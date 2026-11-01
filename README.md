@@ -2,6 +2,8 @@
 
 Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke **Google Sheets**, dibina dengan **Google Apps Script**. Mesra telefon, berbilang pengguna, dengan peringatan servis melalui **Google Calendar** dan **e-mel**.
 
+**🔗 Buka app & panduan:** https://g-03355699-tech.github.io/rekod-maintenance-kenderaan/
+
 ![Tangkapan skrin](docs/tangkapan-skrin.png)
 
 ## Ciri-ciri
