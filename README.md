@@ -6,20 +6,31 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 
 ## Ciri-ciri
 
+**Kenderaan**
 - **Cari ikut nombor plat**, atau tekan butang plat kenderaan yang telah didaftar.
-- **Daftar kenderaan** — Motorsikal / Kereta, jenama/model, tahun, pemilik.
-- **Pilih ikon kenderaan** — 9 gaya kereta (sedan, hatchback, SUV, MPV, pikap, van, sport, EV, lori ringan) dan 6 gaya motosikal (skuter, kapcai, sport, cruiser, offroad, touring).
-- **Rekod maintenance** — tarikh, mileage (auto-isi mileage terakhir), jenis aktiviti, kos, bengkel, catatan.
-  - Kos ditaip gaya ATM: `1453` → **14.53**, `1500` → **15.00**.
-  - Aktiviti "Lain-lain" yang ditaip akan disimpan ke senarai pilihan.
-- **Edit & padam** rekod dalam sejarah.
-- **Edit & padam kenderaan** — termasuk tukar nombor plat. Padam kenderaan perlu pengesahan dengan menaip nombor plat.
-- **Ringkasan** — bilangan rekod, mileage terkini, jumlah kos.
-- **Peringatan servis seterusnya** — ikut mileage dan/atau tarikh (mana dulu):
-  - Status pada kad kenderaan: biru (jauh lagi), kuning (≤ 14 hari / ≤ 500 km), merah (lewat).
-  - Acara **Google Calendar** dengan notifikasi 7 hari & 1 hari sebelum.
-  - **E-mel** ringkasan harian bila peringatan hampir/lewat.
-- **Berbilang pengguna** — setiap akaun Google mendapat Google Sheet sendiri dalam Drive mereka. Data tidak dikongsi.
+- **Daftar, edit & padam kenderaan** — Motorsikal / Kereta, 15 pilihan ikon, jenama/model, tahun, pemilik. Padam perlu pengesahan dengan menaip nombor plat.
+- **Cukai jalan & insurans** — tarikh tamat dengan amaran pada kad kenderaan, e-mel 30 & 7 hari sebelum, dan acara Google Calendar.
+- **Kemas kini mileage pantas** — rekod mileage semasa tanpa rekod servis, supaya peringatan ikut mileage kekal tepat.
+
+**Rekod maintenance**
+- Tarikh, mileage (auto-isi), jenis aktiviti, kos (gaya ATM: `1453` → 14.53), bengkel (auto-cadang), catatan.
+- **Gambar resit** — ambil dari kamera atau galeri; dimampatkan di telefon dan disimpan dalam folder *Resit Maintenance Kenderaan* di Google Drive pengguna.
+- Aktiviti "Lain-lain" yang ditaip disimpan ke senarai pilihan.
+- **Edit & padam** rekod, dengan pengesahan.
+- **Cari & tapis sejarah** ikut kata kunci, aktiviti dan tahun, beserta jumlah kos hasil tapisan.
+
+**Peringatan servis**
+- Ikut mileage dan/atau tarikh (mana dulu); status biru / kuning / merah pada kad kenderaan dan butang plat.
+- **Templat servis** — pilih aktiviti, selang terus diisi (cth. Tukar minyak enjin motosikal: 3,000 km / 3 bulan). Selang yang anda guna disimpan sebagai templat kenderaan itu.
+- Acara **Google Calendar** (notifikasi 7 & 1 hari sebelum) dan **e-mel** ringkasan harian.
+
+**Laporan**
+- **Laporan kos** — jumlah, purata sebulan/setahun, kos setiap km, carta kos bulanan/tahunan dan pecahan ikut aktiviti.
+- **Eksport PDF** sejarah servis satu kenderaan (berguna semasa menjual kenderaan).
+
+**Pengguna & perkongsian**
+- **Berbilang pengguna** — setiap akaun Google mendapat "garaj" (Google Sheet) sendiri dalam Drive mereka.
+- **Kongsi garaj dengan ahli keluarga** — masukkan e-mel ahli, berikan kod garaj; ahli boleh tukar antara garaj sendiri dan garaj dikongsi.
 
 ## Fail
 
@@ -27,7 +38,7 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 |---|---|
 | `Code.gs` | Backend Apps Script (Sheet, Calendar, e-mel, trigger) |
 | `Index.html` | Antara muka web app |
-| `appsscript.json` | Manifest: zon waktu, kebenaran (OAuth scopes), tetapan web app |
+| `appsscript.json` | Manifest: zon waktu, kebenaran (OAuth scopes), Drive API (v3), tetapan web app |
 
 ## Cara pasang
 
@@ -51,9 +62,13 @@ Kebenaran boleh ditarik balik bila-bila masa di <https://myaccount.google.com/pe
 
 ## Struktur data
 
-**Tab `Kenderaan`:** `No_Plat`, `Jenama_Model`, `Tahun`, `Pemilik`, `Tarikh_Daftar`, `Jenis`, `Ikon`
+**Tab `Kenderaan`:** `No_Plat`, `Jenama_Model`, `Tahun`, `Pemilik`, `Tarikh_Daftar`, `Jenis`, `Ikon`, `Tamat_Cukai`, `Tamat_Insurans`, `Notis_Cukai`, `Notis_Insurans`, `Cal_Cukai`, `Cal_Insurans`
 
-**Tab `Rekod`:** `ID`, `No_Plat`, `Tarikh`, `Jenis_Aktiviti`, `Mileage`, `Kos`, `Bengkel`, `Catatan`, `Masa_Rekod`, `Ingat_Mileage`, `Ingat_Tarikh`, `Ingat_Emel`, `Calendar_ID`, `Emel_Dihantar`
+**Tab `Rekod`:** `ID`, `No_Plat`, `Tarikh`, `Jenis_Aktiviti`, `Mileage`, `Kos`, `Bengkel`, `Catatan`, `Masa_Rekod`, `Ingat_Mileage`, `Ingat_Tarikh`, `Ingat_Emel`, `Calendar_ID`, `Emel_Dihantar`, `Resit_ID`, `Resit_URL`
+
+**Tab `Mileage`:** `ID`, `No_Plat`, `Tarikh`, `Mileage`, `Masa_Rekod`
+
+**Tab `Templat`:** `No_Plat`, `Aktiviti`, `Selang_KM`, `Selang_Bulan`
 
 Peringatan yang **aktif** ialah rekod terbaru bagi kenderaan + jenis aktiviti yang sama. Bila rekod baru dengan aktiviti sama ditambah, peringatan lama dianggap selesai (acara Calendar lama dipadam).
 
@@ -63,12 +78,15 @@ Peringatan yang **aktif** ialah rekod terbaru bagi kenderaan + jenis aktiviti ya
 const HAMPIR_KM = 500;        // kuning bila baki <= 500 km
 const HAMPIR_HARI = 14;       // kuning bila baki <= 14 hari
 const EMEL_HARI_SEBELUM = 7;  // e-mel 7 hari sebelum tarikh peringatan
+const DOKUMEN_HARI = [30, 7]; // cukai jalan / insurans: notis 30 & 7 hari sebelum tamat
 const JAM_SEMAKAN = 8;        // semakan e-mel harian sekitar 8 pagi
 ```
 
 ## Had
 
 - App yang belum disahkan Google (*unverified*) dengan kebenaran sensitif (Calendar, e-mel) dihadkan kepada sekitar 100 pengguna baru. Untuk lebih, mohon *OAuth verification* di Google Cloud Console.
+- Garaj dikongsi: acara Google Calendar dicipta dalam kalendar orang yang menyimpan rekod, dan e-mel harian dihantar kepada pemilik garaj sahaja.
+- Resit disimpan dalam Drive orang yang memuat naik, dan dikongsi (lihat sahaja) dengan ahli garaj.
 - Kuota Apps Script (e-mel harian, masa larian) dikira bagi setiap pengguna.
 
 ## Lesen
