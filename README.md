@@ -69,6 +69,10 @@ const JAM_SEMAKAN = 8;        // semakan e-mel harian sekitar 8 pagi
 - App yang belum disahkan Google (*unverified*) dengan kebenaran sensitif (Calendar, e-mel) dihadkan kepada sekitar 100 pengguna baru. Untuk lebih, mohon *OAuth verification* di Google Cloud Console.
 - Kuota Apps Script (e-mel harian, masa larian) dikira bagi setiap pengguna.
 
+## Lesen
+
+[MIT](LICENSE) — bebas digunakan, diubah suai dan diedarkan, dengan syarat notis hak cipta dikekalkan.
+
 ---
 
 Dibangunkan oleh **Ibrahim bin Kadri (9M2IBR)**.
