@@ -599,12 +599,16 @@
   </div>
 
 <script>
-  const VERSI = '2.0.4';   // naikkan setiap kali deploy versi baru
+  const VERSI = '2.0.5';   // naikkan setiap kali deploy versi baru
   document.getElementById('versi').textContent = 'v' + VERSI;
   /* ---------- Maklumat pembangun & derma (ubah di sini) ---------- */
+  // Bina URL tanpa menulis dua garis condong berturut-turut dalam kod —
+  // HtmlService Apps Script boleh memotong baris selepas aksara itu.
+  function pautan(...bah) { return ['https:', ''].concat(bah).join('/'); }
   const PEMBANGUN = { nama: 'Ibrahim bin Kadri', telefon: '019-300 2591', whatsapp: '60193002591' };
   const DERMA = {
-    qr: 'https://raw.githubusercontent.com/g-03355699-tech/rekod-maintenance-kenderaan/main/docs/derma-qr.png',   // QR DuitNow Maybank
+    // QR DuitNow Maybank (fail docs/derma-qr.png di GitHub)
+    qr: pautan('raw.githubusercontent.com', 'g-03355699-tech', 'rekod-maintenance-kenderaan', 'main', 'docs', 'derma-qr.png'),
     url: '',   // pautan derma (cth. ToyyibPay / Buy Me a Coffee)
     bank: ''   // cth. 'Maybank 1234 5678 9012 (Ibrahim bin Kadri)'
   };
@@ -1023,7 +1027,7 @@
   /* ---------- Pembangun & derma ---------- */
   function isiPembangun() {
     $('pNama').textContent = PEMBANGUN.nama;
-    $('pTelefon').href = 'https://wa.me/' + PEMBANGUN.whatsapp;
+    $('pTelefon').href = pautan('wa.me', PEMBANGUN.whatsapp);
     $('pTelefon').querySelector('span').textContent = PEMBANGUN.telefon + ' (WhatsApp)';
   }
 
@@ -1033,7 +1037,7 @@
     if (DERMA.bank) bah.push(`<p><b>${esc(DERMA.bank)}</b></p>`);
     if (DERMA.url) bah.push(`<a class="btn" style="display:block;text-decoration:none" href="${esc(DERMA.url)}" target="_blank" rel="noopener">Derma secara dalam talian</a>`);
     if (!bah.length) bah.push(`<a class="btn" style="display:block;text-decoration:none" target="_blank" rel="noopener"
-        href="https://wa.me/${PEMBANGUN.whatsapp}?text=${encodeURIComponent('Salam, saya ingin menderma untuk app Rekod Maintenance Kenderaan.')}">Hubungi melalui WhatsApp</a>`);
+        href="${pautan('wa.me', PEMBANGUN.whatsapp)}?text=${encodeURIComponent('Salam, saya ingin menderma untuk app Rekod Maintenance Kenderaan.')}">Hubungi melalui WhatsApp</a>`);
     $('dIsi').innerHTML = bah.join('');
     $('modalDerma').classList.remove('tersembunyi');
   }
