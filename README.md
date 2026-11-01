@@ -8,6 +8,7 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 
 - **Cari ikut nombor plat**, atau tekan butang plat kenderaan yang telah didaftar.
 - **Daftar kenderaan** — Motorsikal / Kereta, jenama/model, tahun, pemilik.
+- **Pilih ikon kenderaan** — 9 gaya kereta (sedan, hatchback, SUV, MPV, pikap, van, sport, EV, lori ringan) dan 6 gaya motosikal (skuter, kapcai, sport, cruiser, offroad, touring).
 - **Rekod maintenance** — tarikh, mileage (auto-isi mileage terakhir), jenis aktiviti, kos, bengkel, catatan.
   - Kos ditaip gaya ATM: `1453` → **14.53**, `1500` → **15.00**.
   - Aktiviti "Lain-lain" yang ditaip akan disimpan ke senarai pilihan.
@@ -50,7 +51,7 @@ Kebenaran boleh ditarik balik bila-bila masa di <https://myaccount.google.com/pe
 
 ## Struktur data
 
-**Tab `Kenderaan`:** `No_Plat`, `Jenama_Model`, `Tahun`, `Pemilik`, `Tarikh_Daftar`, `Jenis`
+**Tab `Kenderaan`:** `No_Plat`, `Jenama_Model`, `Tahun`, `Pemilik`, `Tarikh_Daftar`, `Jenis`, `Ikon`
 
 **Tab `Rekod`:** `ID`, `No_Plat`, `Tarikh`, `Jenis_Aktiviti`, `Mileage`, `Kos`, `Bengkel`, `Catatan`, `Masa_Rekod`, `Ingat_Mileage`, `Ingat_Tarikh`, `Ingat_Emel`, `Calendar_ID`, `Emel_Dihantar`
 

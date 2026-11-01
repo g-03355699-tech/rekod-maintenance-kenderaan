@@ -13,7 +13,7 @@
 
 const SHEET_KENDERAAN = 'Kenderaan';
 const SHEET_REKOD = 'Rekod';
-const HDR_KENDERAAN = ['No_Plat', 'Jenama_Model', 'Tahun', 'Pemilik', 'Tarikh_Daftar', 'Jenis'];
+const HDR_KENDERAAN = ['No_Plat', 'Jenama_Model', 'Tahun', 'Pemilik', 'Tarikh_Daftar', 'Jenis', 'Ikon'];
 const HDR_REKOD = ['ID', 'No_Plat', 'Tarikh', 'Jenis_Aktiviti', 'Mileage', 'Kos', 'Bengkel', 'Catatan', 'Masa_Rekod',
                    'Ingat_Mileage', 'Ingat_Tarikh', 'Ingat_Emel', 'Calendar_ID', 'Emel_Dihantar'];
 const JENIS_KENDERAAN = ['Motorsikal', 'Kereta'];
@@ -110,7 +110,7 @@ function senaraiKenderaan() {
   return sh.getRange(2, 1, last - 1, HDR_KENDERAAN.length).getValues()
     .filter(r => r[0])
     .map(r => ({
-      plat: String(r[0]), model: String(r[1] || ''), jenis: String(r[5] || ''),
+      plat: String(r[0]), model: String(r[1] || ''), jenis: String(r[5] || ''), ikon: String(r[6] || ''),
       status: statusPlat[normPlat_(r[0])] || ''
     }))
     .sort((a, b) => a.plat.localeCompare(b.plat));
@@ -158,7 +158,7 @@ function daftarKenderaan(data) {
   return withLock_(() => {
     if (findKenderaan_(plat)) throw new Error('Kenderaan ' + plat + ' sudah didaftarkan.');
     getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN).appendRow([
-      plat, clean_(data.model), clean_(data.tahun), clean_(data.pemilik), new Date(), data.jenis
+      plat, clean_(data.model), clean_(data.tahun), clean_(data.pemilik), new Date(), data.jenis, kodIkon_(data.ikon)
     ]);
     return cariKenderaan(plat);
   });
@@ -179,7 +179,7 @@ function kemaskiniKenderaan(data) {
 
     const tarikhDaftar = shK.getRange(baris, 5).getValue();
     shK.getRange(baris, 1, 1, HDR_KENDERAAN.length).setValues([[
-      baru, clean_(data.model), clean_(data.tahun), clean_(data.pemilik), tarikhDaftar, data.jenis
+      baru, clean_(data.model), clean_(data.tahun), clean_(data.pemilik), tarikhDaftar, data.jenis, kodIkon_(data.ikon)
     ]]);
 
     // Tukar plat: kemaskini semua rekod & tajuk acara Calendar
@@ -558,8 +558,14 @@ function findKenderaan_(plat) {
     tahun: String(r[2] || ''),
     pemilik: String(r[3] || ''),
     tarikhDaftar: fmtDate_(r[4]),
-    jenis: String(r[5] || '')
+    jenis: String(r[5] || ''),
+    ikon: String(r[6] || '')
   };
+}
+
+/** Kod ikon kenderaan (cth. 'sedan', 'kapcai') — huruf kecil sahaja. */
+function kodIkon_(v) {
+  return String(v || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 20);
 }
 
 /** "wxy 1234" -> "WXY1234" */

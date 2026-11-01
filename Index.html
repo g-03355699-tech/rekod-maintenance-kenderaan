@@ -98,6 +98,16 @@
                         border: 1.5px solid var(--garis); border-radius: 10px; font-weight: 500; }
     .pilih-jenis span svg { width: 42px; height: 28px; }
     .pilih-jenis input:checked + span { border-color: var(--navy); background: #e7eef8; color: var(--navy); --latar-ikon: #e7eef8; }
+    .pilih-ikon { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+    .pilih-ikon label { cursor: pointer; }
+    .pilih-ikon input { position: absolute; opacity: 0; width: 0; }
+    .pilih-ikon span { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px 6px;
+                       border: 1.5px solid var(--garis); border-radius: 10px; font-size: .72rem; text-align: center;
+                       color: var(--kelabu); line-height: 1.2; }
+    .pilih-ikon span svg { width: 60px; height: 40px; color: var(--navy); }
+    .pilih-ikon input:checked + span { border-color: var(--navy); background: #e7eef8; color: var(--navy); font-weight: 600;
+                                       --latar-ikon: #e7eef8; }
+    .pilih-ikon input:focus-visible + span { outline: 2px solid var(--navy); outline-offset: 2px; }
     .pilih-jenis input:focus-visible + span { outline: 2px solid var(--navy); outline-offset: 2px; }
 
     /* Sejarah */
@@ -214,10 +224,22 @@
     <symbol id="i-loceng" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
     <symbol id="i-pensel" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
 
-    <!-- Ilustrasi motosikal (skuter) — gaya garis -->
-    <symbol id="g-motor" viewBox="0 0 120 80"><path d="M16 52C9 47 11 37 22 34L60 33C63 33 64 36 64 40C64 44 66 46 70 46H77L83 29C85 23 88 20 93 20H98C101 27 100 36 95 43C92 47 89 50 85 51L40 52Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 34C26 28 31 26 38 26H57C61 26 62 29 61 33Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M83 12L101 10M92 11L91 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M95 25L98 26" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="59" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="59" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="93" cy="59" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="93" cy="59" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
-    <!-- Ilustrasi kereta — gaya garis -->
-    <symbol id="g-kereta" viewBox="0 0 120 80"><path d="M8 53V44C8 40 11 38 15 37L32 34L44 22C46 20 49 19 52 19H78C82 19 85 20 87 22L100 34L107 36C110 37 112 40 112 43V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M38 34L47 25H62V34Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M66 25H79C81 25 82 26 83 27L90 34H66Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 36V50M70 40H74M104 41H109M10 41H14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="30" cy="56" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="91" cy="56" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="91" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <!-- Ilustrasi kenderaan — gaya garis (v-<kod>) -->
+    <symbol id="v-sedan" viewBox="0 0 120 80"><path d="M8 53V44C8 40 11 38 15 37L32 34L44 22C46 20 49 19 52 19H78C82 19 85 20 87 22L100 34L107 36C110 37 112 40 112 43V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M38 34L47 25H62V34Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M66 25H79C81 25 82 26 83 27L90 34H66Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 36V50M70 40H74M104 41H109M10 41H14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="30" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="91" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="91" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-hatchback" viewBox="0 0 120 80"><path d="M12 53V31C12 25 15 21 21 20L64 19C69 19 73 21 76 24L88 34L104 36C108 37 110 40 110 44V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M20 33V25C20 23 21 22 23 22H44V33Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M48 22H63C66 22 68 23 70 25L79 33H48Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M46 36V50M52 40H56M103 41H108M12 38H16" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="32" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="32" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="90" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="90" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-suv" viewBox="0 0 120 80"><path d="M10 52V27C10 21 13 17 19 17H74C78 17 81 18 83 21L93 33L106 35C109 36 111 39 111 43V52Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M18 31V23C18 21 19 20 21 20H45V31Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M49 20H72C74 20 76 21 77 23L84 31H49Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M47 34V48M53 37H57M104 40H109M10 36H14M18 52H100" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="30" cy="55" r="11" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="55" r="4.2" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="90" cy="55" r="11" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="90" cy="55" r="4.2" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-mpv" viewBox="0 0 120 80"><path d="M10 53V26C10 21 13 18 18 18H70C75 18 79 20 82 23L95 34L106 36C109 37 111 40 111 44V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M17 31V23C17 22 18 21 19 21H36V31Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M40 21H58V31H40Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M62 21H70C73 21 76 22 78 24L85 31H62Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M60 34V50M66 38H70M104 41H109" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="29" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="29" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="91" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="91" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-pikap" viewBox="0 0 120 80"><path d="M8 53V37H50V24C50 21 52 19 55 19H80C83 19 85 20 86 22L93 35L106 37C109 38 111 41 111 44V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M56 22H79C80 22 81 23 82 24L87 33H56Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 37V33M50 37V33M70 37H74M104 42H109" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="55" r="11" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="55" r="4.2" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="92" cy="55" r="11" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="92" cy="55" r="4.2" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-van" viewBox="0 0 120 80"><path d="M8 53V23C8 19 11 16 15 16H82C86 16 89 18 91 21L101 35C106 36 111 39 111 44V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M78 20H84C86 20 87 21 88 22L96 33H78Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M16 20H40V31H16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M46 20H70V31H46Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M74 20V50M66 38H70M104 42H109" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="92" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="92" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-sport" viewBox="0 0 120 80"><path d="M8 52V44C8 41 10 39 14 38L36 35L52 26C55 24 58 23 62 23H78C82 23 85 25 88 28L96 36L108 39C111 40 112 42 112 45V52Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M44 35L55 28C57 27 59 26 62 26H76C79 26 81 27 83 29L88 35Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M6 38L4 33H16M104 44H110M66 39V49" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="30" cy="55" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="55" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="92" cy="55" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="92" cy="55" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-ev" viewBox="0 0 120 80"><path d="M8 53V44C8 40 11 38 15 37L32 34L44 22C46 20 49 19 52 19H78C82 19 85 20 87 22L100 34L107 36C110 37 112 40 112 43V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M38 34L47 25H62V34Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M66 25H79C81 25 82 26 83 27L90 34H66Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M104 41H109" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M66 37L57 46H63L59 53L70 43H63Z" fill="currentColor"/><circle cx="30" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="91" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="91" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-lori" viewBox="0 0 120 80"><path d="M6 13H68V49H6Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M71 49V26C71 24 72 23 74 23H95C98 23 100 25 101 28L108 39V49Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M77 27H94L100 37H77Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M4 49H110M84 40H88" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="24" cy="56" r="9" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="56" r="3.4" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="46" cy="56" r="9" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="46" cy="56" r="3.4" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="92" cy="56" r="9" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="92" cy="56" r="3.4" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-skuter" viewBox="0 0 120 80"><path d="M16 52C9 47 11 37 22 34L60 33C63 33 64 36 64 40C64 44 66 46 70 46H77L83 29C85 23 88 20 93 20H98C101 27 100 36 95 43C92 47 89 50 85 51L40 52Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 34C26 28 31 26 38 26H57C61 26 62 29 61 33Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M83 12L101 10M92 11L91 20M95 25L98 26" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="59" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="59" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="93" cy="59" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="93" cy="59" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-kapcai" viewBox="0 0 120 80"><path d="M12 46C12 40 17 36 24 36H46L48 44H18Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 36C26 31 30 30 36 30H58C61 30 62 33 60 36Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M46 36H64L80 24C82 21 85 20 88 21L90 22L84 35C80 43 72 48 62 48H48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="48" y="46" width="15" height="9" rx="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M86 24L95 58M80 15L94 13M88 14L87 21M26 58L50 52M86 50C88 45 100 45 103 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="26" cy="58" r="11" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="58" r="4.2" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="95" cy="58" r="11" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="95" cy="58" r="4.2" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-sukan" viewBox="0 0 120 80"><path d="M14 30L40 33L62 30C66 29 70 27 74 24L90 18C96 18 100 22 100 26L88 44C84 50 78 52 70 52H50L44 42L22 38Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M40 33L46 40M74 24L66 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M92 34L95 58M26 58L48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="26" cy="58" r="12" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="58" r="4.6" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="95" cy="58" r="12" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="95" cy="58" r="4.6" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-cruiser" viewBox="0 0 120 80"><path d="M46 30C52 24 66 24 72 30L68 36H48Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M18 36C28 34 38 35 48 36V42H26C20 42 17 40 18 36Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 54C8 42 18 38 28 40" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M80 26L100 58M72 18L82 22L86 15" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M28 52L46 48H70L80 30" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M50 38L54 46M66 38L62 46" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="58" cy="50" r="5" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M30 63H70" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="22" cy="58" r="12" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="22" cy="58" r="4.6" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="100" cy="58" r="12" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="100" cy="58" r="4.6" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-dirt" viewBox="0 0 120 80"><path d="M8 27L36 29H60L74 23C77 22 80 23 80 26L76 34L62 42H48L36 34Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M86 30L108 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M84 16L96 57M76 14L92 11M24 57L48 46" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="46" y="42" width="16" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="24" cy="57" r="13" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="24" cy="57" r="4.9" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="96" cy="57" r="13" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="96" cy="57" r="4.9" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <symbol id="v-touring" viewBox="0 0 120 80"><path d="M30 32H58L64 28L80 24C84 23 86 25 85 28L80 38L66 46H46L38 38H30Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M80 24L86 10L91 12L86 27" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="6" y="30" width="22" height="18" rx="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M86 28L96 58M78 18L88 17M88 34L102 36M26 58L48 50" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><rect x="46" y="45" width="16" height="9" rx="3" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="26" cy="58" r="12" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="26" cy="58" r="4.6" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="96" cy="58" r="12" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="96" cy="58" r="4.6" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
   </svg>
 
   <header>
@@ -260,8 +282,12 @@
       </div>
       <label class="tajuk">Jenis Kenderaan *</label>
       <div class="pilih-jenis" role="radiogroup">
-        <label><input type="radio" name="dJenis" value="Motorsikal"><span><svg><use href="#g-motor"/></svg>Motorsikal</span></label>
-        <label><input type="radio" name="dJenis" value="Kereta"><span><svg><use href="#g-kereta"/></svg>Kereta</span></label>
+        <label><input type="radio" name="dJenis" value="Motorsikal" onchange="binaPilihIkon()"><span><svg><use href="#v-skuter"/></svg>Motorsikal</span></label>
+        <label><input type="radio" name="dJenis" value="Kereta" onchange="binaPilihIkon()"><span><svg><use href="#v-sedan"/></svg>Kereta</span></label>
+      </div>
+      <div id="blokIkon" class="tersembunyi">
+        <label class="tajuk">Gaya / Ikon Kenderaan</label>
+        <div id="pilihIkon" class="pilih-ikon"></div>
       </div>
       <label class="tajuk">Jenama / Model</label>
       <input id="dModel" placeholder="cth: Perodua Myvi 1.5">
@@ -279,7 +305,7 @@
     <!-- Maklumat kenderaan -->
     <section id="secInfo" class="kad tersembunyi">
       <div class="kepala">
-        <div class="gambar"><svg><use id="iGambar" href="#g-motor"/></svg></div>
+        <div class="gambar"><svg><use id="iGambar" href="#v-skuter"/></svg></div>
         <div style="min-width:0">
           <div class="plat-besar"><span id="iPlat"></span><span id="iJenis" class="lencana"></span></div>
           <div class="kecil" id="iModel"></div>
@@ -453,7 +479,7 @@
       $('senaraiPlat').innerHTML = list.map(k => `<option value="${esc(k.plat)}">${esc(k.model)}</option>`).join('');
       $('senaraiCip').innerHTML = list.map(k => `
         <button class="cip" data-plat="${esc(k.plat)}" title="${esc(k.model)}" onclick="pilihPlat(this.dataset.plat)">
-          <svg><use href="#${k.jenis === 'Kereta' ? 'g-kereta' : 'g-motor'}"/></svg>${esc(k.plat)}${
+          <svg><use href="${hrefIkon(k)}"/></svg>${esc(k.plat)}${
             k.status === 'lewat' || k.status === 'hampir' ? `<span class="titik ${k.status}"></span>` : ''}
         </button>`).join('');
       $('blokCip').classList.toggle('tersembunyi', !list.length);
@@ -491,6 +517,7 @@
       $('platBaru').textContent = data.plat;
       ['dModel','dTahun','dPemilik'].forEach(id => $(id).value = '');
       document.querySelectorAll('input[name="dJenis"]').forEach(r => r.checked = false);
+      binaPilihIkon();
       $('secDaftar').classList.remove('tersembunyi');
       return;
     }
@@ -507,7 +534,7 @@
       <div class="banner ${p.status}">${ik('i-loceng')}<div>
         <b>${esc(p.aktiviti)}${p.status === 'lewat' ? ' — LEWAT' : ''}</b>${esc(teksPeringatan(p))}
       </div></div>`).join('');
-    $('iGambar').setAttribute('href', k.jenis === 'Kereta' ? '#g-kereta' : '#g-motor');
+    $('iGambar').setAttribute('href', hrefIkon(k));
     $('iPlat').textContent = k.plat;
     $('iJenis').textContent = k.jenis;
     $('iJenis').classList.toggle('tersembunyi', !k.jenis);
@@ -551,6 +578,7 @@
     const data = await panggil('daftarKenderaan', [{
       plat: platSemasa,
       jenis: jenis.value,
+      ikon: ikonDipilih(),
       model: $('dModel').value,
       tahun: $('dTahun').value,
       pemilik: $('dPemilik').value
@@ -682,6 +710,29 @@
   $('rKos').addEventListener('focus', e => setTimeout(() => {
     const n = e.target.value.length; e.target.setSelectionRange(n, n);
   }, 0));
+  /* ---------- Ikon kenderaan ---------- */
+  const IKON_KENDERAAN = [{"kod": "sedan", "jenis": "Kereta", "nama": "Sedan"}, {"kod": "hatchback", "jenis": "Kereta", "nama": "Hatchback"}, {"kod": "suv", "jenis": "Kereta", "nama": "SUV"}, {"kod": "mpv", "jenis": "Kereta", "nama": "MPV"}, {"kod": "pikap", "jenis": "Kereta", "nama": "Pikap / 4x4"}, {"kod": "van", "jenis": "Kereta", "nama": "Van"}, {"kod": "sport", "jenis": "Kereta", "nama": "Sport / Coupe"}, {"kod": "ev", "jenis": "Kereta", "nama": "Elektrik (EV)"}, {"kod": "lori", "jenis": "Kereta", "nama": "Lori ringan"}, {"kod": "skuter", "jenis": "Motorsikal", "nama": "Skuter"}, {"kod": "kapcai", "jenis": "Motorsikal", "nama": "Kapcai (Underbone)"}, {"kod": "sukan", "jenis": "Motorsikal", "nama": "Sport"}, {"kod": "cruiser", "jenis": "Motorsikal", "nama": "Cruiser"}, {"kod": "dirt", "jenis": "Motorsikal", "nama": "Offroad / Dirt"}, {"kod": "touring", "jenis": "Motorsikal", "nama": "Touring / Adventure"}];
+  const IKON_LALAI = { Motorsikal: 'skuter', Kereta: 'sedan' };
+
+  function hrefIkon(k) {
+    const ada = IKON_KENDERAAN.some(i => i.kod === k.ikon);
+    return '#v-' + (ada ? k.ikon : (IKON_LALAI[k.jenis] || 'skuter'));
+  }
+
+  /** Bina grid pilihan ikon ikut jenis yang dipilih. */
+  function binaPilihIkon(pilih) {
+    const jenis = (document.querySelector('input[name="dJenis"]:checked') || {}).value;
+    $('blokIkon').classList.toggle('tersembunyi', !jenis);
+    if (!jenis) { $('pilihIkon').innerHTML = ''; return; }
+    const senarai = IKON_KENDERAAN.filter(i => i.jenis === jenis);
+    if (!senarai.some(i => i.kod === pilih)) pilih = IKON_LALAI[jenis];
+    $('pilihIkon').innerHTML = senarai.map(i => `
+      <label><input type="radio" name="dIkon" value="${i.kod}" ${i.kod === pilih ? 'checked' : ''}>
+        <span><svg><use href="#v-${i.kod}"/></svg>${esc(i.nama)}</span></label>`).join('');
+  }
+
+  const ikonDipilih = () => (document.querySelector('input[name="dIkon"]:checked') || {}).value || '';
+
   /* ---------- Edit / padam kenderaan ---------- */
   let modEditK = false;
   let kenderaanSemasa = null;
@@ -705,6 +756,7 @@
     $('dTahun').value = k.tahun;
     $('dPemilik').value = k.pemilik;
     document.querySelectorAll('input[name="dJenis"]').forEach(r => r.checked = r.value === k.jenis);
+    binaPilihIkon(k.ikon);
     $('secDaftar').classList.remove('tersembunyi');
     $('secDaftar').scrollIntoView({ behavior: 'smooth' });
   }
@@ -713,7 +765,7 @@
     const platBaru = $('dPlat').value.trim();
     if (!platBaru) return mesej('Nombor plat diperlukan.', 'ralat');
     const data = await panggil('kemaskiniKenderaan', [{
-      platAsal: platSemasa, plat: platBaru, jenis: jenis,
+      platAsal: platSemasa, plat: platBaru, jenis: jenis, ikon: ikonDipilih(),
       model: $('dModel').value, tahun: $('dTahun').value, pemilik: $('dPemilik').value
     }], $('btnDaftar'));
     mesej('Maklumat kenderaan ' + data.plat + ' dikemaskini.');
