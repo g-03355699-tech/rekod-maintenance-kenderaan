@@ -29,7 +29,9 @@
     header .dalam { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
     header svg.logo { width: 48px; height: 44px; stroke: rgba(255,255,255,.9); stroke-width: 1.6; fill: none;
                       stroke-linecap: round; stroke-linejoin: round; }
-    header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+    header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    header .versi { font-size: .68rem; font-weight: 500; background: rgba(255,255,255,.16); color: rgba(255,255,255,.9);
+                    padding: 2px 8px; border-radius: 999px; letter-spacing: .3px; }
 
     main { max-width: 640px; margin: 0 auto; padding: 12px; }
     .kad { background: var(--kad); border-radius: 16px; padding: 18px 16px; margin-bottom: 12px;
@@ -309,7 +311,7 @@
         <path d="M36 4a5 5 0 0 0 4 7l4 4-3 3-4-4a5 5 0 0 1-7-4 5 5 0 0 1 6-6z"/>
         <path d="M8 40v-6l4-8h28l4 8v6zM8 34h36M14 37h3M35 37h3M12 40v4M40 40v4"/>
       </svg>
-      <h1>Rekod Maintenance Kenderaan</h1>
+      <h1>Rekod Maintenance Kenderaan <span class="versi" id="versi"></span></h1>
     </div>
   </header>
 
@@ -560,6 +562,8 @@
   </div>
 
 <script>
+  const VERSI = '2.0.0';   // naikkan setiap kali deploy versi baru
+  document.getElementById('versi').textContent = 'v' + VERSI;
   let platSemasa = '';
   let mileageTerakhir = '';
   let rekodSemasa = {};   // id -> rekod
