@@ -256,6 +256,19 @@
                      border-radius: 6px; margin-left: 6px; }
     footer { max-width: 640px; margin: 0 auto; padding: 4px 16px 24px; text-align: center; font-size: .78rem; color: var(--kelabu); }
     footer a { color: var(--navy); font-weight: 500; }
+    .pembangun { max-width: 640px; margin: 0 auto 28px; padding: 0 12px; }
+    .pembangun .kotak-p { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 2px 10px rgba(16,32,64,.08);
+                          display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .pembangun .maklumat { flex: 1; min-width: 180px; font-size: .85rem; color: var(--kelabu); line-height: 1.5; }
+    .pembangun .maklumat b { color: var(--teks); font-size: .95rem; }
+    .pembangun .maklumat a { color: var(--navy); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; }
+    .pembangun .maklumat svg.ik { width: 15px; height: 15px; }
+    .btn-derma { display: inline-flex; align-items: center; gap: 8px; background: #f2a600; color: #1b1f24; border: 0;
+                 border-radius: 10px; padding: 10px 16px; font-family: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; }
+    .btn-derma:hover { background: #e09a00; }
+    .btn-derma svg.ik { width: 18px; height: 18px; }
+    #modalDerma .kotak { text-align: center; }
+    #modalDerma img { width: 100%; max-width: 260px; border-radius: 12px; border: 1px solid var(--garis); margin: 8px auto; display: block; }
     .kosong { text-align: center; color: var(--kelabu); padding: 14px 0; font-size: .9rem; }
 
     @media (max-width: 380px) {
@@ -283,6 +296,8 @@
     <symbol id="i-pdf" viewBox="0 0 24 24"><path d="M14 3H6a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 6 21h12a1.5 1.5 0 0 0 1.5-1.5V8.5z"/><path d="M14 3v5.5h5.5M12 11v6M9.5 14.5L12 17l2.5-2.5"/></symbol>
     <symbol id="i-dokumen" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
     <symbol id="i-rumah" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9H3z"/><path d="M8 20v-6h8v6"/></symbol>
+    <symbol id="i-telefon" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-hati" viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></symbol>
     <symbol id="i-pensel" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
 
     <!-- Ilustrasi kenderaan — gaya garis (v-<kod>) -->
@@ -544,6 +559,27 @@
   </main>
   <footer id="kaki"></footer>
 
+  <!-- Pembangun & derma -->
+  <div class="pembangun">
+    <div class="kotak-p">
+      <div class="maklumat">
+        Dibangunkan oleh<br><b id="pNama"></b><br>
+        <a id="pTelefon" target="_blank" rel="noopener"><svg class="ik"><use href="#i-telefon"/></svg><span></span></a>
+      </div>
+      <button class="btn-derma" onclick="bukaDerma()"><svg class="ik"><use href="#i-hati"/></svg>Derma</button>
+    </div>
+  </div>
+
+  <!-- Modal derma -->
+  <div id="modalDerma" class="modal tersembunyi" onclick="if (event.target === this) this.classList.add('tersembunyi')">
+    <div class="kotak" role="dialog" aria-modal="true">
+      <h3>Sokong app ini ❤️</h3>
+      <p>App ini percuma. Jika ia membantu anda, sumbangan anda membantu penyelenggaraan dan ciri baru.</p>
+      <div id="dIsi"></div>
+      <button class="btn sekunder" onclick="$('modalDerma').classList.add('tersembunyi')">Tutup</button>
+    </div>
+  </div>
+
   <!-- Modal pengesahan -->
   <div id="modal" class="modal tersembunyi" onclick="if (event.target === this) tutupModal(false)">
     <div class="kotak" role="dialog" aria-modal="true">
@@ -562,8 +598,15 @@
   </div>
 
 <script>
-  const VERSI = '2.0.1';   // naikkan setiap kali deploy versi baru
+  const VERSI = '2.0.2';   // naikkan setiap kali deploy versi baru
   document.getElementById('versi').textContent = 'v' + VERSI;
+  /* ---------- Maklumat pembangun & derma (ubah di sini) ---------- */
+  const PEMBANGUN = { nama: 'Ibrahim bin Kadri', telefon: '019-300 2591', whatsapp: '60193002591' };
+  const DERMA = {
+    qr: '',    // URL gambar QR DuitNow / Touch 'n Go (cth. https://g-03355699-tech.github.io/rekod-maintenance-kenderaan/derma-qr.png)
+    url: '',   // pautan derma (cth. ToyyibPay / Buy Me a Coffee)
+    bank: ''   // cth. 'Maybank 1234 5678 9012 (Ibrahim bin Kadri)'
+  };
   let platSemasa = '';
   let mileageTerakhir = '';
   let rekodSemasa = {};   // id -> rekod
@@ -974,6 +1017,24 @@
     el.className = 'mesej ralat';
     clearTimeout(mesej.t);
     mesej.t = setTimeout(() => el.className = 'mesej', 12000);
+  }
+
+  /* ---------- Pembangun & derma ---------- */
+  function isiPembangun() {
+    $('pNama').textContent = PEMBANGUN.nama;
+    $('pTelefon').href = 'https://wa.me/' + PEMBANGUN.whatsapp;
+    $('pTelefon').querySelector('span').textContent = PEMBANGUN.telefon + ' (WhatsApp)';
+  }
+
+  function bukaDerma() {
+    const bah = [];
+    if (DERMA.qr) bah.push(`<img src="${esc(DERMA.qr)}" alt="Kod QR derma"><div class="nota">Imbas dengan app bank atau e-wallet anda.</div>`);
+    if (DERMA.bank) bah.push(`<p><b>${esc(DERMA.bank)}</b></p>`);
+    if (DERMA.url) bah.push(`<a class="btn" style="display:block;text-decoration:none" href="${esc(DERMA.url)}" target="_blank" rel="noopener">Derma secara dalam talian</a>`);
+    if (!bah.length) bah.push(`<a class="btn" style="display:block;text-decoration:none" target="_blank" rel="noopener"
+        href="https://wa.me/${PEMBANGUN.whatsapp}?text=${encodeURIComponent('Salam, saya ingin menderma untuk app Rekod Maintenance Kenderaan.')}">Hubungi melalui WhatsApp</a>`);
+    $('dIsi').innerHTML = bah.join('');
+    $('modalDerma').classList.remove('tersembunyi');
   }
 
   /* ---------- Data semasa ---------- */
@@ -1481,6 +1542,7 @@
   ['rIngatMileage','rIngatTarikh','rMileage','rTarikh'].forEach(id => $(id).addEventListener('input', kemasPanel));
 
   binaSenaraiAktiviti();
+  isiPembangun();
   muatSenaraiPlat();
   muatPengguna();
 </script>
