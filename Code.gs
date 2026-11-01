@@ -164,6 +164,69 @@ function daftarKenderaan(data) {
   });
 }
 
+/** Kemaskini maklumat kenderaan (termasuk tukar nombor plat). */
+function kemaskiniKenderaan(data) {
+  const asal = normPlat_(data.platAsal);
+  const baru = normPlat_(data.plat);
+  if (!asal || !baru) throw new Error('Nombor plat diperlukan.');
+  if (JENIS_KENDERAAN.indexOf(data.jenis) < 0) throw new Error('Sila pilih jenis kenderaan (Motorsikal / Kereta).');
+
+  return withLock_(() => {
+    const shK = getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN);
+    const baris = cariBarisKenderaan_(shK, asal);
+    if (!baris) throw new Error('Kenderaan ' + asal + ' tidak dijumpai.');
+    if (baru !== asal && findKenderaan_(baru)) throw new Error('Nombor plat ' + baru + ' sudah digunakan kenderaan lain.');
+
+    const tarikhDaftar = shK.getRange(baris, 5).getValue();
+    shK.getRange(baris, 1, 1, HDR_KENDERAAN.length).setValues([[
+      baru, clean_(data.model), clean_(data.tahun), clean_(data.pemilik), tarikhDaftar, data.jenis
+    ]]);
+
+    // Tukar plat: kemaskini semua rekod & tajuk acara Calendar
+    if (baru !== asal) {
+      const shR = getSheet_(SHEET_REKOD, HDR_REKOD);
+      bacaRekod_().filter(r => r.plat === asal).forEach(r => {
+        shR.getRange(r.baris, R.PLAT + 1).setValue(baru);
+        if (r.calendarId) {
+          try {
+            const ev = CalendarApp.getEventById(r.calendarId);
+            if (ev) ev.setTitle(ev.getTitle().replace(asal, baru));
+          } catch (e) { console.error('Gagal kemaskini acara: ' + e); }
+        }
+      });
+    }
+    return cariKenderaan(baru);
+  });
+}
+
+/** Padam kenderaan beserta SEMUA rekod & acara Calendar berkaitan. */
+function padamKenderaan(plat) {
+  plat = normPlat_(plat);
+  return withLock_(() => {
+    const shK = getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN);
+    const baris = cariBarisKenderaan_(shK, plat);
+    if (!baris) throw new Error('Kenderaan ' + plat + ' tidak dijumpai.');
+
+    const shR = getSheet_(SHEET_REKOD, HDR_REKOD);
+    const rekod = bacaRekod_().filter(r => r.plat === plat);
+    rekod.forEach(r => padamAcara_(r.calendarId));
+    rekod.map(r => r.baris).sort((a, b) => b - a)       // padam dari bawah supaya nombor baris tak berubah
+      .forEach(b => shR.deleteRow(b));
+    shK.deleteRow(baris);
+    return { plat: plat, bilRekod: rekod.length };
+  });
+}
+
+function cariBarisKenderaan_(sh, plat) {
+  const last = sh.getLastRow();
+  if (last < 2) return 0;
+  const plats = sh.getRange(2, 1, last - 1, 1).getValues();
+  for (let i = 0; i < plats.length; i++) {
+    if (normPlat_(plats[i][0]) === plat) return i + 2;
+  }
+  return 0;
+}
+
 /** Tambah rekod maintenance (dengan peringatan jika ada). */
 function tambahRekod(data) {
   const plat = normPlat_(data.plat);

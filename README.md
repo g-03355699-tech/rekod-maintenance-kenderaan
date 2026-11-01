@@ -12,6 +12,7 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
   - Kos ditaip gaya ATM: `1453` → **14.53**, `1500` → **15.00**.
   - Aktiviti "Lain-lain" yang ditaip akan disimpan ke senarai pilihan.
 - **Edit & padam** rekod dalam sejarah.
+- **Edit & padam kenderaan** — termasuk tukar nombor plat. Padam kenderaan perlu pengesahan dengan menaip nombor plat.
 - **Ringkasan** — bilangan rekod, mileage terkini, jumlah kos.
 - **Peringatan servis seterusnya** — ikut mileage dan/atau tarikh (mana dulu):
   - Status pada kad kenderaan: biru (jauh lagi), kuning (≤ 14 hari / ≤ 500 km), merah (lewat).

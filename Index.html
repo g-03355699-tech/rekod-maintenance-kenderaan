@@ -166,6 +166,29 @@
     .mesej.ok { background: #e6f4ea; color: var(--hijau); display: block; }
     .mesej.ralat { background: #fce8e6; color: var(--merah); display: block; }
     .tersembunyi { display: none !important; }
+    .kepala .aksi-k { margin-left: auto; align-self: flex-start; display: flex; gap: 4px; }
+    .ikon-btn { background: none; border: 1px solid transparent; border-radius: 8px; padding: 6px; cursor: pointer;
+                color: var(--kelabu); display: inline-flex; }
+    .ikon-btn:hover { background: var(--jubin); color: var(--navy); }
+    .ikon-btn.bahaya:hover { color: var(--merah); background: #fde8e6; }
+    .ikon-btn svg.ik { width: 20px; height: 20px; }
+    .btn.bahaya { background: #fff; color: var(--merah); border: 1.5px solid #f3b2ab; box-shadow: none; }
+    .btn.bahaya:hover { background: #fde8e6; }
+    .btn.merah { background: var(--merah); box-shadow: none; }
+    .btn.merah:hover { background: #b3261e; }
+    .btn.merah:disabled { opacity: .4; cursor: not-allowed; }
+    /* Modal pengesahan */
+    .modal { position: fixed; inset: 0; background: rgba(16,24,40,.5); display: flex; align-items: center;
+             justify-content: center; padding: 16px; z-index: 50; }
+    .modal .kotak { background: #fff; border-radius: 16px; padding: 20px; width: 100%; max-width: 400px;
+                    box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+    .modal .ikon-amaran { width: 44px; height: 44px; border-radius: 50%; background: #fde8e6; color: var(--merah);
+                          display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+    .modal .ikon-amaran svg.ik { width: 24px; height: 24px; }
+    .modal h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .modal p { margin: 0 0 6px; font-size: .9rem; color: #3b4350; }
+    .modal .baris { margin-top: 8px; }
+    .modal .baris .btn { margin-top: 8px; }
     footer { max-width: 640px; margin: 0 auto; padding: 4px 16px 24px; text-align: center; font-size: .78rem; color: var(--kelabu); }
     footer a { color: var(--navy); font-weight: 500; }
     .kosong { text-align: center; color: var(--kelabu); padding: 14px 0; font-size: .9rem; }
@@ -229,8 +252,12 @@
 
     <!-- Daftar kenderaan baru -->
     <section id="secDaftar" class="kad tersembunyi">
-      <h2>Kenderaan baru: <span id="platBaru"></span></h2>
-      <p class="kecil" style="margin:0">Kenderaan ini belum didaftarkan. Isi maklumat di bawah.</p>
+      <h2 id="tajukDaftar">Kenderaan baru: <span id="platBaru"></span></h2>
+      <p id="notaDaftar" class="kecil" style="margin:0">Kenderaan ini belum didaftarkan. Isi maklumat di bawah.</p>
+      <div id="blokDPlat" class="tersembunyi">
+        <label class="tajuk">No. Plat *</label>
+        <input id="dPlat" style="text-transform:uppercase" autocomplete="off">
+      </div>
       <label class="tajuk">Jenis Kenderaan *</label>
       <div class="pilih-jenis" role="radiogroup">
         <label><input type="radio" name="dJenis" value="Motorsikal"><span><svg><use href="#g-motor"/></svg>Motorsikal</span></label>
@@ -243,6 +270,10 @@
         <div><label class="tajuk">Pemilik</label><input id="dPemilik" placeholder="Nama"></div>
       </div>
       <button id="btnDaftar" class="btn" onclick="daftar()">Daftar Kenderaan</button>
+      <div id="blokEditK" class="tersembunyi">
+        <button class="btn sekunder" onclick="batalEditKenderaan()">Batal</button>
+        <button class="btn bahaya" onclick="padamKenderaanUI()">Padam Kenderaan Ini</button>
+      </div>
     </section>
 
     <!-- Maklumat kenderaan -->
@@ -252,6 +283,10 @@
         <div style="min-width:0">
           <div class="plat-besar"><span id="iPlat"></span><span id="iJenis" class="lencana"></span></div>
           <div class="kecil" id="iModel"></div>
+        </div>
+        <div class="aksi-k">
+          <button class="ikon-btn" title="Edit kenderaan" onclick="editKenderaan()"><svg class="ik"><use href="#i-pensel"/></svg></button>
+          <button class="ikon-btn bahaya" title="Padam kenderaan" onclick="padamKenderaanUI()"><svg class="ik"><use href="#i-tong"/></svg></button>
         </div>
       </div>
       <div id="iPeringatan"></div>
@@ -341,6 +376,23 @@
     </section>
   </main>
   <footer id="kaki"></footer>
+
+  <!-- Modal pengesahan -->
+  <div id="modal" class="modal tersembunyi" onclick="if (event.target === this) tutupModal(false)">
+    <div class="kotak" role="dialog" aria-modal="true">
+      <div class="ikon-amaran"><svg class="ik"><use href="#i-tong"/></svg></div>
+      <h3 id="mTajuk"></h3>
+      <div id="mMesej"></div>
+      <div id="mBlokTaip" class="tersembunyi">
+        <label class="tajuk" id="mLabelTaip"></label>
+        <input id="mTaip" autocomplete="off" style="text-transform:uppercase">
+      </div>
+      <div class="baris">
+        <button class="btn sekunder" onclick="tutupModal(false)">Batal</button>
+        <button id="mOk" class="btn merah" onclick="tutupModal(true)">Padam</button>
+      </div>
+    </div>
+  </div>
 
 <script>
   let platSemasa = '';
@@ -435,6 +487,7 @@
     tandaCipAktif();
 
     if (!data.wujud) {
+      setModKenderaan(false);
       $('platBaru').textContent = data.plat;
       ['dModel','dTahun','dPemilik'].forEach(id => $(id).value = '');
       document.querySelectorAll('input[name="dJenis"]').forEach(r => r.checked = false);
@@ -443,6 +496,8 @@
     }
 
     const k = data.kenderaan, s = data.ringkasan;
+    kenderaanSemasa = k;
+    setModKenderaan(false);
     idEdit = null;
     rekodSemasa = Object.fromEntries(data.rekod.map(r => [r.id, r]));
     binaSenaraiAktiviti(data.senaraiAktiviti || []);
@@ -492,6 +547,7 @@
   async function daftar() {
     const jenis = document.querySelector('input[name="dJenis"]:checked');
     if (!jenis) return mesej('Sila pilih jenis kenderaan: Motorsikal atau Kereta.', 'ralat');
+    if (modEditK) return simpanKenderaan(jenis.value);
     const data = await panggil('daftarKenderaan', [{
       plat: platSemasa,
       jenis: jenis.value,
@@ -600,7 +656,13 @@
   }
 
   async function padam(id) {
-    if (!confirm('Padam rekod ini?')) return;
+    const r = rekodSemasa[id] || {};
+    const ok = await sahkan({
+      tajuk: 'Padam rekod ini?',
+      mesej: `<p><b>${esc(r.aktiviti || '')}</b> — ${fmtTarikh(r.tarikh)}${r.kos !== '' && r.kos != null ? ' — ' + rm(r.kos) : ''}</p>
+              <p>Tindakan ini tidak boleh diundur.</p>`
+    });
+    if (!ok) return;
     const data = await panggil('padamRekod', [id, platSemasa]);
     mesej('Rekod dipadam.');
     papar(data);
@@ -620,6 +682,95 @@
   $('rKos').addEventListener('focus', e => setTimeout(() => {
     const n = e.target.value.length; e.target.setSelectionRange(n, n);
   }, 0));
+  /* ---------- Edit / padam kenderaan ---------- */
+  let modEditK = false;
+  let kenderaanSemasa = null;
+
+  function setModKenderaan(edit) {
+    modEditK = edit;
+    $('tajukDaftar').innerHTML = edit ? 'Edit Kenderaan' : 'Kenderaan baru: <span id="platBaru"></span>';
+    $('notaDaftar').classList.toggle('tersembunyi', edit);
+    $('blokDPlat').classList.toggle('tersembunyi', !edit);
+    $('blokEditK').classList.toggle('tersembunyi', !edit);
+    $('btnDaftar').textContent = edit ? 'Simpan Perubahan' : 'Daftar Kenderaan';
+  }
+
+  function editKenderaan() {
+    const k = kenderaanSemasa;
+    if (!k) return;
+    sembunyiSemua();
+    setModKenderaan(true);
+    $('dPlat').value = k.plat;
+    $('dModel').value = k.model;
+    $('dTahun').value = k.tahun;
+    $('dPemilik').value = k.pemilik;
+    document.querySelectorAll('input[name="dJenis"]').forEach(r => r.checked = r.value === k.jenis);
+    $('secDaftar').classList.remove('tersembunyi');
+    $('secDaftar').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  async function simpanKenderaan(jenis) {
+    const platBaru = $('dPlat').value.trim();
+    if (!platBaru) return mesej('Nombor plat diperlukan.', 'ralat');
+    const data = await panggil('kemaskiniKenderaan', [{
+      platAsal: platSemasa, plat: platBaru, jenis: jenis,
+      model: $('dModel').value, tahun: $('dTahun').value, pemilik: $('dPemilik').value
+    }], $('btnDaftar'));
+    mesej('Maklumat kenderaan ' + data.plat + ' dikemaskini.');
+    $('plat').value = data.plat;
+    papar(data);
+    muatSenaraiPlat();
+  }
+
+  async function batalEditKenderaan() {
+    setModKenderaan(false);
+    papar(await panggil('cariKenderaan', [platSemasa]));
+  }
+
+  async function padamKenderaanUI() {
+    const k = kenderaanSemasa;
+    if (!k) return;
+    const bil = Object.keys(rekodSemasa).length;
+    const ok = await sahkan({
+      tajuk: `Padam kenderaan ${k.plat}?`,
+      mesej: `<p>Kenderaan ini <b>dan ${bil} rekod maintenance</b> akan dipadam terus, termasuk peringatan di Google Calendar.</p>
+              <p>Tindakan ini tidak boleh diundur.</p>`,
+      taip: k.plat
+    });
+    if (!ok) return;
+    const hasil = await panggil('padamKenderaan', [k.plat]);
+    mesej(`Kenderaan ${hasil.plat} dan ${hasil.bilRekod} rekod telah dipadam.`);
+    setModKenderaan(false);
+    sembunyiSemua();
+    platSemasa = '';
+    kenderaanSemasa = null;
+    $('plat').value = '';
+    muatSenaraiPlat();
+  }
+
+  /** Modal pengesahan. opsyen.taip = teks yang mesti ditaip sebelum butang Padam aktif. */
+  let selesaiModal = null;
+  function sahkan({ tajuk, mesej: isi, taip, butang = 'Padam' }) {
+    $('mTajuk').textContent = tajuk;
+    $('mMesej').innerHTML = isi;
+    $('mOk').textContent = butang;
+    $('mBlokTaip').classList.toggle('tersembunyi', !taip);
+    $('mTaip').value = '';
+    $('mOk').disabled = !!taip;
+    $('mTaip').oninput = () => {
+      $('mOk').disabled = $('mTaip').value.toUpperCase().replace(/[^A-Z0-9]/g, '') !== taip;
+    };
+    if (taip) $('mLabelTaip').innerHTML = `Taip <b>${esc(taip)}</b> untuk sahkan:`;
+    $('modal').classList.remove('tersembunyi');
+    if (taip) setTimeout(() => $('mTaip').focus(), 50);
+    return new Promise(res => selesaiModal = res);
+  }
+  function tutupModal(ok) {
+    $('modal').classList.add('tersembunyi');
+    if (selesaiModal) { selesaiModal(ok); selesaiModal = null; }
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && selesaiModal) tutupModal(false); });
+
   /* ---------- Peringatan ---------- */
   const panelBuka = () => !$('panelIngat').classList.contains('tersembunyi');
 
