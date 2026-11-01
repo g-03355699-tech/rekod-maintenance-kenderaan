@@ -562,7 +562,7 @@
   </div>
 
 <script>
-  const VERSI = '2.0.0';   // naikkan setiap kali deploy versi baru
+  const VERSI = '2.0.1';   // naikkan setiap kali deploy versi baru
   document.getElementById('versi').textContent = 'v' + VERSI;
   let platSemasa = '';
   let mileageTerakhir = '';
@@ -712,6 +712,7 @@
     }], $('btnDaftar'));
     mesej('Kenderaan ' + data.plat + ' berjaya didaftarkan.');
     papar(data);
+    tunjukAmaran(data);
     muatSenaraiPlat();
     togolBorang(true);
   }
@@ -768,6 +769,7 @@
     }], $('btnSimpan'));
     mesej(sedangEdit ? 'Rekod berjaya dikemaskini.' : 'Rekod berjaya disimpan.');
     papar(data);
+    tunjukAmaran(data);
     muatSenaraiPlat();
   }
 
@@ -911,6 +913,7 @@
     mesej('Maklumat kenderaan ' + data.plat + ' dikemaskini.');
     $('plat').value = data.plat;
     papar(data);
+    tunjukAmaran(data);
     muatSenaraiPlat();
   }
 
@@ -962,6 +965,16 @@
     if (selesaiModal) { selesaiModal(ok); selesaiModal = null; }
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && selesaiModal) tutupModal(false); });
+
+  /** Papar amaran dari pelayan (cth. acara Calendar gagal dicipta) — kekal lebih lama. */
+  function tunjukAmaran(data) {
+    if (!data || !data.amaran || !data.amaran.length) return;
+    const el = $('mesej');
+    el.textContent = 'Rekod disimpan, tetapi: ' + data.amaran.join(' ');
+    el.className = 'mesej ralat';
+    clearTimeout(mesej.t);
+    mesej.t = setTimeout(() => el.className = 'mesej', 12000);
+  }
 
   /* ---------- Data semasa ---------- */
   let dataSemasa = null;

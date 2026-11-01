@@ -258,6 +258,7 @@ function cariKenderaan(plat) {
     templat: bacaTemplat_().filter(t => t.plat === plat),
     senaraiAktiviti: unik_(semua.map(r => r.aktiviti)),
     senaraiBengkel: unik_(semua.map(r => r.bengkel)),
+    amaran: unik_(AMARAN),
     ringkasan: {
       bilRekod: rekod.length,
       jumlahKos: rekod.reduce((s, r) => s + (Number(r.kos) || 0), 0),
@@ -747,18 +748,77 @@ function ciptaAcaraDokumen_(plat, nama, tarikhStr) {
   return ciptaAcaraUmum_(`📄 ${nama} tamat — ${plat}`, tarikhStr, `${nama} kenderaan ${plat} tamat pada tarikh ini. Sila perbaharui.`);
 }
 
+/** Amaran untuk dipaparkan kepada pengguna (cth. acara Calendar gagal dicipta). */
+let AMARAN = [];
+
 function ciptaAcaraUmum_(tajuk, tarikhStr, keterangan) {
+  let ev;
   try {
-    const ev = CalendarApp.getDefaultCalendar().createAllDayEvent(tajuk, keTarikh_(tarikhStr),
-      { description: keterangan + `\n\n${ScriptApp.getService().getUrl() || ''}` });
+    let url = '';
+    try { url = ScriptApp.getService().getUrl() || ''; } catch (e) {}
+    ev = CalendarApp.getDefaultCalendar().createAllDayEvent(tajuk, keTarikh_(tarikhStr),
+      { description: keterangan + (url ? '\n\n' + url : '') });
+  } catch (e) {
+    console.error('Gagal cipta acara Calendar: ' + e);
+    AMARAN.push('Acara Google Calendar gagal dicipta: ' + (e.message || e));
+    return '';
+  }
+  // Notifikasi — jika gagal, acara tetap disimpan
+  try {
     ev.removeAllReminders();
     ev.addPopupReminder(7 * 24 * 60 - 9 * 60); // 7 hari sebelum, ~9 pagi
     ev.addPopupReminder(24 * 60 - 9 * 60);     // 1 hari sebelum, ~9 pagi
-    return ev.getId();
   } catch (e) {
-    console.error('Gagal cipta acara Calendar: ' + e);
-    return '';
+    console.warn('Acara dicipta tetapi notifikasi gagal ditetapkan: ' + e);
   }
+  return ev.getId();
+}
+
+/**
+ * UJIAN: jalankan dari editor (pilih ujiCalendar > Run), kemudian lihat Execution log.
+ * Mencipta acara ujian esok hari, kemudian memadamnya semula.
+ */
+function ujiCalendar() {
+  const cal = CalendarApp.getDefaultCalendar();
+  console.log('Kalendar lalai: ' + cal.getName() + ' (' + cal.getId() + ')');
+  const esok = fmtDate_(new Date(Date.now() + 86400000));
+  const id = ciptaAcaraUmum_('🔧 Ujian Rekod Maintenance', esok, 'Acara ujian — akan dipadam automatik.');
+  if (id) {
+    console.log('BERJAYA cipta acara: ' + id);
+    padamAcara_(id);
+    console.log('Acara ujian telah dipadam. Calendar berfungsi dengan baik.');
+  } else {
+    console.log('GAGAL: ' + AMARAN.join(' | '));
+  }
+}
+
+/**
+ * BAIKI: cipta acara Calendar untuk peringatan aktif yang ada tarikh (akan datang)
+ * tetapi tiada Calendar_ID. Jalankan dari editor selepas ujiCalendar berjaya.
+ */
+function baikiAcaraCalendar() {
+  SS_CACHE = ssSendiri_(false);
+  if (!SS_CACHE) return console.log('Tiada Sheet.');
+  const semua = bacaRekod_();
+  prosesPeringatan_(semua, bacaMileage_());
+  const sh = getSheet_(SHEET_REKOD, HDR_REKOD);
+  const hariIni = keHari_(fmtDate_(new Date()));
+  let bil = 0;
+  semua.filter(r => r.aktif && r.ingatTarikh && !r.calendarId && keHari_(r.ingatTarikh) >= hariIni).forEach(r => {
+    const id = ciptaAcara_(r.plat, r.aktiviti, r.ingatTarikh, r.ingatMileage);
+    if (id) { sh.getRange(r.baris, R.CAL_ID + 1).setValue(id); bil++; }
+  });
+  // Cukai jalan & insurans
+  const shK = getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN);
+  bacaKenderaan_().forEach(k => DOKUMEN.forEach(d => {
+    const tarikh = d.kod === 'cukai' ? k.tamatCukai : k.tamatInsurans;
+    const ada = shK.getRange(k.baris, d.cal + 1).getValue();
+    if (tarikh && !ada && keHari_(tarikh) >= hariIni) {
+      const id = ciptaAcaraDokumen_(k.plat, d.nama, tarikh);
+      if (id) { shK.getRange(k.baris, d.cal + 1).setValue(id); bil++; }
+    }
+  }));
+  console.log(`${bil} acara Calendar dicipta.` + (AMARAN.length ? ' Amaran: ' + AMARAN.join(' | ') : ''));
 }
 
 function padamAcara_(id) {
