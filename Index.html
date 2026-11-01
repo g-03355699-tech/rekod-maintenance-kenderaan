@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #12386b; --navy-gelap: #0c2a52; --latar: #eef1f5; --kad: #fff;
+      --teks: #1b1f24; --kelabu: #5f6670; --garis: #c9ced6; --jubin: #f2f4f7;
+      --merah: #d93025; --hijau: #1e7a3a; --lencana: #e3e8ef;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: "Poppins", system-ui, sans-serif; color: var(--teks);
+      background: var(--latar);
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(18,56,107,.05) 0 120px, transparent 121px),
+        radial-gradient(circle at 85% 75%, rgba(18,56,107,.05) 0 160px, transparent 161px);
+      min-height: 100vh;
+    }
+    svg.ik { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7;
+             stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+
+    /* Header */
+    header { background: var(--navy); color: #fff; padding: 14px 16px; }
+    header .dalam { max-width: 640px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+    header svg.logo { width: 48px; height: 44px; stroke: rgba(255,255,255,.9); stroke-width: 1.6; fill: none;
+                      stroke-linecap: round; stroke-linejoin: round; }
+    header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+
+    main { max-width: 640px; margin: 0 auto; padding: 12px; }
+    .kad { background: var(--kad); border-radius: 16px; padding: 18px 16px; margin-bottom: 12px;
+           box-shadow: 0 2px 10px rgba(16,32,64,.08); }
+    .kad h2 { margin: 0 0 12px; font-size: 1.05rem; font-weight: 600; }
+
+    /* Medan input dengan ikon */
+    label.tajuk { display: block; font-size: .85rem; color: var(--teks); margin: 12px 0 6px; }
+    .medan { position: relative; }
+    .medan > svg.ik, .medan > .awalan { position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+                                        color: #3b4350; pointer-events: none; }
+    .medan > .awalan { font-size: .95rem; }
+    .medan input, .medan select { padding-left: 42px; }
+    input, select, textarea {
+      width: 100%; padding: 11px 12px; font-size: .95rem; border: 1px solid var(--garis);
+      border-radius: 10px; font-family: inherit; color: var(--teks); background: #fff;
+    }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--navy);
+                                                box-shadow: 0 0 0 3px rgba(18,56,107,.15); }
+    input::placeholder, textarea::placeholder { color: #9aa1ab; }
+    select { appearance: none; -webkit-appearance: none; padding-right: 36px; }
+    .medan > svg.chevron { left: auto; right: 12px; }
+    textarea { resize: vertical; min-height: 64px; }
+    input, select { height: 46px; max-width: 100%; min-width: 0; display: block; }
+    /* iOS Safari: input tarikh ada lebar minimum sendiri & teks di tengah — paksa ikut lebar kolum */
+    input[type="date"] { -webkit-appearance: none; appearance: none; text-align: left; line-height: normal; }
+    input[type="date"]::-webkit-date-and-time-value { text-align: left; margin: 0; }
+    input[type="date"]::-webkit-calendar-picker-indicator { margin-left: 0; }
+    .medan { min-width: 0; }
+    #plat { text-transform: uppercase; }
+    .baris { display: flex; gap: 10px; }
+    .baris > * { flex: 1; min-width: 0; }
+
+    /* Butang */
+    button { font-family: inherit; }
+    .btn { padding: 12px 16px; font-size: .95rem; border: 0; border-radius: 10px; cursor: pointer;
+           background: var(--navy); color: #fff; font-weight: 600; width: 100%; margin-top: 12px;
+           box-shadow: 0 2px 4px rgba(12,42,82,.25); }
+    .btn:hover { background: var(--navy-gelap); }
+    .btn:disabled { opacity: .6; cursor: wait; }
+    .btn.sekunder { background: var(--lencana); color: #3b4350; box-shadow: none; font-weight: 500; }
+    .btn.sekunder:hover { background: #d6dde7; }
+
+    /* Kad kenderaan */
+    .kepala { display: flex; align-items: center; gap: 12px; }
+    .kepala .gambar { width: 84px; height: 56px; flex-shrink: 0; }
+    .kepala .gambar svg { width: 100%; height: 100%; }
+    .kepala .gambar, .cip svg, .pilih-jenis span svg { color: var(--navy); }
+    .plat-besar { font-size: 1.45rem; font-weight: 700; letter-spacing: .5px; display: flex; align-items: center;
+                  gap: 8px; flex-wrap: wrap; line-height: 1.2; }
+    .lencana { font-size: .7rem; font-weight: 500; background: var(--lencana); color: #3b4350;
+               padding: 3px 8px; border-radius: 6px; letter-spacing: 0; }
+    .kecil { font-size: .85rem; color: var(--kelabu); }
+    .info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+    .info > div { background: var(--jubin); border-radius: 10px; padding: 10px 6px; display: flex;
+                  align-items: center; gap: 6px; min-width: 0; }
+    .info svg.ik { width: 24px; height: 24px; color: #3b4350; stroke-width: 1.4; }
+    .info b { display: block; font-size: clamp(.8rem, 3.6vw, 1rem); font-weight: 600; white-space: nowrap; }
+    .info span { font-size: .7rem; color: var(--kelabu); display: block; line-height: 1.2; }
+
+    /* Pilih jenis */
+    .pilih-jenis { display: flex; gap: 10px; }
+    .pilih-jenis label { flex: 1; cursor: pointer; }
+    .pilih-jenis input { position: absolute; opacity: 0; width: 0; }
+    .pilih-jenis span { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 8px;
+                        border: 1.5px solid var(--garis); border-radius: 10px; font-weight: 500; }
+    .pilih-jenis span svg { width: 42px; height: 28px; }
+    .pilih-jenis input:checked + span { border-color: var(--navy); background: #e7eef8; color: var(--navy); --latar-ikon: #e7eef8; }
+    .pilih-jenis input:focus-visible + span { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+    /* Sejarah */
+    .rekod { display: flex; justify-content: space-between; gap: 10px; background: var(--jubin);
+             border-left: 4px solid var(--navy); border-radius: 4px 10px 10px 4px; padding: 10px 12px; margin-bottom: 8px; }
+    .rekod .tajuk-r { font-weight: 600; }
+    .rekod .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .8rem; color: #3b4350; margin-top: 4px; }
+    .rekod .meta span { display: inline-flex; align-items: center; gap: 4px; }
+    .rekod .meta svg.ik { width: 15px; height: 15px; }
+    .rekod .catatan { font-size: .8rem; color: var(--kelabu); margin-top: 4px; }
+    .rekod .kanan { text-align: right; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; }
+    .rekod .kos { color: var(--hijau); font-weight: 600; white-space: nowrap; }
+    .tindakan { display: flex; gap: 12px; }
+    /* Peringatan */
+    .btn.garis { background: #fff; color: var(--navy); border: 1.5px dashed var(--navy); box-shadow: none;
+                 display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn.garis:hover { background: #f3f6fb; }
+    .panel { border: 1.5px solid var(--navy); border-radius: 12px; padding: 14px; margin-top: 12px; background: #f7f9fc; }
+    .panel .kepala-p { display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: var(--navy); }
+    .panel .kepala-p span { display: flex; align-items: center; gap: 6px; }
+    .tutup { background: none; border: 0; color: var(--kelabu); font-size: 1.2rem; cursor: pointer; padding: 0 4px; }
+    .togol { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: .9rem; font-weight: 500; cursor: pointer; }
+    .togol input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .suis { width: 40px; height: 22px; border-radius: 11px; background: #c9ced6; position: relative; flex-shrink: 0; transition: .2s; }
+    .suis::after { content: ""; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: .2s; }
+    .togol input:checked + .suis { background: var(--navy); }
+    .togol input:checked + .suis::after { left: 21px; }
+    .togol input:focus-visible + .suis { outline: 2px solid var(--navy); outline-offset: 2px; }
+    .pantas { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .pantas button { font-family: inherit; font-size: .78rem; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--garis);
+                     background: #fff; cursor: pointer; color: var(--teks); }
+    .pantas button.on { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .nota { font-size: .75rem; color: var(--kelabu); margin-top: 6px; }
+    .semak { display: flex; align-items: center; gap: 8px; font-size: .85rem; margin-top: 12px; cursor: pointer; }
+    .semak input { width: 18px; height: 18px; accent-color: var(--navy); margin: 0; flex-shrink: 0; }
+    .semak input:disabled + span { color: #9aa1ab; }
+    .banner { display: flex; gap: 10px; align-items: flex-start; border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-size: .82rem; }
+    .banner svg.ik { width: 22px; height: 22px; }
+    .banner b { display: block; font-size: .9rem; }
+    .banner.ok { background: #eef3fa; color: #2c4a73; border: 1px solid #d3deee; }
+    .banner.hampir { background: #fff6dc; color: #7a5500; border: 1px solid #f2d27a; }
+    .banner.lewat { background: #fde8e6; color: #a5221a; border: 1px solid #f3b2ab; }
+    .tag { display: inline-flex; align-items: center; gap: 3px; font-size: .72rem; background: #fff6dc; color: #7a5500;
+           border-radius: 6px; padding: 2px 6px; margin-top: 6px; }
+    .tag svg.ik { width: 13px; height: 13px; }
+    .cip .titik { width: 8px; height: 8px; border-radius: 50%; background: #e8a400; margin-left: 2px; }
+    .cip .titik.lewat { background: var(--merah); }
+    .cip-tajuk { font-size: .8rem; color: var(--kelabu); margin: 14px 0 8px; }
+    .senarai-cip { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px 7px 8px; border-radius: 999px;
+           border: 1.5px solid var(--garis); background: #fff; color: var(--teks); font-weight: 600;
+           font-size: .85rem; cursor: pointer; letter-spacing: .3px; }
+    .cip svg { width: 30px; height: 20px; }
+    .cip:hover { border-color: var(--navy); }
+    .cip.aktif { border-color: var(--navy); background: var(--navy); color: #fff; --latar-ikon: var(--navy); }
+    .cip.aktif svg { color: #fff; }
+    .edit { background: none; border: 0; color: var(--navy); cursor: pointer; font-size: .8rem;
+            display: inline-flex; align-items: center; gap: 3px; padding: 2px 0; }
+    .edit svg.ik { width: 15px; height: 15px; }
+    .rekod.diedit { border-left-color: #f2a600; background: #fff8e1; }
+    .padam { background: none; border: 0; color: var(--merah); cursor: pointer; font-size: .8rem;
+             display: inline-flex; align-items: center; gap: 3px; padding: 2px 0; }
+    .padam svg.ik { width: 15px; height: 15px; }
+
+    .mesej { padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; display: none; font-size: .9rem; }
+    .mesej.ok { background: #e6f4ea; color: var(--hijau); display: block; }
+    .mesej.ralat { background: #fce8e6; color: var(--merah); display: block; }
+    .tersembunyi { display: none !important; }
+    footer { max-width: 640px; margin: 0 auto; padding: 4px 16px 24px; text-align: center; font-size: .78rem; color: var(--kelabu); }
+    footer a { color: var(--navy); font-weight: 500; }
+    .kosong { text-align: center; color: var(--kelabu); padding: 14px 0; font-size: .9rem; }
+
+    @media (max-width: 380px) {
+      .info { grid-template-columns: 1fr; }
+      .kepala .gambar { width: 64px; height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ikon -->
+  <svg width="0" height="0" style="position:absolute">
+    <symbol id="i-cari" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+    <symbol id="i-kalendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/></symbol>
+    <symbol id="i-meter" viewBox="0 0 24 24"><path d="M4.5 17a8.5 8.5 0 1 1 15 0"/><path d="M12 14l4-5"/><circle cx="12" cy="14" r="1.3"/><path d="M7 9.5l.8.6M12 6.5v1M17 9.5l-.8.6"/></symbol>
+    <symbol id="i-sepana" viewBox="0 0 24 24"><path d="M14.5 6.5a4 4 0 0 0 5 5L12 19a2.1 2.1 0 0 1-3-3l7.5-7.5a4 4 0 0 1-2-2z"/><path d="M17 4.5l-2.5 2.5 2.5 2.5 2.5-2.5"/></symbol>
+    <symbol id="i-bengkel" viewBox="0 0 24 24"><path d="M3 20V9l9-5 9 5v11"/><path d="M6.5 20v-8h11v8M6.5 14.5h11M6.5 17h11"/></symbol>
+    <symbol id="i-fail" viewBox="0 0 24 24"><path d="M3.5 18V6a1.5 1.5 0 0 1 1.5-1.5h4l2 2h8a1.5 1.5 0 0 1 1.5 1.5v3"/><path d="M3.5 18a1.5 1.5 0 0 0 1.5 1.5h7"/><circle cx="17" cy="16" r="4"/><path d="M15.3 16l1.2 1.2 2.2-2.4"/></symbol>
+    <symbol id="i-duit" viewBox="0 0 24 24"><ellipse cx="9" cy="17" rx="6" ry="2.5"/><path d="M3 17v-3c0-1.4 2.7-2.5 6-2.5"/><circle cx="15.5" cy="9.5" r="6"/><text x="15.5" y="11.6" font-size="5.5" text-anchor="middle" stroke-width=".4" fill="currentColor" font-family="sans-serif" font-weight="700">RM</text></symbol>
+    <symbol id="i-tong" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-loceng" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-pensel" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></symbol>
+
+    <!-- Ilustrasi motosikal (skuter) — gaya garis -->
+    <symbol id="g-motor" viewBox="0 0 120 80"><path d="M16 52C9 47 11 37 22 34L60 33C63 33 64 36 64 40C64 44 66 46 70 46H77L83 29C85 23 88 20 93 20H98C101 27 100 36 95 43C92 47 89 50 85 51L40 52Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M24 34C26 28 31 26 38 26H57C61 26 62 29 61 33Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M83 12L101 10M92 11L91 20" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M95 25L98 26" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="59" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="28" cy="59" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="93" cy="59" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="93" cy="59" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+    <!-- Ilustrasi kereta — gaya garis -->
+    <symbol id="g-kereta" viewBox="0 0 120 80"><path d="M8 53V44C8 40 11 38 15 37L32 34L44 22C46 20 49 19 52 19H78C82 19 85 20 87 22L100 34L107 36C110 37 112 40 112 43V53Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M38 34L47 25H62V34Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M66 25H79C81 25 82 26 83 27L90 34H66Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 36V50M70 40H74M104 41H109M10 41H14" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="30" cy="56" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="91" cy="56" r="10" fill="none" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3"/><circle cx="91" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></symbol>
+  </svg>
+
+  <header>
+    <div class="dalam">
+      <svg class="logo" viewBox="0 0 52 48">
+        <circle cx="16" cy="14" r="5"/>
+        <path d="M16 4v3M16 21v3M6 14h3M23 14h3M9 7l2 2M21 19l2 2M9 21l2-2M21 9l2-2"/>
+        <path d="M36 4a5 5 0 0 0 4 7l4 4-3 3-4-4a5 5 0 0 1-7-4 5 5 0 0 1 6-6z"/>
+        <path d="M8 40v-6l4-8h28l4 8v6zM8 34h36M14 37h3M35 37h3M12 40v4M40 40v4"/>
+      </svg>
+      <h1>Rekod Maintenance Kenderaan</h1>
+    </div>
+  </header>
+
+  <main>
+    <div id="mesej" class="mesej"></div>
+
+    <!-- Carian -->
+    <section class="kad">
+      <h2>Cari Kenderaan</h2>
+      <div class="medan">
+        <svg class="ik"><use href="#i-cari"/></svg>
+        <input id="plat" list="senaraiPlat" placeholder="cth: WXY 1234" autocomplete="off">
+      </div>
+      <datalist id="senaraiPlat"></datalist>
+      <button id="btnCari" class="btn" onclick="cari()">Cari</button>
+      <div id="blokCip" class="tersembunyi">
+        <div class="cip-tajuk">Kenderaan berdaftar — tekan untuk buka:</div>
+        <div id="senaraiCip" class="senarai-cip"></div>
+      </div>
+    </section>
+
+    <!-- Daftar kenderaan baru -->
+    <section id="secDaftar" class="kad tersembunyi">
+      <h2>Kenderaan baru: <span id="platBaru"></span></h2>
+      <p class="kecil" style="margin:0">Kenderaan ini belum didaftarkan. Isi maklumat di bawah.</p>
+      <label class="tajuk">Jenis Kenderaan *</label>
+      <div class="pilih-jenis" role="radiogroup">
+        <label><input type="radio" name="dJenis" value="Motorsikal"><span><svg><use href="#g-motor"/></svg>Motorsikal</span></label>
+        <label><input type="radio" name="dJenis" value="Kereta"><span><svg><use href="#g-kereta"/></svg>Kereta</span></label>
+      </div>
+      <label class="tajuk">Jenama / Model</label>
+      <input id="dModel" placeholder="cth: Perodua Myvi 1.5">
+      <div class="baris">
+        <div><label class="tajuk">Tahun</label><input id="dTahun" type="number" inputmode="numeric" placeholder="2020"></div>
+        <div><label class="tajuk">Pemilik</label><input id="dPemilik" placeholder="Nama"></div>
+      </div>
+      <button id="btnDaftar" class="btn" onclick="daftar()">Daftar Kenderaan</button>
+    </section>
+
+    <!-- Maklumat kenderaan -->
+    <section id="secInfo" class="kad tersembunyi">
+      <div class="kepala">
+        <div class="gambar"><svg><use id="iGambar" href="#g-motor"/></svg></div>
+        <div style="min-width:0">
+          <div class="plat-besar"><span id="iPlat"></span><span id="iJenis" class="lencana"></span></div>
+          <div class="kecil" id="iModel"></div>
+        </div>
+      </div>
+      <div id="iPeringatan"></div>
+      <div class="info">
+        <div><svg class="ik"><use href="#i-fail"/></svg><div><b id="iBil">0</b><span>Rekod</span></div></div>
+        <div><svg class="ik"><use href="#i-meter"/></svg><div><b id="iMileage">-</b><span>Mileage terkini</span></div></div>
+        <div><svg class="ik"><use href="#i-duit"/></svg><div><b id="iKos">RM0</b><span>Jumlah kos</span></div></div>
+      </div>
+      <button class="btn sekunder" onclick="togolBorang()">+ Tambah Rekod</button>
+    </section>
+
+    <!-- Borang tambah rekod -->
+    <section id="secBorang" class="kad tersembunyi">
+      <h2 id="tajukBorang">Tambah Rekod Maintenance</h2>
+      <div class="baris">
+        <div>
+          <label class="tajuk">Tarikh *</label>
+          <div class="medan"><svg class="ik"><use href="#i-kalendar"/></svg><input id="rTarikh" type="date"></div>
+        </div>
+        <div>
+          <label class="tajuk">Mileage (km)</label>
+          <div class="medan"><svg class="ik"><use href="#i-meter"/></svg><input id="rMileage" type="number" inputmode="numeric" min="0" placeholder="45000"></div>
+        </div>
+      </div>
+      <label class="tajuk">Jenis Aktiviti *</label>
+      <div class="medan">
+        <svg class="ik"><use href="#i-sepana"/></svg>
+        <select id="rAktiviti" onchange="aktivitiLain()"></select>
+        <svg class="ik chevron"><use href="#i-chevron"/></svg>
+      </div>
+      <input id="rAktivitiLain" class="tersembunyi" style="margin-top:8px" placeholder="Nyatakan aktiviti">
+      <div class="baris">
+        <div>
+          <label class="tajuk">Kos (RM)</label>
+          <div class="medan"><span class="awalan">RM</span><input id="rKos" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0.00" autocomplete="off"></div>
+        </div>
+        <div>
+          <label class="tajuk">Bengkel</label>
+          <div class="medan"><svg class="ik"><use href="#i-bengkel"/></svg><input id="rBengkel" placeholder="Nama bengkel"></div>
+        </div>
+      </div>
+      <label class="tajuk">Catatan</label>
+      <textarea id="rCatatan" placeholder="cth: Minyak 5W-30 fully synthetic"></textarea>
+
+      <button id="btnIngat" type="button" class="btn garis" onclick="bukaPeringatan(true)">
+        <svg class="ik"><use href="#i-loceng"/></svg>Tetapkan Peringatan
+      </button>
+      <div id="panelIngat" class="panel tersembunyi">
+        <div class="kepala-p">
+          <span><svg class="ik"><use href="#i-loceng"/></svg>Peringatan seterusnya</span>
+          <button type="button" class="tutup" onclick="bukaPeringatan(false)" title="Buang peringatan">✕</button>
+        </div>
+
+        <label class="togol"><input type="checkbox" id="cbIngatKm" onchange="kemasPanel()"><span class="suis"></span>Ikut mileage</label>
+        <div id="blokIngatKm">
+          <div class="pantas" id="pantasKm">
+            <button type="button" data-km="1000">+1,000</button><button type="button" data-km="2000">+2,000</button>
+            <button type="button" data-km="3000">+3,000</button><button type="button" data-km="5000">+5,000</button>
+            <button type="button" data-km="10000">+10,000</button>
+          </div>
+          <div class="medan"><svg class="ik"><use href="#i-meter"/></svg>
+            <input id="rIngatMileage" type="number" inputmode="numeric" min="0" placeholder="Mileage peringatan (km)"></div>
+          <div class="nota" id="notaKm"></div>
+        </div>
+
+        <label class="togol"><input type="checkbox" id="cbIngatTarikh" onchange="kemasPanel()"><span class="suis"></span>Ikut tarikh</label>
+        <div id="blokIngatTarikh">
+          <div class="pantas" id="pantasTarikh">
+            <button type="button" data-bulan="1">+1 bulan</button><button type="button" data-bulan="3">+3 bulan</button>
+            <button type="button" data-bulan="6">+6 bulan</button><button type="button" data-bulan="12">+1 tahun</button>
+          </div>
+          <div class="medan"><svg class="ik"><use href="#i-kalendar"/></svg><input id="rIngatTarikh" type="date"></div>
+        </div>
+
+        <div class="nota">Mana-mana yang sampai dulu akan diingatkan.</div>
+        <label class="semak"><input type="checkbox" id="cbKalendar" checked><span>Tambah ke Google Calendar (perlu tarikh)</span></label>
+        <label class="semak"><input type="checkbox" id="cbEmel" checked><span>Hantar e-mel 7 hari / 500 km sebelum</span></label>
+      </div>
+      <button id="btnSimpan" class="btn" onclick="simpan()">Simpan Rekod</button>
+      <button id="btnBatal" class="btn sekunder tersembunyi" onclick="batalEdit()">Batal</button>
+    </section>
+
+    <!-- Sejarah -->
+    <section id="secSejarah" class="kad tersembunyi">
+      <h2>Sejarah Maintenance</h2>
+      <div id="senaraiRekod"></div>
+    </section>
+  </main>
+  <footer id="kaki"></footer>
+
+<script>
+  let platSemasa = '';
+  let mileageTerakhir = '';
+  let rekodSemasa = {};   // id -> rekod
+  let idEdit = null;      // null = mod tambah
+  let jenisSemasa = '';
+  const AKTIVITI_ASAS = [
+    'Servis berkala', 'Tukar minyak enjin', 'Tukar penapis minyak', 'Tukar penapis udara',
+    'Tukar tayar', 'Alignment / Balancing', 'Tukar bateri', 'Brek (pad/disc)',
+    'Minyak gear / ATF', 'Coolant / Radiator', 'Aircond', 'Cukai jalan / Insurans',
+    'Pemeriksaan PUSPAKOM', 'Pembaikan'
+  ];
+
+  /** Bina senarai aktiviti: asas + aktiviti "Lain-lain" yang pernah ditaip. */
+  function binaSenaraiAktiviti(tambahan = []) {
+    const pilihSemasa = $('rAktiviti').value;
+    const asasKecil = AKTIVITI_ASAS.map(a => a.toLowerCase());
+    const lain = tambahan.filter(a => !asasKecil.includes(a.toLowerCase()))
+                         .sort((a, b) => a.localeCompare(b));
+    const opt = a => `<option value="${esc(a)}">${esc(a)}</option>`;
+    $('rAktiviti').innerHTML =
+      '<option value="">-- Pilih --</option>' +
+      AKTIVITI_ASAS.map(opt).join('') +
+      (lain.length ? `<optgroup label="Aktiviti lain yang pernah direkod">${lain.map(opt).join('')}</optgroup>` : '') +
+      '<option value="__lain">Lain-lain… (taip baru)</option>';
+    $('rAktiviti').value = pilihSemasa;
+  }
+
+  const $ = id => document.getElementById(id);
+  const rm = n => 'RM' + Number(n || 0).toLocaleString('ms-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const km = n => (n === '' || n == null) ? '-' : Number(n).toLocaleString('ms-MY');
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  const fmtTarikh = s => { if (!s) return '-'; const [y,m,d] = s.split('-'); return `${d}/${m}/${y}`; };
+  const ik = nama => `<svg class="ik"><use href="#${nama}"/></svg>`;
+
+  function mesej(teks, jenis = 'ok') {
+    const el = $('mesej');
+    el.textContent = teks;
+    el.className = 'mesej ' + jenis;
+    clearTimeout(mesej.t);
+    mesej.t = setTimeout(() => el.className = 'mesej', 4000);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function panggil(fn, args, btn) {
+    return new Promise((resolve, reject) => {
+      if (btn) btn.disabled = true;
+      google.script.run
+        .withSuccessHandler(r => { if (btn) btn.disabled = false; resolve(r); })
+        .withFailureHandler(e => { if (btn) btn.disabled = false; mesej(e.message, 'ralat'); reject(e); })
+        [fn](...args);
+    });
+  }
+
+  function muatSenaraiPlat() {
+    google.script.run.withSuccessHandler(list => {
+      $('senaraiPlat').innerHTML = list.map(k => `<option value="${esc(k.plat)}">${esc(k.model)}</option>`).join('');
+      $('senaraiCip').innerHTML = list.map(k => `
+        <button class="cip" data-plat="${esc(k.plat)}" title="${esc(k.model)}" onclick="pilihPlat(this.dataset.plat)">
+          <svg><use href="#${k.jenis === 'Kereta' ? 'g-kereta' : 'g-motor'}"/></svg>${esc(k.plat)}${
+            k.status === 'lewat' || k.status === 'hampir' ? `<span class="titik ${k.status}"></span>` : ''}
+        </button>`).join('');
+      $('blokCip').classList.toggle('tersembunyi', !list.length);
+      tandaCipAktif();
+    }).senaraiKenderaan();
+  }
+
+  function pilihPlat(plat) {
+    $('plat').value = plat;
+    cari();
+  }
+
+  function tandaCipAktif() {
+    document.querySelectorAll('.cip').forEach(b => b.classList.toggle('aktif', b.dataset.plat === platSemasa));
+  }
+
+  function sembunyiSemua() {
+    ['secDaftar','secInfo','secBorang','secSejarah'].forEach(id => $(id).classList.add('tersembunyi'));
+  }
+
+  async function cari() {
+    const plat = $('plat').value.trim();
+    if (!plat) return mesej('Sila masukkan nombor plat.', 'ralat');
+    const data = await panggil('cariKenderaan', [plat], $('btnCari'));
+    papar(data);
+  }
+
+  function papar(data) {
+    sembunyiSemua();
+    platSemasa = data.plat;
+    tandaCipAktif();
+
+    if (!data.wujud) {
+      $('platBaru').textContent = data.plat;
+      ['dModel','dTahun','dPemilik'].forEach(id => $(id).value = '');
+      document.querySelectorAll('input[name="dJenis"]').forEach(r => r.checked = false);
+      $('secDaftar').classList.remove('tersembunyi');
+      return;
+    }
+
+    const k = data.kenderaan, s = data.ringkasan;
+    idEdit = null;
+    rekodSemasa = Object.fromEntries(data.rekod.map(r => [r.id, r]));
+    binaSenaraiAktiviti(data.senaraiAktiviti || []);
+    mileageTerakhir = s.mileageTerkini || '';
+    jenisSemasa = k.jenis;
+    $('iPeringatan').innerHTML = (data.peringatan || []).map(p => `
+      <div class="banner ${p.status}">${ik('i-loceng')}<div>
+        <b>${esc(p.aktiviti)}${p.status === 'lewat' ? ' — LEWAT' : ''}</b>${esc(teksPeringatan(p))}
+      </div></div>`).join('');
+    $('iGambar').setAttribute('href', k.jenis === 'Kereta' ? '#g-kereta' : '#g-motor');
+    $('iPlat').textContent = k.plat;
+    $('iJenis').textContent = k.jenis;
+    $('iJenis').classList.toggle('tersembunyi', !k.jenis);
+    $('iModel').textContent = [k.model, k.tahun, k.pemilik].filter(Boolean).join(' • ') || '—';
+    $('iBil').textContent = s.bilRekod;
+    $('iMileage').textContent = s.mileageTerkini ? km(s.mileageTerkini) + ' km' : '-';
+    $('iKos').textContent = rm(s.jumlahKos);
+    $('secInfo').classList.remove('tersembunyi');
+
+    $('senaraiRekod').innerHTML = data.rekod.length
+      ? data.rekod.map(r => `
+          <div class="rekod" id="rek-${esc(r.id)}">
+            <div style="min-width:0">
+              <div class="tajuk-r">${esc(r.aktiviti)}</div>
+              <div class="meta">
+                <span>${ik('i-kalendar')}${fmtTarikh(r.tarikh)}</span>
+                <span>${ik('i-meter')}${km(r.mileage)} km</span>
+                ${r.bengkel ? `<span>${ik('i-bengkel')}${esc(r.bengkel)}</span>` : ''}
+              </div>
+              ${r.catatan ? `<div class="catatan">${esc(r.catatan)}</div>` : ''}
+              ${r.aktif ? `<span class="tag">${ik('i-loceng')}Seterusnya: ${esc([
+                  r.ingatMileage !== '' ? km(r.ingatMileage) + ' km' : '',
+                  r.ingatTarikh ? fmtTarikh(r.ingatTarikh) : ''].filter(Boolean).join(' / '))}</span>` : ''}
+            </div>
+            <div class="kanan">
+              <span class="kos">${r.kos === '' ? '' : rm(r.kos)}</span>
+              <div class="tindakan">
+                <button class="edit" onclick="editRekod('${esc(r.id)}')">${ik('i-pensel')}Edit</button>
+                <button class="padam" onclick="padam('${esc(r.id)}')">${ik('i-tong')}Padam</button>
+              </div>
+            </div>
+          </div>`).join('')
+      : '<div class="kosong">Tiada rekod lagi. Tekan "+ Tambah Rekod".</div>';
+    $('secSejarah').classList.remove('tersembunyi');
+  }
+
+  async function daftar() {
+    const jenis = document.querySelector('input[name="dJenis"]:checked');
+    if (!jenis) return mesej('Sila pilih jenis kenderaan: Motorsikal atau Kereta.', 'ralat');
+    const data = await panggil('daftarKenderaan', [{
+      plat: platSemasa,
+      jenis: jenis.value,
+      model: $('dModel').value,
+      tahun: $('dTahun').value,
+      pemilik: $('dPemilik').value
+    }], $('btnDaftar'));
+    mesej('Kenderaan ' + data.plat + ' berjaya didaftarkan.');
+    papar(data);
+    muatSenaraiPlat();
+    togolBorang(true);
+  }
+
+  function togolBorang(paksaBuka) {
+    const sec = $('secBorang');
+    const buka = paksaBuka === true || sec.classList.contains('tersembunyi');
+    sec.classList.toggle('tersembunyi', !buka);
+    setModBorang(null);
+    if (buka) {
+      resetBorang();
+      sec.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function resetBorang() {
+    const t = new Date();
+    $('rTarikh').value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    ['rKos','rBengkel','rCatatan','rAktivitiLain'].forEach(id => $(id).value = '');
+    $('rMileage').value = mileageTerakhir;  // prefill dengan mileage rekod terakhir
+    $('rAktiviti').value = '';
+    $('rAktivitiLain').classList.add('tersembunyi');
+    resetPeringatan();
+  }
+
+  function aktivitiLain() {
+    $('rAktivitiLain').classList.toggle('tersembunyi', $('rAktiviti').value !== '__lain');
+  }
+
+  async function simpan() {
+    let aktiviti = $('rAktiviti').value;
+    if (aktiviti === '__lain') aktiviti = $('rAktivitiLain').value.trim();
+    if (!$('rTarikh').value) return mesej('Sila pilih tarikh.', 'ralat');
+    if (!aktiviti) return mesej('Sila pilih jenis aktiviti.', 'ralat');
+    const ingat = dataPeringatan();
+    if (panelBuka() && ingat.ingatMileage === '' && !ingat.ingatTarikh)
+      return mesej('Isi mileage atau tarikh peringatan, atau tekan ✕ untuk buang peringatan.', 'ralat');
+
+    const sedangEdit = !!idEdit;
+    const data = await panggil(sedangEdit ? 'kemaskiniRekod' : 'tambahRekod', [{
+      id: idEdit,
+      plat: platSemasa,
+      tarikh: $('rTarikh').value,
+      aktiviti: aktiviti,
+      mileage: $('rMileage').value,
+      kos: $('rKos').value,
+      bengkel: $('rBengkel').value,
+      catatan: $('rCatatan').value,
+      ...dataPeringatan()
+    }], $('btnSimpan'));
+    mesej(sedangEdit ? 'Rekod berjaya dikemaskini.' : 'Rekod berjaya disimpan.');
+    papar(data);
+    muatSenaraiPlat();
+  }
+
+  /** Tukar tajuk & butang borang ikut mod tambah / edit. */
+  function setModBorang(id) {
+    idEdit = id;
+    $('tajukBorang').textContent = id ? 'Edit Rekod Maintenance' : 'Tambah Rekod Maintenance';
+    $('btnSimpan').textContent = id ? 'Kemaskini Rekod' : 'Simpan Rekod';
+    $('btnBatal').classList.toggle('tersembunyi', !id);
+    document.querySelectorAll('.rekod.diedit').forEach(el => el.classList.remove('diedit'));
+    if (id && $('rek-' + id)) $('rek-' + id).classList.add('diedit');
+  }
+
+  function editRekod(id) {
+    const r = rekodSemasa[id];
+    if (!r) return;
+    resetBorang();
+    $('rTarikh').value = r.tarikh;
+    $('rMileage').value = r.mileage;
+    $('rKos').value = r.kos === '' ? '' : Number(r.kos).toFixed(2);
+    $('rBengkel').value = r.bengkel;
+    $('rCatatan').value = r.catatan;
+    const ada = [...$('rAktiviti').options].some(o => o.value === r.aktiviti);
+    $('rAktiviti').value = ada ? r.aktiviti : '__lain';
+    if (!ada) $('rAktivitiLain').value = r.aktiviti;
+    aktivitiLain();
+    if (r.ingatMileage !== '' || r.ingatTarikh) {
+      bukaPeringatan(true, true);
+      $('cbIngatKm').checked = r.ingatMileage !== '';
+      $('rIngatMileage').value = r.ingatMileage;
+      $('cbIngatTarikh').checked = !!r.ingatTarikh;
+      $('rIngatTarikh').value = r.ingatTarikh;
+      $('cbKalendar').checked = r.adaKalendar;
+      $('cbEmel').checked = r.ingatEmel;
+      kemasPanel();
+    }
+    setModBorang(id);
+    $('secBorang').classList.remove('tersembunyi');
+    $('secBorang').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function batalEdit() {
+    setModBorang(null);
+    $('secBorang').classList.add('tersembunyi');
+  }
+
+  async function padam(id) {
+    if (!confirm('Padam rekod ini?')) return;
+    const data = await panggil('padamRekod', [id, platSemasa]);
+    mesej('Rekod dipadam.');
+    papar(data);
+    muatSenaraiPlat();
+  }
+
+  $('plat').addEventListener('keydown', e => { if (e.key === 'Enter') cari(); });
+  // Pilih semua nombor bila disentuh supaya mudah ditaip ganti
+  $('rMileage').addEventListener('focus', e => e.target.select());
+
+  // Kos gaya mesin ATM: taip 1453 -> 14.53, taip 1500 -> 15.00 (tak perlu tekan titik)
+  $('rKos').addEventListener('input', e => {
+    const digit = e.target.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 9);
+    e.target.value = digit ? (Number(digit) / 100).toFixed(2) : '';
+  });
+  // Kursor sentiasa di hujung supaya digit ditambah dari kanan
+  $('rKos').addEventListener('focus', e => setTimeout(() => {
+    const n = e.target.value.length; e.target.setSelectionRange(n, n);
+  }, 0));
+  /* ---------- Peringatan ---------- */
+  const panelBuka = () => !$('panelIngat').classList.contains('tersembunyi');
+
+  function teksPeringatan(p) {
+    const bah = [];
+    if (p.bakiKm !== null) bah.push(p.bakiKm <= 0
+      ? `Pada ${km(p.ingatMileage)} km (lewat ${km(-p.bakiKm)} km)`
+      : `Pada ${km(p.ingatMileage)} km (baki ${km(p.bakiKm)} km)`);
+    if (p.bakiHari !== null) bah.push(p.bakiHari < 0
+      ? `${fmtTarikh(p.ingatTarikh)} (lewat ${-p.bakiHari} hari)`
+      : p.bakiHari === 0 ? `${fmtTarikh(p.ingatTarikh)} (hari ini)`
+      : `${fmtTarikh(p.ingatTarikh)} (${p.bakiHari} hari lagi)`);
+    return bah.join(' atau ');
+  }
+
+  /** Buka/tutup panel. Buka kali pertama = isi nilai lalai ikut jenis kenderaan. */
+  function bukaPeringatan(buka, tanpaLalai) {
+    $('panelIngat').classList.toggle('tersembunyi', !buka);
+    $('btnIngat').classList.toggle('tersembunyi', buka);
+    if (!buka) { resetPeringatan(); return; }
+    if (!tanpaLalai) {
+      const kereta = jenisSemasa === 'Kereta';
+      $('cbIngatKm').checked = true;
+      $('cbIngatTarikh').checked = true;
+      setKm(kereta ? 5000 : 3000);
+      setBulan(kereta ? 6 : 3);
+    }
+    kemasPanel();
+  }
+
+  function resetPeringatan() {
+    $('panelIngat').classList.add('tersembunyi');
+    $('btnIngat').classList.remove('tersembunyi');
+    ['rIngatMileage','rIngatTarikh'].forEach(id => $(id).value = '');
+    $('cbIngatKm').checked = $('cbIngatTarikh').checked = false;
+    $('cbKalendar').checked = $('cbEmel').checked = true;
+    tandaPantas();
+    kemasPanel();
+  }
+
+  function kemasPanel() {
+    const adaKm = $('cbIngatKm').checked, adaTarikh = $('cbIngatTarikh').checked;
+    $('blokIngatKm').classList.toggle('tersembunyi', !adaKm);
+    $('blokIngatTarikh').classList.toggle('tersembunyi', !adaTarikh);
+    $('cbKalendar').disabled = !adaTarikh;
+    const asas = Number($('rMileage').value) || 0, sasar = Number($('rIngatMileage').value) || 0;
+    $('notaKm').textContent = sasar
+      ? (sasar > asas ? `Mileage semasa ${km(asas)} km → ingatkan pada ${km(sasar)} km (+${km(sasar - asas)})`
+                      : 'Mileage peringatan mesti lebih tinggi daripada mileage semasa.')
+      : '';
+    tandaPantas();
+  }
+
+  function setKm(n) {
+    $('rIngatMileage').value = (Number($('rMileage').value) || Number(mileageTerakhir) || 0) + n;
+    kemasPanel();
+  }
+
+  function setBulan(n) {
+    const asas = $('rTarikh').value || new Date().toISOString().slice(0, 10);
+    const [y, m, d] = asas.split('-').map(Number);
+    const t = new Date(y, m - 1 + n, 1);
+    const hariMaks = new Date(t.getFullYear(), t.getMonth() + 1, 0).getDate(); // elak 31 Feb
+    t.setDate(Math.min(d, hariMaks));
+    $('rIngatTarikh').value = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+    kemasPanel();
+  }
+
+  /** Serlahkan butang pantas yang sepadan dengan nilai semasa. */
+  function tandaPantas() {
+    const asasKm = Number($('rMileage').value) || 0, sasar = Number($('rIngatMileage').value);
+    document.querySelectorAll('#pantasKm button').forEach(b =>
+      b.classList.toggle('on', !!sasar && sasar - asasKm === Number(b.dataset.km)));
+    document.querySelectorAll('#pantasTarikh button').forEach(b => {
+      const simpan = $('rIngatTarikh').value;
+      if (!simpan || !$('rTarikh').value) return b.classList.remove('on');
+      const [y1, m1] = $('rTarikh').value.split('-').map(Number), [y2, m2] = simpan.split('-').map(Number);
+      b.classList.toggle('on', (y2 - y1) * 12 + (m2 - m1) === Number(b.dataset.bulan));
+    });
+  }
+
+  function dataPeringatan() {
+    const buka = panelBuka();
+    const ingatMileage = buka && $('cbIngatKm').checked ? $('rIngatMileage').value : '';
+    const ingatTarikh = buka && $('cbIngatTarikh').checked ? $('rIngatTarikh').value : '';
+    return {
+      ingatMileage, ingatTarikh,
+      kalendar: !!ingatTarikh && $('cbKalendar').checked,
+      emel: (ingatMileage !== '' || !!ingatTarikh) && $('cbEmel').checked
+    };
+  }
+
+  document.querySelectorAll('#pantasKm button').forEach(b => b.onclick = () => setKm(Number(b.dataset.km)));
+  document.querySelectorAll('#pantasTarikh button').forEach(b => b.onclick = () => setBulan(Number(b.dataset.bulan)));
+  ['rIngatMileage','rIngatTarikh','rMileage','rTarikh'].forEach(id => $(id).addEventListener('input', kemasPanel));
+
+  binaSenaraiAktiviti();
+  muatSenaraiPlat();
+  google.script.run.withSuccessHandler(u => {
+    $('kaki').innerHTML = `Log masuk sebagai <b>${esc(u.emel)}</b><br>
+      Data anda disimpan dalam <a href="${esc(u.urlSheet)}" target="_blank">Google Sheet anda sendiri</a>`;
+  }).maklumatPengguna();
+</script>
+</body>
+</html>
