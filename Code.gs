@@ -46,6 +46,387 @@ const DOKUMEN = [
   { kod: 'insurans', nama: 'Insurans', kol: K.INSURANS, notis: K.NOTIS_INSURANS, cal: K.CAL_INSURANS }
 ];
 
+/* ===================== Bahasa (BM / EN / 中文 / தமிழ்) ===================== */
+
+const BAHASA_SAH = ['ms', 'en', 'zh', 'ta'];
+const KAMUS_S = {
+"ms": {
+"e_emel_tak_sah": "Alamat e-mel tidak sah.",
+"e_emel_sendiri": "Itu e-mel anda sendiri.",
+"e_kod_tak_sah": "Kod garaj tidak sah.",
+"e_garaj_sendiri": "Itu garaj anda sendiri.",
+"e_tiada_akses": "Tiada akses. Minta pemilik garaj kongsi dengan e-mel anda ({e}) dahulu.",
+"e_bukan_garaj": "Kod ini bukan garaj Rekod Maintenance Kenderaan.",
+"e_garaj_tiada": "Garaj tidak dijumpai.",
+"e_plat": "Sila masukkan nombor plat.",
+"e_plat_perlu": "Nombor plat diperlukan.",
+"e_jenis": "Sila pilih jenis kenderaan (Motorsikal / Kereta).",
+"e_sudah_daftar": "Kenderaan {p} sudah didaftarkan.",
+"e_kenderaan_tiada": "Kenderaan {p} tidak dijumpai.",
+"e_plat_digunakan": "Nombor plat {p} sudah digunakan kenderaan lain.",
+"e_belum_daftar": "Kenderaan {p} belum didaftarkan.",
+"e_mileage": "Mileage tidak sah.",
+"e_mileage_rendah": "Mileage {a} km lebih rendah daripada mileage terkini ({b} km).",
+"e_id_rekod": "ID rekod tidak sah.",
+"e_rekod_tiada": "Rekod tidak dijumpai. Mungkin telah dipadam.",
+"e_rekod_bukan": "Rekod bukan milik kenderaan ini.",
+"e_gambar_besar": "Gambar resit terlalu besar.",
+"e_tarikh": "Tarikh diperlukan.",
+"e_aktiviti": "Jenis aktiviti diperlukan.",
+"e_kos": "Kos tidak sah.",
+"e_ingat_km": "Mileage peringatan tidak sah.",
+"e_ingat_tinggi": "Mileage peringatan mesti lebih tinggi daripada mileage semasa.",
+"a_calendar_gagal": "Acara Google Calendar gagal dicipta: {m}",
+"garaj_saya": "Garaj saya",
+"garaj_milik": "Garaj {e}",
+"cukai": "Cukai jalan",
+"insurans": "Insurans",
+"pdf_tajuk": "Sejarah Maintenance",
+"pdf_bil": "Bilangan rekod",
+"pdf_km": "Mileage terkini",
+"pdf_kos": "Jumlah kos",
+"pdf_cukai": "Cukai jalan tamat",
+"pdf_insurans": "Insurans tamat",
+"pdf_c_tarikh": "Tarikh",
+"pdf_c_aktiviti": "Aktiviti",
+"pdf_c_mileage": "Mileage",
+"pdf_c_bengkel": "Bengkel",
+"pdf_c_kos": "Kos",
+"pdf_tiada": "Tiada rekod.",
+"pdf_dijana": "Dijana pada {t} — Rekod Maintenance Kenderaan",
+"pdf_fail": "Sejarah_Maintenance",
+"em_tajuk": "🔔 Peringatan Kenderaan",
+"em_intro": "Perkara berikut perlu perhatian tidak lama lagi:",
+"em_c_kenderaan": "Kenderaan",
+"em_c_perkara": "Perkara",
+"em_c_status": "Status",
+"em_buka": "Buka Rekod Maintenance Kenderaan",
+"em_subjek": "🔔 Peringatan kenderaan: {n} perkara",
+"b_lewat_km": "Lewat {a} km (pada {b} km)",
+"b_baki_km": "Baki {a} km (pada {b} km)",
+"b_lewat_hari": "Lewat {n} hari ({t})",
+"b_hari_ini": "Hari ini ({t})",
+"b_hari_lagi": "{n} hari lagi ({t})",
+"b_atau": " atau ",
+"h_tamat_lalu": "Tamat {n} hari lalu ({t})",
+"h_tamat_hari_ini": "Tamat hari ini ({t})",
+"h_tamat_dalam": "Tamat dalam {n} hari ({t})",
+"c_servis_ket": "Peringatan maintenance kenderaan {p}: {a}",
+"c_atau_km": "Atau pada {k} km (mana dulu).",
+"c_dok_tajuk": "📄 {d} tamat — {p}",
+"c_dok_ket": "{d} kenderaan {p} tamat pada tarikh ini. Sila perbaharui."
+},
+"en": {
+"e_emel_tak_sah": "Invalid email address.",
+"e_emel_sendiri": "That is your own email.",
+"e_kod_tak_sah": "Invalid garage code.",
+"e_garaj_sendiri": "That is your own garage.",
+"e_tiada_akses": "No access. Ask the garage owner to share it with your email ({e}) first.",
+"e_bukan_garaj": "This code is not a Vehicle Maintenance Log garage.",
+"e_garaj_tiada": "Garage not found.",
+"e_plat": "Please enter a plate number.",
+"e_plat_perlu": "Plate number is required.",
+"e_jenis": "Please choose a vehicle type (Motorcycle / Car).",
+"e_sudah_daftar": "Vehicle {p} is already registered.",
+"e_kenderaan_tiada": "Vehicle {p} not found.",
+"e_plat_digunakan": "Plate number {p} is already used by another vehicle.",
+"e_belum_daftar": "Vehicle {p} is not registered yet.",
+"e_mileage": "Invalid mileage.",
+"e_mileage_rendah": "Mileage {a} km is lower than the latest mileage ({b} km).",
+"e_id_rekod": "Invalid record ID.",
+"e_rekod_tiada": "Record not found. It may have been deleted.",
+"e_rekod_bukan": "This record does not belong to this vehicle.",
+"e_gambar_besar": "Receipt image is too large.",
+"e_tarikh": "Date is required.",
+"e_aktiviti": "Activity type is required.",
+"e_kos": "Invalid cost.",
+"e_ingat_km": "Invalid reminder mileage.",
+"e_ingat_tinggi": "Reminder mileage must be higher than the current mileage.",
+"a_calendar_gagal": "Google Calendar event could not be created: {m}",
+"garaj_saya": "My garage",
+"garaj_milik": "{e}'s garage",
+"cukai": "Road tax",
+"insurans": "Insurance",
+"pdf_tajuk": "Maintenance History",
+"pdf_bil": "Number of records",
+"pdf_km": "Latest mileage",
+"pdf_kos": "Total cost",
+"pdf_cukai": "Road tax expires",
+"pdf_insurans": "Insurance expires",
+"pdf_c_tarikh": "Date",
+"pdf_c_aktiviti": "Activity",
+"pdf_c_mileage": "Mileage",
+"pdf_c_bengkel": "Workshop",
+"pdf_c_kos": "Cost",
+"pdf_tiada": "No records.",
+"pdf_dijana": "Generated on {t} — Vehicle Maintenance Log",
+"pdf_fail": "Maintenance_History",
+"em_tajuk": "🔔 Vehicle Reminders",
+"em_intro": "The following items need attention soon:",
+"em_c_kenderaan": "Vehicle",
+"em_c_perkara": "Item",
+"em_c_status": "Status",
+"em_buka": "Open Vehicle Maintenance Log",
+"em_subjek": "🔔 Vehicle reminders: {n} item(s)",
+"b_lewat_km": "{a} km overdue (at {b} km)",
+"b_baki_km": "{a} km to go (at {b} km)",
+"b_lewat_hari": "{n} days overdue ({t})",
+"b_hari_ini": "Today ({t})",
+"b_hari_lagi": "In {n} days ({t})",
+"b_atau": " or ",
+"h_tamat_lalu": "Expired {n} days ago ({t})",
+"h_tamat_hari_ini": "Expires today ({t})",
+"h_tamat_dalam": "Expires in {n} days ({t})",
+"c_servis_ket": "Maintenance reminder for vehicle {p}: {a}",
+"c_atau_km": "Or at {k} km (whichever comes first).",
+"c_dok_tajuk": "📄 {d} expires — {p}",
+"c_dok_ket": "{d} for vehicle {p} expires on this date. Please renew."
+},
+"zh": {
+"e_emel_tak_sah": "电邮地址无效。",
+"e_emel_sendiri": "这是您自己的电邮。",
+"e_kod_tak_sah": "车库代码无效。",
+"e_garaj_sendiri": "这是您自己的车库。",
+"e_tiada_akses": "无权访问。请先让车库主人与您的电邮（{e}）共享。",
+"e_bukan_garaj": "此代码不是车辆保养记录的车库。",
+"e_garaj_tiada": "找不到车库。",
+"e_plat": "请输入车牌号码。",
+"e_plat_perlu": "必须填写车牌号码。",
+"e_jenis": "请选择车辆类型（摩托车 / 汽车）。",
+"e_sudah_daftar": "车辆 {p} 已登记。",
+"e_kenderaan_tiada": "找不到车辆 {p}。",
+"e_plat_digunakan": "车牌号码 {p} 已被其他车辆使用。",
+"e_belum_daftar": "车辆 {p} 尚未登记。",
+"e_mileage": "里程无效。",
+"e_mileage_rendah": "里程 {a} 公里低于最新里程（{b} 公里）。",
+"e_id_rekod": "记录编号无效。",
+"e_rekod_tiada": "找不到记录，可能已被删除。",
+"e_rekod_bukan": "此记录不属于该车辆。",
+"e_gambar_besar": "收据图片太大。",
+"e_tarikh": "必须填写日期。",
+"e_aktiviti": "必须选择保养项目。",
+"e_kos": "费用无效。",
+"e_ingat_km": "提醒里程无效。",
+"e_ingat_tinggi": "提醒里程必须高于当前里程。",
+"a_calendar_gagal": "无法创建 Google 日历活动：{m}",
+"garaj_saya": "我的车库",
+"garaj_milik": "{e} 的车库",
+"cukai": "路税",
+"insurans": "保险",
+"pdf_tajuk": "保养历史",
+"pdf_bil": "记录数量",
+"pdf_km": "最新里程",
+"pdf_kos": "总费用",
+"pdf_cukai": "路税到期",
+"pdf_insurans": "保险到期",
+"pdf_c_tarikh": "日期",
+"pdf_c_aktiviti": "项目",
+"pdf_c_mileage": "里程",
+"pdf_c_bengkel": "维修厂",
+"pdf_c_kos": "费用",
+"pdf_tiada": "没有记录。",
+"pdf_dijana": "生成于 {t} — 车辆保养记录",
+"pdf_fail": "Maintenance_History",
+"em_tajuk": "🔔 车辆提醒",
+"em_intro": "以下事项即将需要处理：",
+"em_c_kenderaan": "车辆",
+"em_c_perkara": "事项",
+"em_c_status": "状态",
+"em_buka": "打开车辆保养记录",
+"em_subjek": "🔔 车辆提醒：{n} 项",
+"b_lewat_km": "已超出 {a} 公里（于 {b} 公里）",
+"b_baki_km": "还剩 {a} 公里（于 {b} 公里）",
+"b_lewat_hari": "逾期 {n} 天（{t}）",
+"b_hari_ini": "今天（{t}）",
+"b_hari_lagi": "还有 {n} 天（{t}）",
+"b_atau": " 或 ",
+"h_tamat_lalu": "已于 {n} 天前到期（{t}）",
+"h_tamat_hari_ini": "今天到期（{t}）",
+"h_tamat_dalam": "{n} 天后到期（{t}）",
+"c_servis_ket": "车辆 {p} 保养提醒：{a}",
+"c_atau_km": "或于 {k} 公里时（以先到者为准）。",
+"c_dok_tajuk": "📄 {d} 到期 — {p}",
+"c_dok_ket": "车辆 {p} 的{d}于此日期到期，请续期。"
+},
+"ta": {
+"e_emel_tak_sah": "தவறான மின்னஞ்சல் முகவரி.",
+"e_emel_sendiri": "அது உங்கள் சொந்த மின்னஞ்சல்.",
+"e_kod_tak_sah": "தவறான கேரேஜ் குறியீடு.",
+"e_garaj_sendiri": "அது உங்கள் சொந்த கேரேஜ்.",
+"e_tiada_akses": "அணுகல் இல்லை. கேரேஜ் உரிமையாளரை முதலில் உங்கள் மின்னஞ்சலுடன் ({e}) பகிரச் சொல்லுங்கள்.",
+"e_bukan_garaj": "இந்தக் குறியீடு வாகன பராமரிப்புப் பதிவு கேரேஜ் அல்ல.",
+"e_garaj_tiada": "கேரேஜ் கிடைக்கவில்லை.",
+"e_plat": "பதிவு எண்ணை உள்ளிடவும்.",
+"e_plat_perlu": "பதிவு எண் தேவை.",
+"e_jenis": "வாகன வகையைத் தேர்ந்தெடுக்கவும் (மோட்டார் சைக்கிள் / கார்).",
+"e_sudah_daftar": "வாகனம் {p} ஏற்கனவே பதிவு செய்யப்பட்டுள்ளது.",
+"e_kenderaan_tiada": "வாகனம் {p} கிடைக்கவில்லை.",
+"e_plat_digunakan": "பதிவு எண் {p} ஏற்கனவே வேறு வாகனத்தால் பயன்படுத்தப்படுகிறது.",
+"e_belum_daftar": "வாகனம் {p} இன்னும் பதிவு செய்யப்படவில்லை.",
+"e_mileage": "தவறான மைலேஜ்.",
+"e_mileage_rendah": "மைலேஜ் {a} கி.மீ சமீபத்திய மைலேஜை ({b} கி.மீ) விடக் குறைவு.",
+"e_id_rekod": "தவறான பதிவு அடையாளம்.",
+"e_rekod_tiada": "பதிவு கிடைக்கவில்லை. அது நீக்கப்பட்டிருக்கலாம்.",
+"e_rekod_bukan": "இந்தப் பதிவு இந்த வாகனத்திற்குச் சொந்தமானது அல்ல.",
+"e_gambar_besar": "ரசீது படம் மிகப் பெரியது.",
+"e_tarikh": "தேதி தேவை.",
+"e_aktiviti": "செயல்பாட்டு வகை தேவை.",
+"e_kos": "தவறான செலவு.",
+"e_ingat_km": "தவறான நினைவூட்டல் மைலேஜ்.",
+"e_ingat_tinggi": "நினைவூட்டல் மைலேஜ் தற்போதைய மைலேஜை விட அதிகமாக இருக்க வேண்டும்.",
+"a_calendar_gagal": "Google Calendar நிகழ்வை உருவாக்க முடியவில்லை: {m}",
+"garaj_saya": "என் கேரேஜ்",
+"garaj_milik": "{e} கேரேஜ்",
+"cukai": "சாலை வரி",
+"insurans": "காப்பீடு",
+"pdf_tajuk": "பராமரிப்பு வரலாறு",
+"pdf_bil": "பதிவுகளின் எண்ணிக்கை",
+"pdf_km": "சமீபத்திய மைலேஜ்",
+"pdf_kos": "மொத்த செலவு",
+"pdf_cukai": "சாலை வரி காலாவதி",
+"pdf_insurans": "காப்பீடு காலாவதி",
+"pdf_c_tarikh": "தேதி",
+"pdf_c_aktiviti": "செயல்பாடு",
+"pdf_c_mileage": "மைலேஜ்",
+"pdf_c_bengkel": "பணிமனை",
+"pdf_c_kos": "செலவு",
+"pdf_tiada": "பதிவுகள் இல்லை.",
+"pdf_dijana": "{t} அன்று உருவாக்கப்பட்டது — வாகன பராமரிப்புப் பதிவு",
+"pdf_fail": "Maintenance_History",
+"em_tajuk": "🔔 வாகன நினைவூட்டல்கள்",
+"em_intro": "பின்வருவன விரைவில் கவனம் தேவை:",
+"em_c_kenderaan": "வாகனம்",
+"em_c_perkara": "விஷயம்",
+"em_c_status": "நிலை",
+"em_buka": "வாகன பராமரிப்புப் பதிவைத் திற",
+"em_subjek": "🔔 வாகன நினைவூட்டல்கள்: {n}",
+"b_lewat_km": "{a} கி.மீ தாமதம் ({b} கி.மீ-இல்)",
+"b_baki_km": "இன்னும் {a} கி.மீ ({b} கி.மீ-இல்)",
+"b_lewat_hari": "{n} நாட்கள் தாமதம் ({t})",
+"b_hari_ini": "இன்று ({t})",
+"b_hari_lagi": "{n} நாட்களில் ({t})",
+"b_atau": " அல்லது ",
+"h_tamat_lalu": "{n} நாட்களுக்கு முன் காலாவதியானது ({t})",
+"h_tamat_hari_ini": "இன்று காலாவதியாகிறது ({t})",
+"h_tamat_dalam": "{n} நாட்களில் காலாவதியாகிறது ({t})",
+"c_servis_ket": "வாகனம் {p} பராமரிப்பு நினைவூட்டல்: {a}",
+"c_atau_km": "அல்லது {k} கி.மீ-இல் (எது முதலில்).",
+"c_dok_tajuk": "📄 {d} காலாவதி — {p}",
+"c_dok_ket": "வாகனம் {p}-இன் {d} இந்தத் தேதியில் காலாவதியாகிறது. புதுப்பிக்கவும்."
+}
+};
+const AKTIVITI_S = {
+"ms": {
+"Servis berkala": "Servis berkala",
+"Tukar minyak enjin": "Tukar minyak enjin",
+"Tukar penapis minyak": "Tukar penapis minyak",
+"Tukar penapis udara": "Tukar penapis udara",
+"Tukar tayar": "Tukar tayar",
+"Alignment / Balancing": "Alignment / Balancing",
+"Tukar bateri": "Tukar bateri",
+"Brek (pad/disc)": "Brek (pad/disc)",
+"Minyak gear / ATF": "Minyak gear / ATF",
+"Coolant / Radiator": "Coolant / Radiator",
+"Aircond": "Aircond",
+"Cukai jalan / Insurans": "Cukai jalan / Insurans",
+"Pemeriksaan PUSPAKOM": "Pemeriksaan PUSPAKOM",
+"Pembaikan": "Pembaikan",
+"Cukai jalan": "Cukai jalan",
+"Insurans": "Insurans"
+},
+"en": {
+"Servis berkala": "Periodic service",
+"Tukar minyak enjin": "Engine oil change",
+"Tukar penapis minyak": "Oil filter change",
+"Tukar penapis udara": "Air filter change",
+"Tukar tayar": "Tyre change",
+"Alignment / Balancing": "Alignment / Balancing",
+"Tukar bateri": "Battery change",
+"Brek (pad/disc)": "Brakes (pads/discs)",
+"Minyak gear / ATF": "Gear oil / ATF",
+"Coolant / Radiator": "Coolant / Radiator",
+"Aircond": "Air-conditioning",
+"Cukai jalan / Insurans": "Road tax / Insurance",
+"Pemeriksaan PUSPAKOM": "PUSPAKOM inspection",
+"Pembaikan": "Repair",
+"Cukai jalan": "Road tax",
+"Insurans": "Insurance"
+},
+"zh": {
+"Servis berkala": "定期保养",
+"Tukar minyak enjin": "更换机油",
+"Tukar penapis minyak": "更换机油滤芯",
+"Tukar penapis udara": "更换空气滤芯",
+"Tukar tayar": "更换轮胎",
+"Alignment / Balancing": "四轮定位 / 平衡",
+"Tukar bateri": "更换电池",
+"Brek (pad/disc)": "刹车（刹车片/碟盘）",
+"Minyak gear / ATF": "齿轮油 / 变速箱油",
+"Coolant / Radiator": "冷却液 / 水箱",
+"Aircond": "冷气",
+"Cukai jalan / Insurans": "路税 / 保险",
+"Pemeriksaan PUSPAKOM": "PUSPAKOM 检验",
+"Pembaikan": "维修",
+"Cukai jalan": "路税",
+"Insurans": "保险"
+},
+"ta": {
+"Servis berkala": "காலமுறை சேவை",
+"Tukar minyak enjin": "இன்ஜின் எண்ணெய் மாற்றம்",
+"Tukar penapis minyak": "எண்ணெய் வடிகட்டி மாற்றம்",
+"Tukar penapis udara": "காற்று வடிகட்டி மாற்றம்",
+"Tukar tayar": "டயர் மாற்றம்",
+"Alignment / Balancing": "அலைன்மென்ட் / பேலன்சிங்",
+"Tukar bateri": "பேட்டரி மாற்றம்",
+"Brek (pad/disc)": "பிரேக் (பேட்/டிஸ்க்)",
+"Minyak gear / ATF": "கியர் எண்ணெய் / ATF",
+"Coolant / Radiator": "குளிரூட்டி / ரேடியேட்டர்",
+"Aircond": "குளிர்சாதனம்",
+"Cukai jalan / Insurans": "சாலை வரி / காப்பீடு",
+"Pemeriksaan PUSPAKOM": "PUSPAKOM ஆய்வு",
+"Pembaikan": "பழுதுபார்ப்பு",
+"Cukai jalan": "சாலை வரி",
+"Insurans": "காப்பீடு"
+}
+};
+let BAHASA_CACHE = null;
+
+/** Bahasa pengguna semasa (disimpan dalam UserProperties). */
+function bahasa_() {
+  if (BAHASA_CACHE) return BAHASA_CACHE;
+  const b = PropertiesService.getUserProperties().getProperty('BAHASA');
+  return (BAHASA_CACHE = BAHASA_SAH.indexOf(b) >= 0 ? b : 'ms');
+}
+
+/** Simpan pilihan bahasa (dipanggil dari app). */
+function simpanBahasa(b) {
+  if (BAHASA_SAH.indexOf(b) < 0) return bahasa_();
+  PropertiesService.getUserProperties().setProperty('BAHASA', b);
+  BAHASA_CACHE = b;
+  return b;
+}
+
+/** Terjemah kunci, ganti {pembolehubah}. */
+function T_(k, v) {
+  const b = bahasa_();
+  let s = (KAMUS_S[b] && KAMUS_S[b][k]) || KAMUS_S.ms[k] || k;
+  Object.keys(v || {}).forEach(x => { s = s.split('{' + x + '}').join(String(v[x])); });
+  return s;
+}
+
+/** Nama jenis kenderaan ikut bahasa. */
+function namaJenis_(j) {
+  const t = { Motorsikal: { ms: 'Motorsikal', en: 'Motorcycle', zh: '摩托车', ta: 'மோட்டார் சைக்கிள்' },
+              Kereta: { ms: 'Kereta', en: 'Car', zh: '汽车', ta: 'கார்' } }[j];
+  return t ? t[bahasa_()] : j;
+}
+
+/** Nama aktiviti asas ikut bahasa (aktiviti lain dipapar seperti ditaip). */
+function namaAktiviti_(a) {
+  const t = AKTIVITI_S[bahasa_()];
+  return (t && t[a]) || a;
+}
+
 /* ===================== Web app ===================== */
 
 function doGet() {
@@ -124,7 +505,7 @@ function senaraiDisertai_() {
 }
 
 function namaGaraj_(ss) {
-  try { return 'Garaj ' + ss.getOwner().getEmail(); } catch (e) { return ss.getName(); }
+  try { return T_('garaj_milik', { e: ss.getOwner().getEmail() }); } catch (e) { return ss.getName(); }
 }
 
 /** Maklumat pengguna & garaj untuk dipaparkan di app. */
@@ -135,7 +516,8 @@ function maklumatPengguna() {
     emel: emelSaya_(),
     urlSheet: ss.getUrl(),
     garajSendiri: ss.getId() === sendiri.getId(),
-    namaGaraj: ss.getId() === sendiri.getId() ? 'Garaj saya' : namaGaraj_(ss)
+    namaGaraj: ss.getId() === sendiri.getId() ? T_('garaj_saya') : namaGaraj_(ss),
+    bahasa: bahasa_()
   };
 }
 
@@ -144,7 +526,7 @@ function senaraiGaraj() {
   const saya = emelSaya_();
   const sendiri = ssSendiri_(true);
   const aktifId = ss_().getId();
-  const garaj = [{ id: sendiri.getId(), nama: 'Garaj saya', sendiri: true, aktif: aktifId === sendiri.getId() }];
+  const garaj = [{ id: sendiri.getId(), nama: T_('garaj_saya'), sendiri: true, aktif: aktifId === sendiri.getId() }];
   senaraiDisertai_().forEach(id => {
     const ss = bukaSS_(id);
     if (ss) garaj.push({ id: id, nama: namaGaraj_(ss), sendiri: false, aktif: aktifId === id });
@@ -157,8 +539,8 @@ function senaraiGaraj() {
 /** Kongsi garaj sendiri dengan ahli keluarga (beri akses edit pada Sheet). */
 function kongsiGaraj(emel) {
   emel = String(emel || '').trim().toLowerCase();
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emel)) throw new Error('Alamat e-mel tidak sah.');
-  if (emel === emelSaya_().toLowerCase()) throw new Error('Itu e-mel anda sendiri.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emel)) throw new Error(T_('e_emel_tak_sah'));
+  if (emel === emelSaya_().toLowerCase()) throw new Error(T_('e_emel_sendiri'));
   ssSendiri_(true).addEditor(emel);
   return senaraiGaraj();
 }
@@ -171,12 +553,12 @@ function buangAhli(emel) {
 /** Sertai garaj orang lain menggunakan kod (ID Sheet) atau pautan Sheet. */
 function sertaiGaraj(kod) {
   const m = String(kod || '').match(/[-\w]{25,}/);
-  if (!m) throw new Error('Kod garaj tidak sah.');
+  if (!m) throw new Error(T_('e_kod_tak_sah'));
   const id = m[0];
-  if (id === ssSendiri_(true).getId()) throw new Error('Itu garaj anda sendiri.');
+  if (id === ssSendiri_(true).getId()) throw new Error(T_('e_garaj_sendiri'));
   const ss = bukaSS_(id);
-  if (!ss) throw new Error('Tiada akses. Minta pemilik garaj kongsi dengan e-mel anda (' + emelSaya_() + ') dahulu.');
-  if (!ss.getSheetByName(SHEET_KENDERAAN)) throw new Error('Kod ini bukan garaj Rekod Maintenance Kenderaan.');
+  if (!ss) throw new Error(T_('e_tiada_akses', { e: emelSaya_() }));
+  if (!ss.getSheetByName(SHEET_KENDERAAN)) throw new Error(T_('e_bukan_garaj'));
 
   const props = PropertiesService.getUserProperties();
   const senarai = senaraiDisertai_();
@@ -191,7 +573,7 @@ function tukarGaraj(id) {
   const props = PropertiesService.getUserProperties();
   if (id === props.getProperty('SS_ID')) props.deleteProperty('AKTIF_ID');
   else if (senaraiDisertai_().indexOf(id) >= 0) props.setProperty('AKTIF_ID', id);
-  else throw new Error('Garaj tidak dijumpai.');
+  else throw new Error(T_('e_garaj_tiada'));
   SS_CACHE = null;
   return senaraiGaraj();
 }
@@ -226,7 +608,7 @@ function senaraiKenderaan() {
 /** Cari kenderaan + semua rekod, peringatan, log mileage, templat. */
 function cariKenderaan(plat) {
   plat = normPlat_(plat);
-  if (!plat) throw new Error('Sila masukkan nombor plat.');
+  if (!plat) throw new Error(T_('e_plat'));
 
   const kenderaan = findKenderaan_(plat);
   if (!kenderaan) return { wujud: false, plat: plat };
@@ -273,12 +655,12 @@ function cariKenderaan(plat) {
 /** Daftar kenderaan baru. */
 function daftarKenderaan(data) {
   const plat = normPlat_(data.plat);
-  if (!plat) throw new Error('Nombor plat diperlukan.');
-  if (JENIS_KENDERAAN.indexOf(data.jenis) < 0) throw new Error('Sila pilih jenis kenderaan (Motorsikal / Kereta).');
+  if (!plat) throw new Error(T_('e_plat_perlu'));
+  if (JENIS_KENDERAAN.indexOf(data.jenis) < 0) throw new Error(T_('e_jenis'));
   const cukai = tarikhSah_(data.tamatCukai), insurans = tarikhSah_(data.tamatInsurans);
 
   return withLock_(() => {
-    if (findKenderaan_(plat)) throw new Error('Kenderaan ' + plat + ' sudah didaftarkan.');
+    if (findKenderaan_(plat)) throw new Error(T_('e_sudah_daftar', { p: plat }));
     getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN).appendRow([
       plat, clean_(data.model), clean_(data.tahun), clean_(data.pemilik), new Date(), data.jenis, kodIkon_(data.ikon),
       cukai ? keTarikh_(cukai) : '', insurans ? keTarikh_(insurans) : '', '', '',
@@ -293,15 +675,15 @@ function daftarKenderaan(data) {
 function kemaskiniKenderaan(data) {
   const asal = normPlat_(data.platAsal);
   const baru = normPlat_(data.plat);
-  if (!asal || !baru) throw new Error('Nombor plat diperlukan.');
-  if (JENIS_KENDERAAN.indexOf(data.jenis) < 0) throw new Error('Sila pilih jenis kenderaan (Motorsikal / Kereta).');
+  if (!asal || !baru) throw new Error(T_('e_plat_perlu'));
+  if (JENIS_KENDERAAN.indexOf(data.jenis) < 0) throw new Error(T_('e_jenis'));
   const tarikhBaru = { cukai: tarikhSah_(data.tamatCukai), insurans: tarikhSah_(data.tamatInsurans) };
 
   return withLock_(() => {
     const shK = getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN);
     const baris = cariBaris_(shK, 0, asal, normPlat_);
-    if (!baris) throw new Error('Kenderaan ' + asal + ' tidak dijumpai.');
-    if (baru !== asal && findKenderaan_(baru)) throw new Error('Nombor plat ' + baru + ' sudah digunakan kenderaan lain.');
+    if (!baris) throw new Error(T_('e_kenderaan_tiada', { p: asal }));
+    if (baru !== asal && findKenderaan_(baru)) throw new Error(T_('e_plat_digunakan', { p: baru }));
 
     const row = shK.getRange(baris, 1, 1, HDR_KENDERAAN.length).getValues()[0];
     row[K.PLAT] = baru;
@@ -355,7 +737,7 @@ function padamKenderaan(plat) {
   return withLock_(() => {
     const shK = getSheet_(SHEET_KENDERAAN, HDR_KENDERAAN);
     const baris = cariBaris_(shK, 0, plat, normPlat_);
-    if (!baris) throw new Error('Kenderaan ' + plat + ' tidak dijumpai.');
+    if (!baris) throw new Error(T_('e_kenderaan_tiada', { p: plat }));
     const row = shK.getRange(baris, 1, 1, HDR_KENDERAAN.length).getValues()[0];
     DOKUMEN.forEach(d => padamAcara_(row[d.cal]));
 
@@ -381,14 +763,14 @@ function padamKenderaan(plat) {
 function kemaskiniMileage(data) {
   const plat = normPlat_(data.plat);
   const km = Number(data.mileage);
-  if (!data.mileage || isNaN(km) || km < 0) throw new Error('Mileage tidak sah.');
+  if (!data.mileage || isNaN(km) || km < 0) throw new Error(T_('e_mileage'));
   const tarikh = tarikhSah_(data.tarikh) || fmtDate_(new Date());
 
   return withLock_(() => {
-    if (!findKenderaan_(plat)) throw new Error('Kenderaan ' + plat + ' tidak dijumpai.');
+    if (!findKenderaan_(plat)) throw new Error(T_('e_kenderaan_tiada', { p: plat }));
     const maxKm = prosesPeringatan_(bacaRekod_(), bacaMileage_());
     if (km < (maxKm[plat] || 0)) {
-      throw new Error(`Mileage ${km.toLocaleString()} km lebih rendah daripada mileage terkini (${(maxKm[plat] || 0).toLocaleString()} km).`);
+      throw new Error(T_('e_mileage_rendah', { a: km.toLocaleString(), b: (maxKm[plat] || 0).toLocaleString() }));
     }
     getSheet_(SHEET_MILEAGE, HDR_MILEAGE).appendRow([Utilities.getUuid().slice(0, 8), plat, keTarikh_(tarikh), km, new Date()]);
     return cariKenderaan(plat);
@@ -400,12 +782,12 @@ function kemaskiniMileage(data) {
 /** Tambah rekod maintenance (dengan peringatan, templat & resit jika ada). */
 function tambahRekod(data) {
   const plat = normPlat_(data.plat);
-  if (!plat) throw new Error('Nombor plat diperlukan.');
+  if (!plat) throw new Error(T_('e_plat_perlu'));
   const nilai = nilaiRekod_(data);
   const ingat = nilaiPeringatan_(data);
 
   return withLock_(() => {
-    if (!findKenderaan_(plat)) throw new Error('Kenderaan ' + plat + ' belum didaftarkan.');
+    if (!findKenderaan_(plat)) throw new Error(T_('e_belum_daftar', { p: plat }));
     const sh = getSheet_(SHEET_REKOD, HDR_REKOD);
     const calId = (data.kalendar && ingat.tarikh)
       ? ciptaAcara_(plat, nilai[1], ingat.tarikh, ingat.mileage) : '';
@@ -423,16 +805,16 @@ function tambahRekod(data) {
 /** Kemaskini rekod sedia ada berdasarkan ID. */
 function kemaskiniRekod(data) {
   const plat = normPlat_(data.plat);
-  if (!data.id) throw new Error('ID rekod tidak sah.');
+  if (!data.id) throw new Error(T_('e_id_rekod'));
   const nilai = nilaiRekod_(data);
   const ingat = nilaiPeringatan_(data);
 
   return withLock_(() => {
     const sh = getSheet_(SHEET_REKOD, HDR_REKOD);
     const baris = cariBaris_(sh, R.ID, data.id, String);
-    if (!baris) throw new Error('Rekod tidak dijumpai. Mungkin telah dipadam.');
+    if (!baris) throw new Error(T_('e_rekod_tiada'));
     const row = sh.getRange(baris, 1, 1, HDR_REKOD.length).getValues()[0];
-    if (normPlat_(row[R.PLAT]) !== plat) throw new Error('Rekod bukan milik kenderaan ini.');
+    if (normPlat_(row[R.PLAT]) !== plat) throw new Error(T_('e_rekod_bukan'));
 
     padamAcara_(row[R.CAL_ID]);
     const calId = (data.kalendar && ingat.tarikh)
@@ -531,7 +913,7 @@ function folderResit_() {
 /** resit = { b64, mime } — gambar telah dimampatkan di pelayar. */
 function simpanResit_(plat, resit) {
   if (!resit || !resit.b64) return { id: '', url: '' };
-  if (resit.b64.length > 8 * 1024 * 1024) throw new Error('Gambar resit terlalu besar.');
+  if (resit.b64.length > 8 * 1024 * 1024) throw new Error(T_('e_gambar_besar'));
   const nama = `Resit_${plat}_${Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd_HHmmss')}.jpg`;
   const blob = Utilities.newBlob(Utilities.base64Decode(resit.b64), resit.mime || 'image/jpeg', nama);
   const fail = Drive.Files.create({ name: nama, parents: [folderResit_()] }, blob, { fields: 'id,webViewLink' });
@@ -565,7 +947,7 @@ function ahliGaraj_() {
 
 function eksportPdf(plat) {
   const d = cariKenderaan(plat);
-  if (!d.wujud) throw new Error('Kenderaan tidak dijumpai.');
+  if (!d.wujud) throw new Error(T_('e_kenderaan_tiada', { p: plat }));
   const k = d.kenderaan;
   const fmt = s => s ? s.split('-').reverse().join('/') : '-';
   const rm = n => n === '' || n == null ? '-' : 'RM' + Number(n).toFixed(2);
@@ -573,7 +955,7 @@ function eksportPdf(plat) {
 
   const baris = d.rekod.slice().reverse().map((r, i) => `
     <tr${i % 2 ? ' style="background:#f5f7fa"' : ''}>
-      <td>${fmt(r.tarikh)}</td><td>${esc_(r.aktiviti)}${r.catatan ? `<br><span class="c">${esc_(r.catatan)}</span>` : ''}</td>
+      <td>${fmt(r.tarikh)}</td><td>${esc_(namaAktiviti_(r.aktiviti))}${r.catatan ? `<br><span class="c">${esc_(r.catatan)}</span>` : ''}</td>
       <td class="n">${km(r.mileage)}</td><td>${esc_(r.bengkel)}</td><td class="n">${rm(r.kos)}</td>
     </tr>`).join('');
 
@@ -589,20 +971,20 @@ function eksportPdf(plat) {
     .n{text-align:right;white-space:nowrap} .c{color:#5f6670;font-size:10px}
     .kaki{margin-top:16px;color:#5f6670;font-size:9px}
   </style></head><body>
-    <h1>Sejarah Maintenance — ${esc_(k.plat)}</h1>
-    <div class="sub">${esc_([k.jenis, k.model, k.tahun, k.pemilik].filter(Boolean).join(' • '))}</div>
-    <div class="kotak">Bilangan rekod<b>${d.ringkasan.bilRekod}</b></div>
-    <div class="kotak">Mileage terkini<b>${km(d.ringkasan.mileageTerkini)}</b></div>
-    <div class="kotak">Jumlah kos<b>${rm(d.ringkasan.jumlahKos)}</b></div>
-    ${k.tamatCukai ? `<div class="kotak">Cukai jalan tamat<b>${fmt(k.tamatCukai)}</b></div>` : ''}
-    ${k.tamatInsurans ? `<div class="kotak">Insurans tamat<b>${fmt(k.tamatInsurans)}</b></div>` : ''}
-    <table><tr><th>Tarikh</th><th>Aktiviti</th><th class="n">Mileage</th><th>Bengkel</th><th class="n">Kos</th></tr>
-    ${baris || '<tr><td colspan="5">Tiada rekod.</td></tr>'}</table>
-    <div class="kaki">Dijana pada ${Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm')} — Rekod Maintenance Kenderaan</div>
+    <h1>${T_('pdf_tajuk')} — ${esc_(k.plat)}</h1>
+    <div class="sub">${esc_([namaJenis_(k.jenis), k.model, k.tahun, k.pemilik].filter(Boolean).join(' • '))}</div>
+    <div class="kotak">${T_('pdf_bil')}<b>${d.ringkasan.bilRekod}</b></div>
+    <div class="kotak">${T_('pdf_km')}<b>${km(d.ringkasan.mileageTerkini)}</b></div>
+    <div class="kotak">${T_('pdf_kos')}<b>${rm(d.ringkasan.jumlahKos)}</b></div>
+    ${k.tamatCukai ? `<div class="kotak">${T_('pdf_cukai')}<b>${fmt(k.tamatCukai)}</b></div>` : ''}
+    ${k.tamatInsurans ? `<div class="kotak">${T_('pdf_insurans')}<b>${fmt(k.tamatInsurans)}</b></div>` : ''}
+    <table><tr><th>${T_('pdf_c_tarikh')}</th><th>${T_('pdf_c_aktiviti')}</th><th class="n">${T_('pdf_c_mileage')}</th><th>${T_('pdf_c_bengkel')}</th><th class="n">${T_('pdf_c_kos')}</th></tr>
+    ${baris || `<tr><td colspan="5">${T_('pdf_tiada')}</td></tr>`}</table>
+    <div class="kaki">${T_('pdf_dijana', { t: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm') })}</div>
   </body></html>`;
 
   const pdf = Utilities.newBlob(html, 'text/html', 'laporan.html').getAs('application/pdf');
-  return { nama: `Sejarah_Maintenance_${k.plat}.pdf`, b64: Utilities.base64Encode(pdf.getBytes()) };
+  return { nama: `${T_('pdf_fail')}_${k.plat}.pdf`, b64: Utilities.base64Encode(pdf.getBytes()) };
 }
 
 /* ===================== Peringatan ===================== */
@@ -680,7 +1062,7 @@ function semakPeringatanHarian() {
     const kunci = d.tarikh + '|' + tahap;
     const sudahLebihDekat = sudah.indexOf(d.tarikh + '|') === 0 && Number(sudah.split('|')[1]) <= tahap;
     if (sudahLebihDekat) return;
-    dokumen.push({ plat: k.plat, aktiviti: d.nama, status: d.status, teks: teksHari_(d.bakiHari, d.tarikh),
+    dokumen.push({ plat: k.plat, aktiviti: namaAktiviti_(d.nama), status: d.status, teks: teksHari_(d.bakiHari, d.tarikh),
                    baris: k.baris, kol: def.notis, kunci: kunci });
   }));
 
@@ -693,23 +1075,23 @@ function semakPeringatanHarian() {
       <td style="padding:8px;border-bottom:1px solid #eee">${esc_(aktiviti)}</td>
       <td style="padding:8px;border-bottom:1px solid #eee;color:${warna}">${esc_(teks)}</td></tr>`;
   };
-  const baris = servis.map(r => tr(r.plat, r.aktiviti, r.status, teksBaki_(r)))
+  const baris = servis.map(r => tr(r.plat, namaAktiviti_(r.aktiviti), r.status, teksBaki_(r)))
     .concat(dokumen.map(d => tr(d.plat, d.aktiviti, d.status, d.teks))).join('');
 
   const html = `<div style="font-family:Arial,sans-serif;color:#1b1f24">
-    <h2 style="color:#12386b;margin:0 0 8px">🔔 Peringatan Kenderaan</h2>
-    <p>Perkara berikut perlu perhatian tidak lama lagi:</p>
+    <h2 style="color:#12386b;margin:0 0 8px">${T_('em_tajuk')}</h2>
+    <p>${T_('em_intro')}</p>
     <table style="border-collapse:collapse;width:100%;max-width:600px">
-      <tr style="background:#12386b;color:#fff"><th style="padding:8px;text-align:left">Kenderaan</th>
-      <th style="padding:8px;text-align:left">Perkara</th><th style="padding:8px;text-align:left">Status</th></tr>
+      <tr style="background:#12386b;color:#fff"><th style="padding:8px;text-align:left">${T_('em_c_kenderaan')}</th>
+      <th style="padding:8px;text-align:left">${T_('em_c_perkara')}</th><th style="padding:8px;text-align:left">${T_('em_c_status')}</th></tr>
       ${baris}
     </table>
-    <p><a href="${ScriptApp.getService().getUrl()}">Buka Rekod Maintenance Kenderaan</a></p>
+    <p><a href="${ScriptApp.getService().getUrl()}">${T_('em_buka')}</a></p>
   </div>`;
 
   MailApp.sendEmail({
     to: emelSaya_(),
-    subject: `🔔 Peringatan kenderaan: ${servis.length + dokumen.length} perkara`,
+    subject: T_('em_subjek', { n: servis.length + dokumen.length }),
     htmlBody: html
   });
 
@@ -721,32 +1103,34 @@ function semakPeringatanHarian() {
 
 function teksHari_(baki, tarikh) {
   const t = tarikh.split('-').reverse().join('/');
-  return baki < 0 ? `Tamat ${-baki} hari lalu (${t})` : baki === 0 ? `Tamat hari ini (${t})` : `Tamat dalam ${baki} hari (${t})`;
+  return baki < 0 ? T_('h_tamat_lalu', { n: -baki, t: t }) : baki === 0 ? T_('h_tamat_hari_ini', { t: t }) : T_('h_tamat_dalam', { n: baki, t: t });
 }
 
 function teksBaki_(r) {
   const bah = [];
   if (r.bakiKm !== null) bah.push(r.bakiKm <= 0
-    ? `Lewat ${Math.abs(r.bakiKm).toLocaleString()} km (pada ${r.ingatMileage.toLocaleString()} km)`
-    : `Baki ${r.bakiKm.toLocaleString()} km (pada ${r.ingatMileage.toLocaleString()} km)`);
+    ? T_('b_lewat_km', { a: Math.abs(r.bakiKm).toLocaleString(), b: r.ingatMileage.toLocaleString() })
+    : T_('b_baki_km', { a: r.bakiKm.toLocaleString(), b: r.ingatMileage.toLocaleString() }));
   if (r.bakiHari !== null) {
     const t = r.ingatTarikh.split('-').reverse().join('/');
-    bah.push(r.bakiHari < 0 ? `Lewat ${-r.bakiHari} hari (${t})`
-           : r.bakiHari === 0 ? `Hari ini (${t})` : `${r.bakiHari} hari lagi (${t})`);
+    bah.push(r.bakiHari < 0 ? T_('b_lewat_hari', { n: -r.bakiHari, t: t })
+           : r.bakiHari === 0 ? T_('b_hari_ini', { t: t }) : T_('b_hari_lagi', { n: r.bakiHari, t: t }));
   }
-  return bah.join(' atau ');
+  return bah.join(T_('b_atau'));
 }
 
 /* ===================== Google Calendar ===================== */
 
 function ciptaAcara_(plat, aktiviti, tarikhStr, ingatMileage) {
-  return ciptaAcaraUmum_(`🔧 ${aktiviti} — ${plat}`, tarikhStr,
-    `Peringatan maintenance kenderaan ${plat}: ${aktiviti}` +
-    (ingatMileage !== '' ? `\nAtau pada ${Number(ingatMileage).toLocaleString()} km (mana dulu).` : ''));
+  const a = namaAktiviti_(aktiviti);
+  return ciptaAcaraUmum_(`🔧 ${a} — ${plat}`, tarikhStr,
+    T_('c_servis_ket', { p: plat, a: a }) +
+    (ingatMileage !== '' ? '\n' + T_('c_atau_km', { k: Number(ingatMileage).toLocaleString() }) : ''));
 }
 
 function ciptaAcaraDokumen_(plat, nama, tarikhStr) {
-  return ciptaAcaraUmum_(`📄 ${nama} tamat — ${plat}`, tarikhStr, `${nama} kenderaan ${plat} tamat pada tarikh ini. Sila perbaharui.`);
+  const d = namaAktiviti_(nama);
+  return ciptaAcaraUmum_(T_('c_dok_tajuk', { d: d, p: plat }), tarikhStr, T_('c_dok_ket', { d: d, p: plat }));
 }
 
 /** Amaran untuk dipaparkan kepada pengguna (cth. acara Calendar gagal dicipta). */
@@ -761,7 +1145,7 @@ function ciptaAcaraUmum_(tajuk, tarikhStr, keterangan) {
       { description: keterangan + (url ? '\n\n' + url : '') });
   } catch (e) {
     console.error('Gagal cipta acara Calendar: ' + e);
-    AMARAN.push('Acara Google Calendar gagal dicipta: ' + (e.message || e));
+    AMARAN.push(T_('a_calendar_gagal', { m: e.message || e }));
     return '';
   }
   // Notifikasi — jika gagal, acara tetap disimpan
@@ -945,12 +1329,12 @@ function unik_(arr) {
 
 /** Sahkan input & pulangkan [Tarikh, Aktiviti, Mileage, Kos, Bengkel, Catatan]. */
 function nilaiRekod_(data) {
-  if (!data.tarikh) throw new Error('Tarikh diperlukan.');
-  if (!data.aktiviti) throw new Error('Jenis aktiviti diperlukan.');
+  if (!data.tarikh) throw new Error(T_('e_tarikh'));
+  if (!data.aktiviti) throw new Error(T_('e_aktiviti'));
   const mileage = Number(data.mileage);
   const kos = Number(data.kos);
-  if (data.mileage !== '' && (isNaN(mileage) || mileage < 0)) throw new Error('Mileage tidak sah.');
-  if (data.kos !== '' && (isNaN(kos) || kos < 0)) throw new Error('Kos tidak sah.');
+  if (data.mileage !== '' && (isNaN(mileage) || mileage < 0)) throw new Error(T_('e_mileage'));
+  if (data.kos !== '' && (isNaN(kos) || kos < 0)) throw new Error(T_('e_kos'));
   return [
     keTarikh_(data.tarikh),
     clean_(data.aktiviti),
@@ -964,9 +1348,9 @@ function nilaiRekod_(data) {
 /** Sahkan input peringatan. */
 function nilaiPeringatan_(data) {
   const km = data.ingatMileage === '' || data.ingatMileage == null ? '' : Number(data.ingatMileage);
-  if (km !== '' && (isNaN(km) || km < 0)) throw new Error('Mileage peringatan tidak sah.');
+  if (km !== '' && (isNaN(km) || km < 0)) throw new Error(T_('e_ingat_km'));
   if (km !== '' && data.mileage !== '' && km <= Number(data.mileage)) {
-    throw new Error('Mileage peringatan mesti lebih tinggi daripada mileage semasa.');
+    throw new Error(T_('e_ingat_tinggi'));
   }
   const tarikh = tarikhSah_(data.ingatTarikh);
   return {

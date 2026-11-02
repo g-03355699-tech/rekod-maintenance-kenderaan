@@ -30,6 +30,12 @@
     header svg.logo { width: 48px; height: 44px; stroke: rgba(255,255,255,.9); stroke-width: 1.6; fill: none;
                       stroke-linecap: round; stroke-linejoin: round; }
     header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    header .dalam { position: relative; }
+    .pilih-bahasa { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: auto; height: 32px; padding: 0 8px;
+                    font-size: .8rem; background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.3);
+                    border-radius: 8px; font-family: inherit; appearance: auto; -webkit-appearance: menulist; }
+    .pilih-bahasa option { color: #1b1f24; }
+    header h1 { padding-right: 70px; }
     header .versi { font-size: .68rem; font-weight: 500; background: rgba(255,255,255,.16); color: rgba(255,255,255,.9);
                     padding: 2px 8px; border-radius: 999px; letter-spacing: .3px; }
 
@@ -326,7 +332,10 @@
         <path d="M36 4a5 5 0 0 0 4 7l4 4-3 3-4-4a5 5 0 0 1-7-4 5 5 0 0 1 6-6z"/>
         <path d="M8 40v-6l4-8h28l4 8v6zM8 34h36M14 37h3M35 37h3M12 40v4M40 40v4"/>
       </svg>
-      <h1>Rekod Maintenance Kenderaan <span class="versi" id="versi"></span></h1>
+      <select id="pilihBahasa" class="pilih-bahasa" onchange="tukarBahasa(this.value)" aria-label="Bahasa">
+        <option value="ms">BM</option><option value="en">EN</option><option value="zh">中文</option><option value="ta">தமிழ்</option>
+      </select>
+      <h1><span data-i18n="app_tajuk">Rekod Maintenance Kenderaan</span> <span class="versi" id="versi"></span></h1>
     </div>
   </header>
 
@@ -335,15 +344,15 @@
 
     <!-- Carian -->
     <section class="kad">
-      <h2>Cari Kenderaan</h2>
+      <h2><span data-i18n="cari_kenderaan">Cari Kenderaan</span></h2>
       <div class="medan">
         <svg class="ik"><use href="#i-cari"/></svg>
-        <input id="plat" list="senaraiPlat" placeholder="cth: WXY 1234" autocomplete="off">
+        <input id="plat" list="senaraiPlat" placeholder="cth: WXY 1234" data-i18n-ph="ph_plat" autocomplete="off">
       </div>
       <datalist id="senaraiPlat"></datalist>
-      <button id="btnCari" class="btn" onclick="cari()">Cari</button>
+      <button id="btnCari" class="btn" onclick="cari()"><span data-i18n="cari">Cari</span></button>
       <div id="blokCip" class="tersembunyi">
-        <div class="cip-tajuk">Kenderaan berdaftar — tekan untuk buka:</div>
+        <div class="cip-tajuk"><span data-i18n="berdaftar">Kenderaan berdaftar — tekan untuk buka:</span></div>
         <div id="senaraiCip" class="senarai-cip"></div>
       </div>
     </section>
@@ -351,41 +360,41 @@
     <!-- Daftar kenderaan baru -->
     <section id="secDaftar" class="kad tersembunyi">
       <h2 id="tajukDaftar">Kenderaan baru: <span id="platBaru"></span></h2>
-      <p id="notaDaftar" class="kecil" style="margin:0">Kenderaan ini belum didaftarkan. Isi maklumat di bawah.</p>
+      <p id="notaDaftar" class="kecil" style="margin:0"><span data-i18n="belum_daftar">Kenderaan ini belum didaftarkan. Isi maklumat di bawah.</span></p>
       <div id="blokDPlat" class="tersembunyi">
-        <label class="tajuk">No. Plat *</label>
+        <label class="tajuk"><span data-i18n="no_plat">No. Plat *</span></label>
         <input id="dPlat" style="text-transform:uppercase" autocomplete="off">
       </div>
-      <label class="tajuk">Jenis Kenderaan *</label>
+      <label class="tajuk"><span data-i18n="jenis_kenderaan">Jenis Kenderaan *</span></label>
       <div class="pilih-jenis" role="radiogroup">
-        <label><input type="radio" name="dJenis" value="Motorsikal" onchange="binaPilihIkon()"><span><svg><use href="#v-skuter"/></svg>Motorsikal</span></label>
-        <label><input type="radio" name="dJenis" value="Kereta" onchange="binaPilihIkon()"><span><svg><use href="#v-sedan"/></svg>Kereta</span></label>
+        <label><input type="radio" name="dJenis" value="Motorsikal" onchange="binaPilihIkon()"><span><svg><use href="#v-skuter"/></svg><span data-i18n="Motorsikal">Motorsikal</span></span></label>
+        <label><input type="radio" name="dJenis" value="Kereta" onchange="binaPilihIkon()"><span><svg><use href="#v-sedan"/></svg><span data-i18n="Kereta">Kereta</span></span></label>
       </div>
       <div id="blokIkon" class="tersembunyi">
-        <label class="tajuk">Gaya / Ikon Kenderaan</label>
+        <label class="tajuk"><span data-i18n="gaya_ikon">Gaya / Ikon Kenderaan</span></label>
         <div id="pilihIkon" class="pilih-ikon"></div>
       </div>
-      <label class="tajuk">Jenama / Model</label>
-      <input id="dModel" placeholder="cth: Perodua Myvi 1.5">
+      <label class="tajuk"><span data-i18n="jenama_model">Jenama / Model</span></label>
+      <input id="dModel" placeholder="cth: Perodua Myvi 1.5" data-i18n-ph="ph_model">
       <div class="baris">
-        <div><label class="tajuk">Tahun</label><input id="dTahun" type="number" inputmode="numeric" placeholder="2020"></div>
-        <div><label class="tajuk">Pemilik</label><input id="dPemilik" placeholder="Nama"></div>
+        <div><label class="tajuk"><span data-i18n="tahun">Tahun</span></label><input id="dTahun" type="number" inputmode="numeric" placeholder="2020"></div>
+        <div><label class="tajuk"><span data-i18n="pemilik">Pemilik</span></label><input id="dPemilik" placeholder="Nama" data-i18n-ph="ph_nama"></div>
       </div>
       <div class="baris">
         <div>
-          <label class="tajuk">Tamat cukai jalan</label>
+          <label class="tajuk"><span data-i18n="tamat_cukai">Tamat cukai jalan</span></label>
           <div class="medan"><svg class="ik"><use href="#i-dokumen"/></svg><input id="dCukai" type="date"></div>
         </div>
         <div>
-          <label class="tajuk">Tamat insurans</label>
+          <label class="tajuk"><span data-i18n="tamat_insurans">Tamat insurans</span></label>
           <div class="medan"><svg class="ik"><use href="#i-dokumen"/></svg><input id="dInsurans" type="date"></div>
         </div>
       </div>
-      <div class="nota">Peringatan e-mel 30 & 7 hari sebelum tamat, serta acara di Google Calendar.</div>
-      <button id="btnDaftar" class="btn" onclick="daftar()">Daftar Kenderaan</button>
+      <div class="nota"><span data-i18n="nota_dokumen">Peringatan e-mel 30 & 7 hari sebelum tamat, serta acara di Google Calendar.</span></div>
+      <button id="btnDaftar" class="btn" onclick="daftar()"><span data-i18n="daftar_kenderaan">Daftar Kenderaan</span></button>
       <div id="blokEditK" class="tersembunyi">
-        <button class="btn sekunder" onclick="batalEditKenderaan()">Batal</button>
-        <button class="btn bahaya" onclick="padamKenderaanUI()">Padam Kenderaan Ini</button>
+        <button class="btn sekunder" onclick="batalEditKenderaan()"><span data-i18n="batal">Batal</span></button>
+        <button class="btn bahaya" onclick="padamKenderaanUI()"><span data-i18n="padam_kenderaan_ini">Padam Kenderaan Ini</span></button>
       </div>
     </section>
 
@@ -398,111 +407,111 @@
           <div class="kecil" id="iModel"></div>
         </div>
         <div class="aksi-k">
-          <button class="ikon-btn" title="Edit kenderaan" onclick="editKenderaan()"><svg class="ik"><use href="#i-pensel"/></svg></button>
-          <button class="ikon-btn bahaya" title="Padam kenderaan" onclick="padamKenderaanUI()"><svg class="ik"><use href="#i-tong"/></svg></button>
+          <button class="ikon-btn" title="Edit kenderaan" data-i18n-t="t_edit_kenderaan" onclick="editKenderaan()"><svg class="ik"><use href="#i-pensel"/></svg></button>
+          <button class="ikon-btn bahaya" title="Padam kenderaan" data-i18n-t="t_padam_kenderaan" onclick="padamKenderaanUI()"><svg class="ik"><use href="#i-tong"/></svg></button>
         </div>
       </div>
       <div id="iPeringatan"></div>
       <div class="info">
-        <div><svg class="ik"><use href="#i-fail"/></svg><div><b id="iBil">0</b><span>Rekod</span></div></div>
-        <div><svg class="ik"><use href="#i-meter"/></svg><div><b id="iMileage">-</b><span>Mileage terkini</span></div></div>
-        <div><svg class="ik"><use href="#i-duit"/></svg><div><b id="iKos">RM0</b><span>Jumlah kos</span></div></div>
+        <div><svg class="ik"><use href="#i-fail"/></svg><div><b id="iBil">0</b><span><span data-i18n="stat_rekod">Rekod</span></span></div></div>
+        <div><svg class="ik"><use href="#i-meter"/></svg><div><b id="iMileage">-</b><span><span data-i18n="mileage_terkini">Mileage terkini</span></span></div></div>
+        <div><svg class="ik"><use href="#i-duit"/></svg><div><b id="iKos">RM0</b><span><span data-i18n="jumlah_kos">Jumlah kos</span></span></div></div>
       </div>
       <div class="kemaskini-km" id="iKemaskiniKm"></div>
-      <button class="btn" onclick="togolBorang()">+ Tambah Rekod</button>
+      <button class="btn" onclick="togolBorang()"><span data-i18n="tambah_rekod">+ Tambah Rekod</span></button>
       <div class="aksi-grid">
-        <button class="btn sekunder" onclick="togolMileage()"><svg class="ik"><use href="#i-meter"/></svg>Mileage</button>
-        <button class="btn sekunder" onclick="togolLaporan()"><svg class="ik"><use href="#i-carta"/></svg>Laporan</button>
+        <button class="btn sekunder" onclick="togolMileage()"><svg class="ik"><use href="#i-meter"/></svg><span data-i18n="mileage">Mileage</span></button>
+        <button class="btn sekunder" onclick="togolLaporan()"><svg class="ik"><use href="#i-carta"/></svg><span data-i18n="laporan">Laporan</span></button>
         <button class="btn sekunder" id="btnPdf" onclick="muatTurunPdf()"><svg class="ik"><use href="#i-pdf"/></svg>PDF</button>
       </div>
       <div id="panelMileage" class="panel tersembunyi">
-        <div class="kepala-p"><span><svg class="ik"><use href="#i-meter"/></svg>Kemas kini mileage</span>
+        <div class="kepala-p"><span><svg class="ik"><use href="#i-meter"/></svg><span data-i18n="kemaskini_mileage">Kemas kini mileage</span></span>
           <button type="button" class="tutup" onclick="togolMileage(false)">✕</button></div>
         <div class="baris">
-          <div><label class="tajuk">Mileage semasa (km)</label>
+          <div><label class="tajuk"><span data-i18n="mileage_semasa_km">Mileage semasa (km)</span></label>
             <div class="medan"><svg class="ik"><use href="#i-meter"/></svg><input id="mKm" type="number" inputmode="numeric" min="0"></div></div>
-          <div><label class="tajuk">Tarikh</label>
+          <div><label class="tajuk"><span data-i18n="tarikh">Tarikh</span></label>
             <div class="medan"><svg class="ik"><use href="#i-kalendar"/></svg><input id="mTarikh" type="date"></div></div>
         </div>
-        <div class="nota">Tanpa rekod servis — supaya peringatan ikut mileage kekal tepat.</div>
-        <button id="btnSimpanKm" class="btn" onclick="simpanMileage()">Simpan Mileage</button>
+        <div class="nota"><span data-i18n="nota_mileage">Tanpa rekod servis — supaya peringatan ikut mileage kekal tepat.</span></div>
+        <button id="btnSimpanKm" class="btn" onclick="simpanMileage()"><span data-i18n="simpan_mileage">Simpan Mileage</span></button>
       </div>
     </section>
 
     <!-- Laporan kos -->
     <section id="secLaporan" class="kad tersembunyi">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
-        <h2 style="margin:0">Laporan Kos</h2>
+        <h2 style="margin:0"><span data-i18n="laporan_kos">Laporan Kos</span></h2>
         <div class="medan" style="width:130px">
           <select id="lTahun" onchange="lukisLaporan()" style="height:38px;padding-left:12px;font-size:.85rem"></select>
           <svg class="ik chevron"><use href="#i-chevron"/></svg>
         </div>
       </div>
       <div class="stat3">
-        <div><b id="lJumlah">-</b><span>Jumlah kos</span></div>
-        <div><b id="lPurata">-</b><span id="lPurataLbl">Purata sebulan</span></div>
-        <div><b id="lPerKm">-</b><span>Kos setiap km</span></div>
+        <div><b id="lJumlah">-</b><span><span data-i18n="jumlah_kos">Jumlah kos</span></span></div>
+        <div><b id="lPurata">-</b><span id="lPurataLbl"><span data-i18n="purata_sebulan">Purata sebulan</span></span></div>
+        <div><b id="lPerKm">-</b><span><span data-i18n="kos_per_km">Kos setiap km</span></span></div>
       </div>
-      <div class="carta-tajuk" id="lTajukCarta">Kos bulanan</div>
+      <div class="carta-tajuk" id="lTajukCarta"><span data-i18n="kos_bulanan">Kos bulanan</span></div>
       <div class="carta" id="lCarta"></div>
-      <div class="carta-tajuk" style="margin-top:16px">Kos ikut aktiviti</div>
+      <div class="carta-tajuk" style="margin-top:16px"><span data-i18n="kos_ikut_aktiviti">Kos ikut aktiviti</span></div>
       <div id="lAktiviti"></div>
     </section>
 
     <!-- Borang tambah rekod -->
     <section id="secBorang" class="kad tersembunyi">
-      <h2 id="tajukBorang">Tambah Rekod Maintenance</h2>
+      <h2 id="tajukBorang"><span data-i18n="tambah_rekod_maint">Tambah Rekod Maintenance</span></h2>
       <div class="baris">
         <div>
-          <label class="tajuk">Tarikh *</label>
+          <label class="tajuk"><span data-i18n="tarikh_wajib">Tarikh *</span></label>
           <div class="medan"><svg class="ik"><use href="#i-kalendar"/></svg><input id="rTarikh" type="date"></div>
         </div>
         <div>
-          <label class="tajuk">Mileage (km)</label>
+          <label class="tajuk"><span data-i18n="mileage_km">Mileage (km)</span></label>
           <div class="medan"><svg class="ik"><use href="#i-meter"/></svg><input id="rMileage" type="number" inputmode="numeric" min="0" placeholder="45000"></div>
         </div>
       </div>
-      <label class="tajuk">Jenis Aktiviti *</label>
+      <label class="tajuk"><span data-i18n="jenis_aktiviti">Jenis Aktiviti *</span></label>
       <div class="medan">
         <svg class="ik"><use href="#i-sepana"/></svg>
         <select id="rAktiviti" onchange="aktivitiLain()"></select>
         <svg class="ik chevron"><use href="#i-chevron"/></svg>
       </div>
-      <input id="rAktivitiLain" class="tersembunyi" style="margin-top:8px" placeholder="Nyatakan aktiviti">
+      <input id="rAktivitiLain" class="tersembunyi" style="margin-top:8px" placeholder="Nyatakan aktiviti" data-i18n-ph="ph_aktiviti_lain">
       <div class="baris">
         <div>
-          <label class="tajuk">Kos (RM)</label>
+          <label class="tajuk"><span data-i18n="kos_rm">Kos (RM)</span></label>
           <div class="medan"><span class="awalan">RM</span><input id="rKos" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="0.00" autocomplete="off"></div>
         </div>
         <div>
-          <label class="tajuk">Bengkel</label>
-          <div class="medan"><svg class="ik"><use href="#i-bengkel"/></svg><input id="rBengkel" placeholder="Nama bengkel" list="senaraiBengkel" autocomplete="off"></div>
+          <label class="tajuk"><span data-i18n="bengkel">Bengkel</span></label>
+          <div class="medan"><svg class="ik"><use href="#i-bengkel"/></svg><input id="rBengkel" placeholder="Nama bengkel" data-i18n-ph="ph_bengkel" list="senaraiBengkel" autocomplete="off"></div>
           <datalist id="senaraiBengkel"></datalist>
         </div>
       </div>
-      <label class="tajuk">Catatan</label>
-      <textarea id="rCatatan" placeholder="cth: Minyak 5W-30 fully synthetic"></textarea>
+      <label class="tajuk"><span data-i18n="catatan">Catatan</span></label>
+      <textarea id="rCatatan" placeholder="cth: Minyak 5W-30 fully synthetic" data-i18n-ph="ph_catatan"></textarea>
 
-      <label class="tajuk">Resit</label>
+      <label class="tajuk"><span data-i18n="resit">Resit</span></label>
       <input id="rFailResit" type="file" accept="image/*" class="tersembunyi" onchange="pilihResit(this)">
       <div class="resit">
         <img id="rResitPratonton" class="tersembunyi" alt="Pratonton resit">
         <button type="button" class="btn sekunder" onclick="$('rFailResit').click()">
-          <svg class="ik"><use href="#i-kamera"/></svg><span id="rResitBtnTeks">Ambil / pilih gambar</span></button>
-        <a id="rResitSedia" class="tersembunyi" target="_blank">Lihat resit</a>
-        <button type="button" id="rResitBuang" class="padam tersembunyi" onclick="buangResit()">Buang</button>
+          <svg class="ik"><use href="#i-kamera"/></svg><span id="rResitBtnTeks"><span data-i18n="ambil_gambar">Ambil / pilih gambar</span></span></button>
+        <a id="rResitSedia" class="tersembunyi" target="_blank"><span data-i18n="lihat_resit">Lihat resit</span></a>
+        <button type="button" id="rResitBuang" class="padam tersembunyi" onclick="buangResit()"><span data-i18n="buang">Buang</span></button>
       </div>
 
       <button id="btnIngat" type="button" class="btn garis" onclick="bukaPeringatan(true)">
-        <svg class="ik"><use href="#i-loceng"/></svg>Tetapkan Peringatan
+        <svg class="ik"><use href="#i-loceng"/></svg><span data-i18n="tetapkan_peringatan">Tetapkan Peringatan</span>
       </button>
       <div id="panelIngat" class="panel tersembunyi">
         <div class="kepala-p">
-          <span><svg class="ik"><use href="#i-loceng"/></svg>Peringatan seterusnya</span>
-          <button type="button" class="tutup" onclick="bukaPeringatan(false)" title="Buang peringatan">✕</button>
+          <span><svg class="ik"><use href="#i-loceng"/></svg><span data-i18n="peringatan_seterusnya">Peringatan seterusnya</span></span>
+          <button type="button" class="tutup" onclick="bukaPeringatan(false)" title="Buang peringatan" data-i18n-t="t_buang_peringatan">✕</button>
         </div>
 
-        <label class="togol"><input type="checkbox" id="cbIngatKm" onchange="kemasPanel()"><span class="suis"></span>Ikut mileage</label>
+        <label class="togol"><input type="checkbox" id="cbIngatKm" onchange="kemasPanel()"><span class="suis"></span><span data-i18n="ikut_mileage">Ikut mileage</span></label>
         <div id="blokIngatKm">
           <div class="pantas" id="pantasKm">
             <button type="button" data-km="1000">+1,000</button><button type="button" data-km="2000">+2,000</button>
@@ -510,35 +519,35 @@
             <button type="button" data-km="10000">+10,000</button>
           </div>
           <div class="medan"><svg class="ik"><use href="#i-meter"/></svg>
-            <input id="rIngatMileage" type="number" inputmode="numeric" min="0" placeholder="Mileage peringatan (km)"></div>
+            <input id="rIngatMileage" type="number" inputmode="numeric" min="0" placeholder="Mileage peringatan (km)" data-i18n-ph="ph_ingat_km"></div>
           <div class="nota" id="notaKm"></div>
         </div>
 
-        <label class="togol"><input type="checkbox" id="cbIngatTarikh" onchange="kemasPanel()"><span class="suis"></span>Ikut tarikh</label>
+        <label class="togol"><input type="checkbox" id="cbIngatTarikh" onchange="kemasPanel()"><span class="suis"></span><span data-i18n="ikut_tarikh">Ikut tarikh</span></label>
         <div id="blokIngatTarikh">
           <div class="pantas" id="pantasTarikh">
-            <button type="button" data-bulan="1">+1 bulan</button><button type="button" data-bulan="3">+3 bulan</button>
-            <button type="button" data-bulan="6">+6 bulan</button><button type="button" data-bulan="12">+1 tahun</button>
+            <button type="button" data-bulan="1"><span data-i18n="p1bulan">+1 bulan</span></button><button type="button" data-bulan="3"><span data-i18n="p3bulan">+3 bulan</span></button>
+            <button type="button" data-bulan="6"><span data-i18n="p6bulan">+6 bulan</span></button><button type="button" data-bulan="12"><span data-i18n="p1tahun">+1 tahun</span></button>
           </div>
           <div class="medan"><svg class="ik"><use href="#i-kalendar"/></svg><input id="rIngatTarikh" type="date"></div>
         </div>
 
-        <div class="nota">Mana-mana yang sampai dulu akan diingatkan.</div>
-        <label class="semak"><input type="checkbox" id="cbKalendar" checked><span>Tambah ke Google Calendar (perlu tarikh)</span></label>
-        <label class="semak"><input type="checkbox" id="cbEmel" checked><span>Hantar e-mel 7 hari / 500 km sebelum</span></label>
-        <label class="semak"><input type="checkbox" id="cbTemplat" checked><span>Simpan selang ini sebagai templat aktiviti ini</span></label>
+        <div class="nota"><span data-i18n="mana_dulu">Mana-mana yang sampai dulu akan diingatkan.</span></div>
+        <label class="semak"><input type="checkbox" id="cbKalendar" checked><span><span data-i18n="cb_kalendar">Tambah ke Google Calendar (perlu tarikh)</span></span></label>
+        <label class="semak"><input type="checkbox" id="cbEmel" checked><span><span data-i18n="cb_emel">Hantar e-mel 7 hari / 500 km sebelum</span></span></label>
+        <label class="semak"><input type="checkbox" id="cbTemplat" checked><span><span data-i18n="cb_templat">Simpan selang ini sebagai templat aktiviti ini</span></span></label>
         <div class="nota" id="notaTemplat"></div>
       </div>
-      <button id="btnSimpan" class="btn" onclick="simpan()">Simpan Rekod</button>
-      <button id="btnBatal" class="btn sekunder tersembunyi" onclick="batalEdit()">Batal</button>
+      <button id="btnSimpan" class="btn" onclick="simpan()"><span data-i18n="simpan_rekod">Simpan Rekod</span></button>
+      <button id="btnBatal" class="btn sekunder tersembunyi" onclick="batalEdit()"><span data-i18n="batal">Batal</span></button>
     </section>
 
     <!-- Sejarah -->
     <section id="secSejarah" class="kad tersembunyi">
-      <h2>Sejarah Maintenance</h2>
+      <h2><span data-i18n="sejarah">Sejarah Maintenance</span></h2>
       <div class="tapis" id="blokTapis">
         <div class="medan penuh"><svg class="ik"><use href="#i-cari"/></svg>
-          <input id="tCari" placeholder="Cari aktiviti, bengkel, catatan…" oninput="lukisSejarah()"></div>
+          <input id="tCari" placeholder="Cari aktiviti, bengkel, catatan…" data-i18n-ph="ph_cari_sejarah" oninput="lukisSejarah()"></div>
         <div class="medan"><select id="tAktiviti" onchange="lukisSejarah()" style="padding-left:12px"></select>
           <svg class="ik chevron"><use href="#i-chevron"/></svg></div>
         <div class="medan"><select id="tTahun" onchange="lukisSejarah()" style="padding-left:12px"></select>
@@ -551,9 +560,9 @@
     <!-- Garaj & perkongsian -->
     <section class="kad">
       <details class="garaj" id="dGaraj" ontoggle="if (this.open) muatGaraj()">
-        <summary><span style="display:flex;align-items:center;gap:8px"><svg class="ik"><use href="#i-rumah"/></svg>Garaj & Perkongsian</span></summary>
+        <summary><span style="display:flex;align-items:center;gap:8px"><svg class="ik"><use href="#i-rumah"/></svg><span data-i18n="garaj_tajuk">Garaj & Perkongsian</span></span></summary>
         <div class="garaj-aktif" id="gAktif"></div>
-        <div id="gIsi" class="kecil" style="margin-top:10px">Memuatkan…</div>
+        <div id="gIsi" class="kecil" style="margin-top:10px"><span data-i18n="memuatkan">Memuatkan…</span></div>
       </details>
     </section>
   </main>
@@ -563,21 +572,21 @@
   <div class="pembangun">
     <div class="kotak-p">
       <div class="maklumat">
-        Dibangunkan oleh<br><b id="pNama"></b><br>
+        <span data-i18n="dibangunkan_oleh">Dibangunkan oleh</span><br><b id="pNama"></b><br>
         <a id="pTelefon" target="_blank" rel="noopener"><svg class="ik"><use href="#i-telefon"/></svg><span></span></a>
       </div>
-      <button class="btn-derma" onclick="bukaDerma()"><svg class="ik"><use href="#i-hati"/></svg>Derma</button>
+      <button class="btn-derma" onclick="bukaDerma()"><svg class="ik"><use href="#i-hati"/></svg><span data-i18n="derma">Derma</span></button>
     </div>
   </div>
 
   <!-- Modal derma -->
   <div id="modalDerma" class="modal tersembunyi" onclick="if (event.target === this) this.classList.add('tersembunyi')">
     <div class="kotak" role="dialog" aria-modal="true">
-      <h3>Sokong app ini ❤️</h3>
-      <p>App ini percuma. Jika ia membantu anda, sumbangan anda membantu penyelenggaraan dan ciri baru.</p>
-      <p class="kecil" style="margin:0">Tangkap layar kod QR ini, kemudian imbas melalui app bank atau e-wallet (DuitNow QR).</p>
+      <h3><span data-i18n="derma_tajuk">Sokong app ini ❤️</span></h3>
+      <p><span data-i18n="derma_teks">App ini percuma. Jika ia membantu anda, sumbangan anda membantu penyelenggaraan dan ciri baru.</span></p>
+      <p class="kecil" style="margin:0"><span data-i18n="derma_arahan">Tangkap layar kod QR ini, kemudian imbas melalui app bank atau e-wallet (DuitNow QR).</span></p>
       <div id="dIsi"></div>
-      <button class="btn sekunder" onclick="$('modalDerma').classList.add('tersembunyi')">Tutup</button>
+      <button class="btn sekunder" onclick="$('modalDerma').classList.add('tersembunyi')"><span data-i18n="tutup">Tutup</span></button>
     </div>
   </div>
 
@@ -592,15 +601,70 @@
         <input id="mTaip" autocomplete="off" style="text-transform:uppercase">
       </div>
       <div class="baris">
-        <button class="btn sekunder" onclick="tutupModal(false)">Batal</button>
-        <button id="mOk" class="btn merah" onclick="tutupModal(true)">Padam</button>
+        <button class="btn sekunder" onclick="tutupModal(false)"><span data-i18n="batal">Batal</span></button>
+        <button id="mOk" class="btn merah" onclick="tutupModal(true)"><span data-i18n="padam">Padam</span></button>
       </div>
     </div>
   </div>
 
 <script>
-  const VERSI = '2.0.6';   // naikkan setiap kali deploy versi baru
+  const VERSI = '2.1.0';   // naikkan setiap kali deploy versi baru
   document.getElementById('versi').textContent = 'v' + VERSI;
+
+  /* ---------- Bahasa (BM / EN / 中文 / தமிழ்) ---------- */
+  const KAMUS = {"ms":{"app_tajuk":"Rekod Maintenance Kenderaan","bahasa":"Bahasa","cari_kenderaan":"Cari Kenderaan","cari":"Cari","ph_plat":"cth: WXY 1234","berdaftar":"Kenderaan berdaftar — tekan untuk buka:","kenderaan_baru":"Kenderaan baru:","belum_daftar":"Kenderaan ini belum didaftarkan. Isi maklumat di bawah.","no_plat":"No. Plat *","jenis_kenderaan":"Jenis Kenderaan *","Motorsikal":"Motorsikal","Kereta":"Kereta","gaya_ikon":"Gaya / Ikon Kenderaan","jenama_model":"Jenama / Model","ph_model":"cth: Perodua Myvi 1.5","tahun":"Tahun","pemilik":"Pemilik","ph_nama":"Nama","tamat_cukai":"Tamat cukai jalan","tamat_insurans":"Tamat insurans","nota_dokumen":"Peringatan e-mel 30 & 7 hari sebelum tamat, serta acara di Google Calendar.","daftar_kenderaan":"Daftar Kenderaan","simpan_perubahan":"Simpan Perubahan","edit_kenderaan_tajuk":"Edit Kenderaan","batal":"Batal","padam_kenderaan_ini":"Padam Kenderaan Ini","t_edit_kenderaan":"Edit kenderaan","t_padam_kenderaan":"Padam kenderaan","stat_rekod":"Rekod","mileage_terkini":"Mileage terkini","jumlah_kos":"Jumlah kos","tambah_rekod":"+ Tambah Rekod","mileage":"Mileage","laporan":"Laporan","pdf":"PDF","kemaskini_mileage":"Kemas kini mileage","mileage_semasa_km":"Mileage semasa (km)","tarikh":"Tarikh","nota_mileage":"Tanpa rekod servis — supaya peringatan ikut mileage kekal tepat.","simpan_mileage":"Simpan Mileage","mileage_dikemaskini_pada":"Mileage dikemas kini {t}","mileage_dikemaskini":"Mileage dikemas kini: {km} km","err_mileage_isi":"Sila isi mileage semasa.","lewat_caps":"LEWAT","laporan_kos":"Laporan Kos","purata_sebulan":"Purata sebulan","purata_setahun":"Purata setahun","kos_per_km":"Kos setiap km","kos_bulanan":"Kos bulanan","kos_bulanan_thn":"Kos bulanan {t}","kos_tahunan":"Kos tahunan","kos_ikut_aktiviti":"Kos ikut aktiviti","tiada_kos":"Tiada kos direkodkan.","tiada_kos_tempoh":"Tiada kos direkodkan untuk tempoh ini.","lain_lain":"Lain-lain","semua_tahun":"Semua tahun","pdf_dimuat":"PDF dimuat turun: {n}","tambah_rekod_maint":"Tambah Rekod Maintenance","edit_rekod_maint":"Edit Rekod Maintenance","tarikh_wajib":"Tarikh *","mileage_km":"Mileage (km)","jenis_aktiviti":"Jenis Aktiviti *","pilih":"-- Pilih --","aktiviti_lain_pernah":"Aktiviti lain yang pernah direkod","lain_taip_baru":"Lain-lain… (taip baru)","ph_aktiviti_lain":"Nyatakan aktiviti","kos_rm":"Kos (RM)","bengkel":"Bengkel","ph_bengkel":"Nama bengkel","catatan":"Catatan","ph_catatan":"cth: Minyak 5W-30 fully synthetic","resit":"Resit","ambil_gambar":"Ambil / pilih gambar","ganti_gambar":"Ganti gambar","lihat_resit":"Lihat resit","buang":"Buang","err_gambar":"Fail ini bukan gambar yang boleh dibaca.","simpan_rekod":"Simpan Rekod","kemaskini_rekod":"Kemaskini Rekod","err_tarikh":"Sila pilih tarikh.","err_aktiviti":"Sila pilih jenis aktiviti.","rekod_disimpan":"Rekod berjaya disimpan.","rekod_dikemaskini":"Rekod berjaya dikemaskini.","rekod_disimpan_tetapi":"Rekod disimpan, tetapi:","tetapkan_peringatan":"Tetapkan Peringatan","peringatan_seterusnya":"Peringatan seterusnya","t_buang_peringatan":"Buang peringatan","ikut_mileage":"Ikut mileage","ikut_tarikh":"Ikut tarikh","ph_ingat_km":"Mileage peringatan (km)","p1bulan":"+1 bulan","p3bulan":"+3 bulan","p6bulan":"+6 bulan","p1tahun":"+1 tahun","mana_dulu":"Mana-mana yang sampai dulu akan diingatkan.","cb_kalendar":"Tambah ke Google Calendar (perlu tarikh)","cb_emel":"Hantar e-mel 7 hari / 500 km sebelum","cb_templat":"Simpan selang ini sebagai templat aktiviti ini","err_ingat":"Isi mileage atau tarikh peringatan, atau tekan ✕ untuk buang peringatan.","nota_km":"Mileage semasa {a} km → ingatkan pada {b} km (+{c})","err_km_tinggi":"Mileage peringatan mesti lebih tinggi daripada mileage semasa.","templat_anda":"templat anda","cadangan_umum":"cadangan umum","selang":"Selang {s} ({sumber}).","bulan_n":"{n} bulan","seterusnya":"Seterusnya:","tamat_lewat":"Tamat {t} (lewat {n} hari)","tamat_hari_ini":"Tamat hari ini ({t})","tamat_lagi":"Tamat {t} ({n} hari lagi)","pada_km_lewat":"Pada {a} km (lewat {b} km)","pada_km_baki":"Pada {a} km (baki {b} km)","tarikh_lewat":"{t} (lewat {n} hari)","tarikh_hari_ini":"{t} (hari ini)","tarikh_lagi":"{t} ({n} hari lagi)","atau":"atau","sejarah":"Sejarah Maintenance","ph_cari_sejarah":"Cari aktiviti, bengkel, catatan…","semua_aktiviti":"Semua aktiviti","tapis_ringkas":"{a} daripada {b} rekod • {rm}","tiada_rekod":"Tiada rekod lagi. Tekan \"+ Tambah Rekod\".","tiada_padan":"Tiada rekod sepadan dengan tapisan.","edit":"Edit","padam":"Padam","resit_pautan":"Resit","padam_rekod_q":"Padam rekod ini?","tak_boleh_undur":"Tindakan ini tidak boleh diundur.","rekod_dipadam":"Rekod dipadam.","err_plat":"Sila masukkan nombor plat.","err_plat_perlu":"Nombor plat diperlukan.","err_jenis":"Sila pilih jenis kenderaan: Motorsikal atau Kereta.","berjaya_daftar":"Kenderaan {p} berjaya didaftarkan.","kenderaan_dikemaskini":"Maklumat kenderaan {p} dikemaskini.","padam_kenderaan_q":"Padam kenderaan {p}?","padam_kenderaan_teks":"Kenderaan ini <b>dan {n} rekod maintenance</b> akan dipadam terus, termasuk peringatan di Google Calendar.","kenderaan_dipadam":"Kenderaan {p} dan {n} rekod telah dipadam.","taip_sahkan":"Taip <b>{x}</b> untuk sahkan:","garaj_tajuk":"Garaj & Perkongsian","memuatkan":"Memuatkan…","log_masuk":"Log masuk sebagai","data_disimpan":"Data disimpan dalam","sheet_sendiri":"Google Sheet anda sendiri","sheet_dikongsi":"Google Sheet garaj dikongsi","sedang_guna":"Sedang guna:","dikongsi":"Dikongsi","garaj_saya":"Garaj saya","garaj_milik":"Garaj {e}","tukar_garaj":"Tukar garaj","tinggalkan_btn":"Tinggalkan garaj ini","kongsi_label":"Kongsi garaj saya dengan ahli keluarga","ph_emel_ahli":"e-mel Gmail ahli keluarga","kongsi":"Kongsi","belum_kongsi":"Belum dikongsi dengan sesiapa.","beri_kod":"Selepas dikongsi, beri <b>kod garaj</b> ini kepada ahli tersebut:","salin_kod":"Salin kod garaj","sertai_label":"Sertai garaj orang lain","ph_kod":"Tampal kod garaj","sertai":"Sertai","pemilik_perlu":"Pemilik garaj perlu kongsi dengan e-mel anda ({e}) dahulu.","err_emel_ahli":"Sila isi e-mel ahli keluarga.","garaj_dikongsi_dgn":"Garaj dikongsi dengan {e}. Hantar kod garaj kepadanya.","buang_ahli_q":"Buang ahli?","buang_ahli_teks":"<b>{e}</b> tidak lagi boleh melihat atau mengubah kenderaan dalam garaj anda.","ahli_dibuang":"{e} telah dibuang dari garaj.","err_kod":"Sila tampal kod garaj.","berjaya_sertai":"Berjaya sertai garaj.","tinggalkan_q":"Tinggalkan garaj ini?","tinggalkan_teks":"Anda tidak akan nampak kenderaan garaj ini lagi sehingga sertai semula.","tinggalkan":"Tinggalkan","kod_disalin":"Kod garaj disalin.","tekan_lama":"Tekan lama untuk salin kod.","dibangunkan_oleh":"Dibangunkan oleh","derma":"Derma","derma_tajuk":"Sokong app ini ❤️","derma_teks":"App ini percuma. Jika ia membantu anda, sumbangan anda membantu penyelenggaraan dan ciri baru.","derma_arahan":"Tangkap layar kod QR ini, kemudian imbas melalui app bank atau e-wallet (DuitNow QR).","imbas_bank":"Imbas dengan app bank atau e-wallet anda.","derma_online":"Derma secara dalam talian","hubungi_wa":"Hubungi melalui WhatsApp","wa_derma_mesej":"Salam, saya ingin menderma untuk app Rekod Maintenance Kenderaan.","tutup":"Tutup"},"en":{"app_tajuk":"Vehicle Maintenance Log","bahasa":"Language","cari_kenderaan":"Find Vehicle","cari":"Search","ph_plat":"e.g. WXY 1234","berdaftar":"Registered vehicles — tap to open:","kenderaan_baru":"New vehicle:","belum_daftar":"This vehicle is not registered yet. Fill in the details below.","no_plat":"Plate No. *","jenis_kenderaan":"Vehicle Type *","Motorsikal":"Motorcycle","Kereta":"Car","gaya_ikon":"Vehicle Style / Icon","jenama_model":"Make / Model","ph_model":"e.g. Perodua Myvi 1.5","tahun":"Year","pemilik":"Owner","ph_nama":"Name","tamat_cukai":"Road tax expiry","tamat_insurans":"Insurance expiry","nota_dokumen":"Email reminders 30 & 7 days before expiry, plus a Google Calendar event.","daftar_kenderaan":"Register Vehicle","simpan_perubahan":"Save Changes","edit_kenderaan_tajuk":"Edit Vehicle","batal":"Cancel","padam_kenderaan_ini":"Delete This Vehicle","t_edit_kenderaan":"Edit vehicle","t_padam_kenderaan":"Delete vehicle","stat_rekod":"Records","mileage_terkini":"Latest mileage","jumlah_kos":"Total cost","tambah_rekod":"+ Add Record","mileage":"Mileage","laporan":"Report","pdf":"PDF","kemaskini_mileage":"Update mileage","mileage_semasa_km":"Current mileage (km)","tarikh":"Date","nota_mileage":"No service record needed — keeps mileage-based reminders accurate.","simpan_mileage":"Save Mileage","mileage_dikemaskini_pada":"Mileage updated {t}","mileage_dikemaskini":"Mileage updated: {km} km","err_mileage_isi":"Please enter the current mileage.","lewat_caps":"OVERDUE","laporan_kos":"Cost Report","purata_sebulan":"Monthly average","purata_setahun":"Yearly average","kos_per_km":"Cost per km","kos_bulanan":"Monthly cost","kos_bulanan_thn":"Monthly cost {t}","kos_tahunan":"Yearly cost","kos_ikut_aktiviti":"Cost by activity","tiada_kos":"No costs recorded.","tiada_kos_tempoh":"No costs recorded for this period.","lain_lain":"Others","semua_tahun":"All years","pdf_dimuat":"PDF downloaded: {n}","tambah_rekod_maint":"Add Maintenance Record","edit_rekod_maint":"Edit Maintenance Record","tarikh_wajib":"Date *","mileage_km":"Mileage (km)","jenis_aktiviti":"Activity Type *","pilih":"-- Select --","aktiviti_lain_pernah":"Other activities recorded before","lain_taip_baru":"Other… (type new)","ph_aktiviti_lain":"Describe the activity","kos_rm":"Cost (RM)","bengkel":"Workshop","ph_bengkel":"Workshop name","catatan":"Notes","ph_catatan":"e.g. 5W-30 fully synthetic oil","resit":"Receipt","ambil_gambar":"Take / choose photo","ganti_gambar":"Replace photo","lihat_resit":"View receipt","buang":"Remove","err_gambar":"This file is not a readable image.","simpan_rekod":"Save Record","kemaskini_rekod":"Update Record","err_tarikh":"Please choose a date.","err_aktiviti":"Please choose an activity type.","rekod_disimpan":"Record saved.","rekod_dikemaskini":"Record updated.","rekod_disimpan_tetapi":"Record saved, but:","tetapkan_peringatan":"Set Reminder","peringatan_seterusnya":"Next reminder","t_buang_peringatan":"Remove reminder","ikut_mileage":"By mileage","ikut_tarikh":"By date","ph_ingat_km":"Reminder mileage (km)","p1bulan":"+1 month","p3bulan":"+3 months","p6bulan":"+6 months","p1tahun":"+1 year","mana_dulu":"You'll be reminded at whichever comes first.","cb_kalendar":"Add to Google Calendar (needs a date)","cb_emel":"Send email 7 days / 500 km before","cb_templat":"Save this interval as the template for this activity","err_ingat":"Enter a reminder mileage or date, or tap ✕ to remove the reminder.","nota_km":"Current mileage {a} km → remind at {b} km (+{c})","err_km_tinggi":"Reminder mileage must be higher than the current mileage.","templat_anda":"your template","cadangan_umum":"general suggestion","selang":"Interval {s} ({sumber}).","bulan_n":"{n} months","seterusnya":"Next:","tamat_lewat":"Expired {t} ({n} days overdue)","tamat_hari_ini":"Expires today ({t})","tamat_lagi":"Expires {t} (in {n} days)","pada_km_lewat":"At {a} km ({b} km overdue)","pada_km_baki":"At {a} km ({b} km to go)","tarikh_lewat":"{t} ({n} days overdue)","tarikh_hari_ini":"{t} (today)","tarikh_lagi":"{t} (in {n} days)","atau":"or","sejarah":"Maintenance History","ph_cari_sejarah":"Search activity, workshop, notes…","semua_aktiviti":"All activities","tapis_ringkas":"{a} of {b} records • {rm}","tiada_rekod":"No records yet. Tap \"+ Add Record\".","tiada_padan":"No records match the filter.","edit":"Edit","padam":"Delete","resit_pautan":"Receipt","padam_rekod_q":"Delete this record?","tak_boleh_undur":"This cannot be undone.","rekod_dipadam":"Record deleted.","err_plat":"Please enter a plate number.","err_plat_perlu":"Plate number is required.","err_jenis":"Please choose a vehicle type: Motorcycle or Car.","berjaya_daftar":"Vehicle {p} registered.","kenderaan_dikemaskini":"Vehicle {p} details updated.","padam_kenderaan_q":"Delete vehicle {p}?","padam_kenderaan_teks":"This vehicle <b>and {n} maintenance records</b> will be permanently deleted, including Google Calendar reminders.","kenderaan_dipadam":"Vehicle {p} and {n} records deleted.","taip_sahkan":"Type <b>{x}</b> to confirm:","garaj_tajuk":"Garage & Sharing","memuatkan":"Loading…","log_masuk":"Signed in as","data_disimpan":"Data is stored in","sheet_sendiri":"your own Google Sheet","sheet_dikongsi":"the shared garage Google Sheet","sedang_guna":"Using:","dikongsi":"Shared","garaj_saya":"My garage","garaj_milik":"{e}'s garage","tukar_garaj":"Switch garage","tinggalkan_btn":"Leave this garage","kongsi_label":"Share my garage with family members","ph_emel_ahli":"family member's Gmail","kongsi":"Share","belum_kongsi":"Not shared with anyone yet.","beri_kod":"After sharing, give this <b>garage code</b> to that member:","salin_kod":"Copy garage code","sertai_label":"Join someone else's garage","ph_kod":"Paste garage code","sertai":"Join","pemilik_perlu":"The garage owner must first share it with your email ({e}).","err_emel_ahli":"Please enter the family member's email.","garaj_dikongsi_dgn":"Garage shared with {e}. Send them the garage code.","buang_ahli_q":"Remove member?","buang_ahli_teks":"<b>{e}</b> will no longer be able to view or change vehicles in your garage.","ahli_dibuang":"{e} has been removed from the garage.","err_kod":"Please paste the garage code.","berjaya_sertai":"Joined the garage.","tinggalkan_q":"Leave this garage?","tinggalkan_teks":"You won't see this garage's vehicles until you join again.","tinggalkan":"Leave","kod_disalin":"Garage code copied.","tekan_lama":"Long-press to copy the code.","dibangunkan_oleh":"Developed by","derma":"Donate","derma_tajuk":"Support this app ❤️","derma_teks":"This app is free. If it helps you, your contribution supports maintenance and new features.","derma_arahan":"Screenshot this QR code, then scan it in your banking or e-wallet app (DuitNow QR).","imbas_bank":"Scan with your banking or e-wallet app.","derma_online":"Donate online","hubungi_wa":"Contact via WhatsApp","wa_derma_mesej":"Hi, I'd like to donate to the Vehicle Maintenance Log app.","tutup":"Close"},"zh":{"app_tajuk":"车辆保养记录","bahasa":"语言","cari_kenderaan":"查找车辆","cari":"搜索","ph_plat":"例如：WXY 1234","berdaftar":"已登记车辆 — 点击打开：","kenderaan_baru":"新车辆：","belum_daftar":"此车辆尚未登记。请填写以下资料。","no_plat":"车牌号码 *","jenis_kenderaan":"车辆类型 *","Motorsikal":"摩托车","Kereta":"汽车","gaya_ikon":"车型 / 图标","jenama_model":"品牌 / 型号","ph_model":"例如：Perodua Myvi 1.5","tahun":"年份","pemilik":"车主","ph_nama":"姓名","tamat_cukai":"路税到期日","tamat_insurans":"保险到期日","nota_dokumen":"到期前 30 天和 7 天发送电邮提醒，并在 Google 日历添加活动。","daftar_kenderaan":"登记车辆","simpan_perubahan":"保存更改","edit_kenderaan_tajuk":"编辑车辆","batal":"取消","padam_kenderaan_ini":"删除此车辆","t_edit_kenderaan":"编辑车辆","t_padam_kenderaan":"删除车辆","stat_rekod":"记录","mileage_terkini":"最新里程","jumlah_kos":"总费用","tambah_rekod":"+ 添加记录","mileage":"里程","laporan":"报告","pdf":"PDF","kemaskini_mileage":"更新里程","mileage_semasa_km":"当前里程（公里）","tarikh":"日期","nota_mileage":"无需保养记录 — 让按里程的提醒保持准确。","simpan_mileage":"保存里程","mileage_dikemaskini_pada":"里程更新于 {t}","mileage_dikemaskini":"里程已更新：{km} 公里","err_mileage_isi":"请输入当前里程。","lewat_caps":"已逾期","laporan_kos":"费用报告","purata_sebulan":"每月平均","purata_setahun":"每年平均","kos_per_km":"每公里费用","kos_bulanan":"每月费用","kos_bulanan_thn":"{t} 年每月费用","kos_tahunan":"每年费用","kos_ikut_aktiviti":"按项目分类的费用","tiada_kos":"没有费用记录。","tiada_kos_tempoh":"此期间没有费用记录。","lain_lain":"其他","semua_tahun":"所有年份","pdf_dimuat":"PDF 已下载：{n}","tambah_rekod_maint":"添加保养记录","edit_rekod_maint":"编辑保养记录","tarikh_wajib":"日期 *","mileage_km":"里程（公里）","jenis_aktiviti":"保养项目 *","pilih":"-- 请选择 --","aktiviti_lain_pernah":"以前记录过的其他项目","lain_taip_baru":"其他…（输入新项目）","ph_aktiviti_lain":"请说明项目","kos_rm":"费用（RM）","bengkel":"维修厂","ph_bengkel":"维修厂名称","catatan":"备注","ph_catatan":"例如：5W-30 全合成机油","resit":"收据","ambil_gambar":"拍照 / 选择照片","ganti_gambar":"更换照片","lihat_resit":"查看收据","buang":"移除","err_gambar":"此文件不是可读取的图片。","simpan_rekod":"保存记录","kemaskini_rekod":"更新记录","err_tarikh":"请选择日期。","err_aktiviti":"请选择保养项目。","rekod_disimpan":"记录已保存。","rekod_dikemaskini":"记录已更新。","rekod_disimpan_tetapi":"记录已保存，但：","tetapkan_peringatan":"设置提醒","peringatan_seterusnya":"下次提醒","t_buang_peringatan":"移除提醒","ikut_mileage":"按里程","ikut_tarikh":"按日期","ph_ingat_km":"提醒里程（公里）","p1bulan":"+1 个月","p3bulan":"+3 个月","p6bulan":"+6 个月","p1tahun":"+1 年","mana_dulu":"以先到者为准进行提醒。","cb_kalendar":"添加到 Google 日历（需要日期）","cb_emel":"提前 7 天 / 500 公里发送电邮","cb_templat":"将此间隔保存为该项目的模板","err_ingat":"请输入提醒里程或日期，或点击 ✕ 移除提醒。","nota_km":"当前里程 {a} 公里 → 在 {b} 公里时提醒（+{c}）","err_km_tinggi":"提醒里程必须高于当前里程。","templat_anda":"您的模板","cadangan_umum":"一般建议","selang":"间隔 {s}（{sumber}）。","bulan_n":"{n} 个月","seterusnya":"下次：","tamat_lewat":"已于 {t} 到期（逾期 {n} 天）","tamat_hari_ini":"今天到期（{t}）","tamat_lagi":"{t} 到期（还有 {n} 天）","pada_km_lewat":"于 {a} 公里（已超出 {b} 公里）","pada_km_baki":"于 {a} 公里（还剩 {b} 公里）","tarikh_lewat":"{t}（逾期 {n} 天）","tarikh_hari_ini":"{t}（今天）","tarikh_lagi":"{t}（还有 {n} 天）","atau":"或","sejarah":"保养历史","ph_cari_sejarah":"搜索项目、维修厂、备注…","semua_aktiviti":"所有项目","tapis_ringkas":"{b} 条记录中的 {a} 条 • {rm}","tiada_rekod":"暂无记录。请点击“+ 添加记录”。","tiada_padan":"没有符合筛选条件的记录。","edit":"编辑","padam":"删除","resit_pautan":"收据","padam_rekod_q":"删除此记录？","tak_boleh_undur":"此操作无法撤销。","rekod_dipadam":"记录已删除。","err_plat":"请输入车牌号码。","err_plat_perlu":"必须填写车牌号码。","err_jenis":"请选择车辆类型：摩托车或汽车。","berjaya_daftar":"车辆 {p} 已登记。","kenderaan_dikemaskini":"车辆 {p} 资料已更新。","padam_kenderaan_q":"删除车辆 {p}？","padam_kenderaan_teks":"此车辆<b>及 {n} 条保养记录</b>将被永久删除，包括 Google 日历中的提醒。","kenderaan_dipadam":"车辆 {p} 及 {n} 条记录已删除。","taip_sahkan":"输入 <b>{x}</b> 以确认：","garaj_tajuk":"车库与共享","memuatkan":"加载中…","log_masuk":"登录身份","data_disimpan":"数据保存在","sheet_sendiri":"您自己的 Google 表格","sheet_dikongsi":"共享车库的 Google 表格","sedang_guna":"当前使用：","dikongsi":"共享","garaj_saya":"我的车库","garaj_milik":"{e} 的车库","tukar_garaj":"切换车库","tinggalkan_btn":"退出此车库","kongsi_label":"与家人共享我的车库","ph_emel_ahli":"家人的 Gmail 地址","kongsi":"共享","belum_kongsi":"尚未与任何人共享。","beri_kod":"共享后，请把此<b>车库代码</b>交给该成员：","salin_kod":"复制车库代码","sertai_label":"加入他人的车库","ph_kod":"粘贴车库代码","sertai":"加入","pemilik_perlu":"车库主人须先与您的电邮（{e}）共享。","err_emel_ahli":"请输入家人的电邮地址。","garaj_dikongsi_dgn":"车库已与 {e} 共享。请把车库代码发给对方。","buang_ahli_q":"移除成员？","buang_ahli_teks":"<b>{e}</b> 将无法再查看或更改您车库中的车辆。","ahli_dibuang":"{e} 已从车库中移除。","err_kod":"请粘贴车库代码。","berjaya_sertai":"已加入车库。","tinggalkan_q":"退出此车库？","tinggalkan_teks":"在重新加入之前，您将看不到此车库的车辆。","tinggalkan":"退出","kod_disalin":"车库代码已复制。","tekan_lama":"长按以复制代码。","dibangunkan_oleh":"开发者","derma":"捐助","derma_tajuk":"支持此应用 ❤️","derma_teks":"此应用免费。若对您有帮助，您的捐助将用于维护和开发新功能。","derma_arahan":"截屏此二维码，然后用银行或电子钱包应用扫描（DuitNow QR）。","imbas_bank":"用您的银行或电子钱包应用扫描。","derma_online":"在线捐助","hubungi_wa":"通过 WhatsApp 联系","wa_derma_mesej":"您好，我想为车辆保养记录应用捐助。","tutup":"关闭"},"ta":{"app_tajuk":"வாகன பராமரிப்புப் பதிவு","bahasa":"மொழி","cari_kenderaan":"வாகனத்தைத் தேடு","cari":"தேடு","ph_plat":"எ.கா: WXY 1234","berdaftar":"பதிவுசெய்த வாகனங்கள் — திறக்கத் தட்டவும்:","kenderaan_baru":"புதிய வாகனம்:","belum_daftar":"இந்த வாகனம் இன்னும் பதிவு செய்யப்படவில்லை. கீழே விவரங்களை நிரப்பவும்.","no_plat":"பதிவு எண் *","jenis_kenderaan":"வாகன வகை *","Motorsikal":"மோட்டார் சைக்கிள்","Kereta":"கார்","gaya_ikon":"வாகன பாணி / சின்னம்","jenama_model":"தயாரிப்பு / மாடல்","ph_model":"எ.கா: Perodua Myvi 1.5","tahun":"ஆண்டு","pemilik":"உரிமையாளர்","ph_nama":"பெயர்","tamat_cukai":"சாலை வரி காலாவதி","tamat_insurans":"காப்பீடு காலாவதி","nota_dokumen":"காலாவதிக்கு 30 & 7 நாட்களுக்கு முன் மின்னஞ்சல் நினைவூட்டல், மேலும் Google Calendar நிகழ்வு.","daftar_kenderaan":"வாகனத்தைப் பதிவு செய்","simpan_perubahan":"மாற்றங்களைச் சேமி","edit_kenderaan_tajuk":"வாகனத்தைத் திருத்து","batal":"ரத்து","padam_kenderaan_ini":"இந்த வாகனத்தை நீக்கு","t_edit_kenderaan":"வாகனத்தைத் திருத்து","t_padam_kenderaan":"வாகனத்தை நீக்கு","stat_rekod":"பதிவுகள்","mileage_terkini":"சமீபத்திய மைலேஜ்","jumlah_kos":"மொத்த செலவு","tambah_rekod":"+ பதிவைச் சேர்","mileage":"மைலேஜ்","laporan":"அறிக்கை","pdf":"PDF","kemaskini_mileage":"மைலேஜைப் புதுப்பி","mileage_semasa_km":"தற்போதைய மைலேஜ் (கி.மீ)","tarikh":"தேதி","nota_mileage":"சேவைப் பதிவு தேவையில்லை — மைலேஜ் அடிப்படையிலான நினைவூட்டல்கள் துல்லியமாக இருக்கும்.","simpan_mileage":"மைலேஜைச் சேமி","mileage_dikemaskini_pada":"மைலேஜ் புதுப்பிக்கப்பட்டது {t}","mileage_dikemaskini":"மைலேஜ் புதுப்பிக்கப்பட்டது: {km} கி.மீ","err_mileage_isi":"தற்போதைய மைலேஜை உள்ளிடவும்.","lewat_caps":"தாமதம்","laporan_kos":"செலவு அறிக்கை","purata_sebulan":"மாத சராசரி","purata_setahun":"ஆண்டு சராசரி","kos_per_km":"ஒரு கி.மீ செலவு","kos_bulanan":"மாதச் செலவு","kos_bulanan_thn":"{t} மாதச் செலவு","kos_tahunan":"ஆண்டுச் செலவு","kos_ikut_aktiviti":"செயல்பாடு வாரியான செலவு","tiada_kos":"செலவுகள் எதுவும் பதிவு செய்யப்படவில்லை.","tiada_kos_tempoh":"இந்தக் காலத்திற்கு செலவுகள் எதுவும் இல்லை.","lain_lain":"மற்றவை","semua_tahun":"அனைத்து ஆண்டுகளும்","pdf_dimuat":"PDF பதிவிறக்கப்பட்டது: {n}","tambah_rekod_maint":"பராமரிப்புப் பதிவைச் சேர்","edit_rekod_maint":"பராமரிப்புப் பதிவைத் திருத்து","tarikh_wajib":"தேதி *","mileage_km":"மைலேஜ் (கி.மீ)","jenis_aktiviti":"செயல்பாட்டு வகை *","pilih":"-- தேர்ந்தெடு --","aktiviti_lain_pernah":"முன்பு பதிவுசெய்த பிற செயல்பாடுகள்","lain_taip_baru":"மற்றவை… (புதிதாகத் தட்டச்சு செய்)","ph_aktiviti_lain":"செயல்பாட்டைக் குறிப்பிடவும்","kos_rm":"செலவு (RM)","bengkel":"பணிமனை","ph_bengkel":"பணிமனையின் பெயர்","catatan":"குறிப்புகள்","ph_catatan":"எ.கா: 5W-30 முழு செயற்கை எண்ணெய்","resit":"ரசீது","ambil_gambar":"புகைப்படம் எடு / தேர்ந்தெடு","ganti_gambar":"புகைப்படத்தை மாற்று","lihat_resit":"ரசீதைப் பார்","buang":"அகற்று","err_gambar":"இந்தக் கோப்பு படிக்கக்கூடிய படம் அல்ல.","simpan_rekod":"பதிவைச் சேமி","kemaskini_rekod":"பதிவைப் புதுப்பி","err_tarikh":"தேதியைத் தேர்ந்தெடுக்கவும்.","err_aktiviti":"செயல்பாட்டு வகையைத் தேர்ந்தெடுக்கவும்.","rekod_disimpan":"பதிவு சேமிக்கப்பட்டது.","rekod_dikemaskini":"பதிவு புதுப்பிக்கப்பட்டது.","rekod_disimpan_tetapi":"பதிவு சேமிக்கப்பட்டது, ஆனால்:","tetapkan_peringatan":"நினைவூட்டலை அமை","peringatan_seterusnya":"அடுத்த நினைவூட்டல்","t_buang_peringatan":"நினைவூட்டலை அகற்று","ikut_mileage":"மைலேஜ் அடிப்படையில்","ikut_tarikh":"தேதி அடிப்படையில்","ph_ingat_km":"நினைவூட்டல் மைலேஜ் (கி.மீ)","p1bulan":"+1 மாதம்","p3bulan":"+3 மாதங்கள்","p6bulan":"+6 மாதங்கள்","p1tahun":"+1 ஆண்டு","mana_dulu":"எது முதலில் வருகிறதோ அப்போது நினைவூட்டப்படும்.","cb_kalendar":"Google Calendar-இல் சேர் (தேதி தேவை)","cb_emel":"7 நாட்கள் / 500 கி.மீ முன் மின்னஞ்சல் அனுப்பு","cb_templat":"இந்த இடைவெளியை இச்செயல்பாட்டின் வார்ப்புருவாகச் சேமி","err_ingat":"நினைவூட்டல் மைலேஜ் அல்லது தேதியை உள்ளிடவும், அல்லது நீக்க ✕ தட்டவும்.","nota_km":"தற்போதைய மைலேஜ் {a} கி.மீ → {b} கி.மீ-இல் நினைவூட்டு (+{c})","err_km_tinggi":"நினைவூட்டல் மைலேஜ் தற்போதைய மைலேஜை விட அதிகமாக இருக்க வேண்டும்.","templat_anda":"உங்கள் வார்ப்புரு","cadangan_umum":"பொதுப் பரிந்துரை","selang":"இடைவெளி {s} ({sumber}).","bulan_n":"{n} மாதங்கள்","seterusnya":"அடுத்து:","tamat_lewat":"{t} அன்று காலாவதியானது ({n} நாட்கள் தாமதம்)","tamat_hari_ini":"இன்று காலாவதியாகிறது ({t})","tamat_lagi":"{t} அன்று காலாவதி ({n} நாட்களில்)","pada_km_lewat":"{a} கி.மீ-இல் ({b} கி.மீ தாமதம்)","pada_km_baki":"{a} கி.மீ-இல் (இன்னும் {b} கி.மீ)","tarikh_lewat":"{t} ({n} நாட்கள் தாமதம்)","tarikh_hari_ini":"{t} (இன்று)","tarikh_lagi":"{t} ({n} நாட்களில்)","atau":"அல்லது","sejarah":"பராமரிப்பு வரலாறு","ph_cari_sejarah":"செயல்பாடு, பணிமனை, குறிப்புகளைத் தேடு…","semua_aktiviti":"அனைத்துச் செயல்பாடுகளும்","tapis_ringkas":"{b} பதிவுகளில் {a} • {rm}","tiada_rekod":"இன்னும் பதிவுகள் இல்லை. \"+ பதிவைச் சேர்\" தட்டவும்.","tiada_padan":"வடிகட்டலுக்குப் பொருந்தும் பதிவுகள் இல்லை.","edit":"திருத்து","padam":"நீக்கு","resit_pautan":"ரசீது","padam_rekod_q":"இந்தப் பதிவை நீக்கவா?","tak_boleh_undur":"இதைத் திரும்பப் பெற முடியாது.","rekod_dipadam":"பதிவு நீக்கப்பட்டது.","err_plat":"பதிவு எண்ணை உள்ளிடவும்.","err_plat_perlu":"பதிவு எண் தேவை.","err_jenis":"வாகன வகையைத் தேர்ந்தெடுக்கவும்: மோட்டார் சைக்கிள் அல்லது கார்.","berjaya_daftar":"வாகனம் {p} பதிவு செய்யப்பட்டது.","kenderaan_dikemaskini":"வாகனம் {p} விவரங்கள் புதுப்பிக்கப்பட்டன.","padam_kenderaan_q":"வாகனம் {p}-ஐ நீக்கவா?","padam_kenderaan_teks":"இந்த வாகனமும் <b>{n} பராமரிப்புப் பதிவுகளும்</b> நிரந்தரமாக நீக்கப்படும், Google Calendar நினைவூட்டல்கள் உட்பட.","kenderaan_dipadam":"வாகனம் {p} மற்றும் {n} பதிவுகள் நீக்கப்பட்டன.","taip_sahkan":"உறுதிப்படுத்த <b>{x}</b> என தட்டச்சு செய்யவும்:","garaj_tajuk":"கேரேஜ் & பகிர்வு","memuatkan":"ஏற்றுகிறது…","log_masuk":"உள்நுழைந்தவர்","data_disimpan":"தரவு சேமிக்கப்படும் இடம்","sheet_sendiri":"உங்கள் சொந்த Google Sheet","sheet_dikongsi":"பகிரப்பட்ட கேரேஜின் Google Sheet","sedang_guna":"பயன்பாட்டில்:","dikongsi":"பகிரப்பட்டது","garaj_saya":"என் கேரேஜ்","garaj_milik":"{e} கேரேஜ்","tukar_garaj":"கேரேஜை மாற்று","tinggalkan_btn":"இந்தக் கேரேஜிலிருந்து வெளியேறு","kongsi_label":"என் கேரேஜைக் குடும்பத்தினருடன் பகிர்","ph_emel_ahli":"குடும்ப உறுப்பினரின் Gmail","kongsi":"பகிர்","belum_kongsi":"இன்னும் யாருடனும் பகிரப்படவில்லை.","beri_kod":"பகிர்ந்த பின், இந்த <b>கேரேஜ் குறியீட்டை</b> அந்த உறுப்பினரிடம் கொடுக்கவும்:","salin_kod":"கேரேஜ் குறியீட்டை நகலெடு","sertai_label":"மற்றவரின் கேரேஜில் சேர்","ph_kod":"கேரேஜ் குறியீட்டை ஒட்டு","sertai":"சேர்","pemilik_perlu":"கேரேஜ் உரிமையாளர் முதலில் உங்கள் மின்னஞ்சலுடன் ({e}) பகிர வேண்டும்.","err_emel_ahli":"குடும்ப உறுப்பினரின் மின்னஞ்சலை உள்ளிடவும்.","garaj_dikongsi_dgn":"கேரேஜ் {e} உடன் பகிரப்பட்டது. கேரேஜ் குறியீட்டை அவருக்கு அனுப்பவும்.","buang_ahli_q":"உறுப்பினரை அகற்றவா?","buang_ahli_teks":"<b>{e}</b> இனி உங்கள் கேரேஜில் உள்ள வாகனங்களைப் பார்க்கவோ மாற்றவோ முடியாது.","ahli_dibuang":"{e} கேரேஜிலிருந்து அகற்றப்பட்டார்.","err_kod":"கேரேஜ் குறியீட்டை ஒட்டவும்.","berjaya_sertai":"கேரேஜில் சேர்ந்தீர்கள்.","tinggalkan_q":"இந்தக் கேரேஜிலிருந்து வெளியேறவா?","tinggalkan_teks":"மீண்டும் சேரும் வரை இந்தக் கேரேஜின் வாகனங்களைப் பார்க்க முடியாது.","tinggalkan":"வெளியேறு","kod_disalin":"கேரேஜ் குறியீடு நகலெடுக்கப்பட்டது.","tekan_lama":"குறியீட்டை நகலெடுக்க நீண்ட நேரம் அழுத்தவும்.","dibangunkan_oleh":"உருவாக்கியவர்","derma":"நன்கொடை","derma_tajuk":"இந்த செயலியை ஆதரியுங்கள் ❤️","derma_teks":"இந்த செயலி இலவசம். இது உங்களுக்கு உதவினால், உங்கள் பங்களிப்பு பராமரிப்புக்கும் புதிய அம்சங்களுக்கும் உதவும்.","derma_arahan":"இந்த QR குறியீட்டைத் திரைப்பிடிப்பு எடுத்து, வங்கி அல்லது மின்-பணப்பை செயலியில் ஸ்கேன் செய்யவும் (DuitNow QR).","imbas_bank":"உங்கள் வங்கி அல்லது மின்-பணப்பை செயலியில் ஸ்கேன் செய்யவும்.","derma_online":"இணையத்தில் நன்கொடை","hubungi_wa":"WhatsApp மூலம் தொடர்பு கொள்ளவும்","wa_derma_mesej":"வணக்கம், வாகன பராமரிப்புப் பதிவு செயலிக்கு நன்கொடை அளிக்க விரும்புகிறேன்.","tutup":"மூடு"}};
+  const KAMUS_AKT = {"ms":{"Servis berkala":"Servis berkala","Tukar minyak enjin":"Tukar minyak enjin","Tukar penapis minyak":"Tukar penapis minyak","Tukar penapis udara":"Tukar penapis udara","Tukar tayar":"Tukar tayar","Alignment / Balancing":"Alignment / Balancing","Tukar bateri":"Tukar bateri","Brek (pad/disc)":"Brek (pad/disc)","Minyak gear / ATF":"Minyak gear / ATF","Coolant / Radiator":"Coolant / Radiator","Aircond":"Aircond","Cukai jalan / Insurans":"Cukai jalan / Insurans","Pemeriksaan PUSPAKOM":"Pemeriksaan PUSPAKOM","Pembaikan":"Pembaikan","Cukai jalan":"Cukai jalan","Insurans":"Insurans"},"en":{"Servis berkala":"Periodic service","Tukar minyak enjin":"Engine oil change","Tukar penapis minyak":"Oil filter change","Tukar penapis udara":"Air filter change","Tukar tayar":"Tyre change","Alignment / Balancing":"Alignment / Balancing","Tukar bateri":"Battery change","Brek (pad/disc)":"Brakes (pads/discs)","Minyak gear / ATF":"Gear oil / ATF","Coolant / Radiator":"Coolant / Radiator","Aircond":"Air-conditioning","Cukai jalan / Insurans":"Road tax / Insurance","Pemeriksaan PUSPAKOM":"PUSPAKOM inspection","Pembaikan":"Repair","Cukai jalan":"Road tax","Insurans":"Insurance"},"zh":{"Servis berkala":"定期保养","Tukar minyak enjin":"更换机油","Tukar penapis minyak":"更换机油滤芯","Tukar penapis udara":"更换空气滤芯","Tukar tayar":"更换轮胎","Alignment / Balancing":"四轮定位 / 平衡","Tukar bateri":"更换电池","Brek (pad/disc)":"刹车（刹车片/碟盘）","Minyak gear / ATF":"齿轮油 / 变速箱油","Coolant / Radiator":"冷却液 / 水箱","Aircond":"冷气","Cukai jalan / Insurans":"路税 / 保险","Pemeriksaan PUSPAKOM":"PUSPAKOM 检验","Pembaikan":"维修","Cukai jalan":"路税","Insurans":"保险"},"ta":{"Servis berkala":"காலமுறை சேவை","Tukar minyak enjin":"இன்ஜின் எண்ணெய் மாற்றம்","Tukar penapis minyak":"எண்ணெய் வடிகட்டி மாற்றம்","Tukar penapis udara":"காற்று வடிகட்டி மாற்றம்","Tukar tayar":"டயர் மாற்றம்","Alignment / Balancing":"அலைன்மென்ட் / பேலன்சிங்","Tukar bateri":"பேட்டரி மாற்றம்","Brek (pad/disc)":"பிரேக் (பேட்/டிஸ்க்)","Minyak gear / ATF":"கியர் எண்ணெய் / ATF","Coolant / Radiator":"குளிரூட்டி / ரேடியேட்டர்","Aircond":"குளிர்சாதனம்","Cukai jalan / Insurans":"சாலை வரி / காப்பீடு","Pemeriksaan PUSPAKOM":"PUSPAKOM ஆய்வு","Pembaikan":"பழுதுபார்ப்பு","Cukai jalan":"சாலை வரி","Insurans":"காப்பீடு"}};
+  const KAMUS_IKON = {"ms":{"sedan":"Sedan","hatchback":"Hatchback","suv":"SUV","mpv":"MPV","pikap":"Pikap / 4x4","van":"Van","sport":"Sport / Coupe","ev":"Elektrik (EV)","lori":"Lori ringan","skuter":"Skuter","kapcai":"Kapcai (Underbone)","sukan":"Sport","cruiser":"Cruiser","dirt":"Offroad / Dirt","touring":"Touring / Adventure"},"en":{"sedan":"Sedan","hatchback":"Hatchback","suv":"SUV","mpv":"MPV","pikap":"Pickup / 4x4","van":"Van","sport":"Sports / Coupe","ev":"Electric (EV)","lori":"Light truck","skuter":"Scooter","kapcai":"Underbone (Kapcai)","sukan":"Sport","cruiser":"Cruiser","dirt":"Off-road / Dirt","touring":"Touring / Adventure"},"zh":{"sedan":"轿车","hatchback":"掀背车","suv":"SUV","mpv":"MPV","pikap":"皮卡 / 四驱","van":"厢型车","sport":"跑车 / 双门","ev":"电动车（EV）","lori":"轻型罗厘","skuter":"踏板车","kapcai":"弯梁车（Kapcai）","sukan":"跑车","cruiser":"巡航车","dirt":"越野车","touring":"旅行 / 探险车"},"ta":{"sedan":"செடான்","hatchback":"ஹேட்ச்பேக்","suv":"SUV","mpv":"MPV","pikap":"பிக்கப் / 4x4","van":"வேன்","sport":"ஸ்போர்ட் / கூபே","ev":"மின்சார (EV)","lori":"இலகு லாரி","skuter":"ஸ்கூட்டர்","kapcai":"அண்டர்போன் (Kapcai)","sukan":"ஸ்போர்ட்","cruiser":"க்ரூசர்","dirt":"ஆஃப்ரோடு / டர்ட்","touring":"டூரிங் / அட்வென்ச்சர்"}};
+  const KAMUS_BULAN = {"ms":["Jan","Feb","Mac","Apr","Mei","Jun","Jul","Ogo","Sep","Okt","Nov","Dis"],"en":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"zh":["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],"ta":["ஜன","பிப்","மார்","ஏப்","மே","ஜூன்","ஜூலை","ஆக","செப்","அக்","நவ","டிச"]};
+  const BAHASA_SAH = ['ms', 'en', 'zh', 'ta'];
+  let BAHASA = (function () {
+    try { const b = localStorage.getItem('bahasa'); if (BAHASA_SAH.includes(b)) return b; } catch (e) {}
+    const n = (navigator.language || 'ms').toLowerCase();
+    return n.startsWith('zh') ? 'zh' : n.startsWith('ta') ? 'ta' : n.startsWith('en') ? 'en' : 'ms';
+  })();
+
+  /** Terjemah kunci, ganti {pembolehubah}. */
+  function t(k, v) {
+    let s = (KAMUS[BAHASA] && KAMUS[BAHASA][k]) || KAMUS.ms[k] || k;
+    Object.keys(v || {}).forEach(x => { s = s.split('{' + x + '}').join(String(v[x])); });
+    return s;
+  }
+  const tAkt = a => (KAMUS_AKT[BAHASA] && KAMUS_AKT[BAHASA][a]) || a;      // nama aktiviti asas
+  const tIkon = (kod, asal) => (KAMUS_IKON[BAHASA] && KAMUS_IKON[BAHASA][kod]) || asal;
+  const tJenis = j => j ? t(j) : '';
+
+  /** Terapkan bahasa pada semua teks statik. */
+  function terapBahasa() {
+    document.documentElement.lang = BAHASA;
+    document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = t(el.dataset.i18nPh));
+    document.querySelectorAll('[data-i18n-t]').forEach(el => el.title = t(el.dataset.i18nT));
+    document.title = t('app_tajuk');
+    const p = document.getElementById('pilihBahasa');
+    if (p) p.value = BAHASA;
+  }
+
+  function tukarBahasa(b) {
+    if (!BAHASA_SAH.includes(b)) return;
+    BAHASA = b;
+    try { localStorage.setItem('bahasa', b); } catch (e) {}
+    google.script.run.simpanBahasa(b);
+    terapBahasa();
+    binaSenaraiAktiviti(tambahanAktiviti);
+    // Lukis semula paparan semasa
+    if (dataSemasa && !$('secInfo').classList.contains('tersembunyi')) {
+      const bukaLaporan = laporanBuka;
+      papar(dataSemasa);
+      if (bukaLaporan) { isiTahunLaporan(); lukisLaporan(); }
+    } else if (!$('secDaftar').classList.contains('tersembunyi')) {
+      setModKenderaan(modEditK);
+      if (!modEditK) $('platBaru').textContent = platSemasa;
+      binaPilihIkon(ikonDipilih());
+    }
+    muatPengguna();
+    if ($('dGaraj').open) muatGaraj();
+  }
+
   /* ---------- Maklumat pembangun & derma (ubah di sini) ---------- */
   // Bina URL tanpa menulis dua garis condong berturut-turut dalam kod —
   // HtmlService Apps Script boleh memotong baris selepas aksara itu.
@@ -625,17 +689,19 @@
   ];
 
   /** Bina senarai aktiviti: asas + aktiviti "Lain-lain" yang pernah ditaip. */
+  let tambahanAktiviti = [];
   function binaSenaraiAktiviti(tambahan = []) {
+    tambahanAktiviti = tambahan;
     const pilihSemasa = $('rAktiviti').value;
     const asasKecil = AKTIVITI_ASAS.map(a => a.toLowerCase());
     const lain = tambahan.filter(a => !asasKecil.includes(a.toLowerCase()))
                          .sort((a, b) => a.localeCompare(b));
-    const opt = a => `<option value="${esc(a)}">${esc(a)}</option>`;
+    const opt = a => `<option value="${esc(a)}">${esc(tAkt(a))}</option>`;
     $('rAktiviti').innerHTML =
-      '<option value="">-- Pilih --</option>' +
+      `<option value="">${t('pilih')}</option>` +
       AKTIVITI_ASAS.map(opt).join('') +
-      (lain.length ? `<optgroup label="Aktiviti lain yang pernah direkod">${lain.map(opt).join('')}</optgroup>` : '') +
-      '<option value="__lain">Lain-lain… (taip baru)</option>';
+      (lain.length ? `<optgroup label="${esc(t('aktiviti_lain_pernah'))}">${lain.map(opt).join('')}</optgroup>` : '') +
+      `<option value="__lain">${t('lain_taip_baru')}</option>`;
     $('rAktiviti').value = pilihSemasa;
   }
 
@@ -693,7 +759,7 @@
 
   async function cari() {
     const plat = $('plat').value.trim();
-    if (!plat) return mesej('Sila masukkan nombor plat.', 'ralat');
+    if (!plat) return mesej(t('err_plat'), 'ralat');
     const data = await panggil('cariKenderaan', [plat], $('btnCari'));
     papar(data);
   }
@@ -723,14 +789,14 @@
     mileageTerakhir = s.mileageTerkini || '';
     jenisSemasa = k.jenis;
     $('senaraiBengkel').innerHTML = (data.senaraiBengkel || []).map(b => `<option value="${esc(b)}">`).join('');
-    $('iKemaskiniKm').textContent = s.kemaskiniMileage ? 'Mileage dikemas kini ' + fmtTarikh(s.kemaskiniMileage) : '';
+    $('iKemaskiniKm').textContent = s.kemaskiniMileage ? t('mileage_dikemaskini_pada', { t: fmtTarikh(s.kemaskiniMileage) }) : '';
     $('iPeringatan').innerHTML = (data.peringatan || []).map(p => `
       <div class="banner ${p.status}">${ik(p.jenisP === 'dokumen' ? 'i-dokumen' : 'i-loceng')}<div>
-        <b>${esc(p.aktiviti)}${p.status === 'lewat' ? ' — LEWAT' : ''}</b>${esc(teksPeringatan(p))}
+        <b>${esc(tAkt(p.aktiviti))}${p.status === 'lewat' ? ' — ' + t('lewat_caps') : ''}</b>${esc(teksPeringatan(p))}
       </div></div>`).join('');
     $('iGambar').setAttribute('href', hrefIkon(k));
     $('iPlat').textContent = k.plat;
-    $('iJenis').textContent = k.jenis;
+    $('iJenis').textContent = tJenis(k.jenis);
     $('iJenis').classList.toggle('tersembunyi', !k.jenis);
     $('iModel').textContent = [k.model, k.tahun, k.pemilik].filter(Boolean).join(' • ') || '—';
     $('iBil').textContent = s.bilRekod;
@@ -746,7 +812,7 @@
 
   async function daftar() {
     const jenis = document.querySelector('input[name="dJenis"]:checked');
-    if (!jenis) return mesej('Sila pilih jenis kenderaan: Motorsikal atau Kereta.', 'ralat');
+    if (!jenis) return mesej(t('err_jenis'), 'ralat');
     if (modEditK) return simpanKenderaan(jenis.value);
     const data = await panggil('daftarKenderaan', [{
       plat: platSemasa,
@@ -758,7 +824,7 @@
       tamatCukai: $('dCukai').value,
       tamatInsurans: $('dInsurans').value
     }], $('btnDaftar'));
-    mesej('Kenderaan ' + data.plat + ' berjaya didaftarkan.');
+    mesej(t('berjaya_daftar', { p: data.plat }));
     papar(data);
     tunjukAmaran(data);
     muatSenaraiPlat();
@@ -795,11 +861,11 @@
   async function simpan() {
     let aktiviti = $('rAktiviti').value;
     if (aktiviti === '__lain') aktiviti = $('rAktivitiLain').value.trim();
-    if (!$('rTarikh').value) return mesej('Sila pilih tarikh.', 'ralat');
-    if (!aktiviti) return mesej('Sila pilih jenis aktiviti.', 'ralat');
+    if (!$('rTarikh').value) return mesej(t('err_tarikh'), 'ralat');
+    if (!aktiviti) return mesej(t('err_aktiviti'), 'ralat');
     const ingat = dataPeringatan();
     if (panelBuka() && ingat.ingatMileage === '' && !ingat.ingatTarikh)
-      return mesej('Isi mileage atau tarikh peringatan, atau tekan ✕ untuk buang peringatan.', 'ralat');
+      return mesej(t('err_ingat'), 'ralat');
 
     const sedangEdit = !!idEdit;
     const data = await panggil(sedangEdit ? 'kemaskiniRekod' : 'tambahRekod', [{
@@ -815,7 +881,7 @@
       resit: resitBaru,
       buangResit: buangResitLama
     }], $('btnSimpan'));
-    mesej(sedangEdit ? 'Rekod berjaya dikemaskini.' : 'Rekod berjaya disimpan.');
+    mesej(t(sedangEdit ? 'rekod_dikemaskini' : 'rekod_disimpan'));
     papar(data);
     tunjukAmaran(data);
     muatSenaraiPlat();
@@ -824,8 +890,8 @@
   /** Tukar tajuk & butang borang ikut mod tambah / edit. */
   function setModBorang(id) {
     idEdit = id;
-    $('tajukBorang').textContent = id ? 'Edit Rekod Maintenance' : 'Tambah Rekod Maintenance';
-    $('btnSimpan').textContent = id ? 'Kemaskini Rekod' : 'Simpan Rekod';
+    $('tajukBorang').textContent = t(id ? 'edit_rekod_maint' : 'tambah_rekod_maint');
+    $('btnSimpan').textContent = t(id ? 'kemaskini_rekod' : 'simpan_rekod');
     $('btnBatal').classList.toggle('tersembunyi', !id);
     document.querySelectorAll('.rekod.diedit').forEach(el => el.classList.remove('diedit'));
     if (id && $('rek-' + id)) $('rek-' + id).classList.add('diedit');
@@ -858,7 +924,7 @@
       $('rResitSedia').href = r.resitUrl;
       $('rResitSedia').classList.remove('tersembunyi');
       $('rResitBuang').classList.remove('tersembunyi');
-      $('rResitBtnTeks').textContent = 'Ganti gambar';
+      $('rResitBtnTeks').textContent = t('ganti_gambar');
     }
     setModBorang(id);
     $('secBorang').classList.remove('tersembunyi');
@@ -873,13 +939,13 @@
   async function padam(id) {
     const r = rekodSemasa[id] || {};
     const ok = await sahkan({
-      tajuk: 'Padam rekod ini?',
-      mesej: `<p><b>${esc(r.aktiviti || '')}</b> — ${fmtTarikh(r.tarikh)}${r.kos !== '' && r.kos != null ? ' — ' + rm(r.kos) : ''}</p>
-              <p>Tindakan ini tidak boleh diundur.</p>`
+      tajuk: t('padam_rekod_q'),
+      mesej: `<p><b>${esc(tAkt(r.aktiviti || ''))}</b> — ${fmtTarikh(r.tarikh)}${r.kos !== '' && r.kos != null ? ' — ' + rm(r.kos) : ''}</p>
+              <p>${t('tak_boleh_undur')}</p>`
     });
     if (!ok) return;
     const data = await panggil('padamRekod', [id, platSemasa]);
-    mesej('Rekod dipadam.');
+    mesej(t('rekod_dipadam'));
     papar(data);
     muatSenaraiPlat();
   }
@@ -915,7 +981,7 @@
     if (!senarai.some(i => i.kod === pilih)) pilih = IKON_LALAI[jenis];
     $('pilihIkon').innerHTML = senarai.map(i => `
       <label><input type="radio" name="dIkon" value="${i.kod}" ${i.kod === pilih ? 'checked' : ''}>
-        <span><svg><use href="#v-${i.kod}"/></svg>${esc(i.nama)}</span></label>`).join('');
+        <span><svg><use href="#v-${i.kod}"/></svg>${esc(tIkon(i.kod, i.nama))}</span></label>`).join('');
   }
 
   const ikonDipilih = () => (document.querySelector('input[name="dIkon"]:checked') || {}).value || '';
@@ -926,11 +992,11 @@
 
   function setModKenderaan(edit) {
     modEditK = edit;
-    $('tajukDaftar').innerHTML = edit ? 'Edit Kenderaan' : 'Kenderaan baru: <span id="platBaru"></span>';
+    $('tajukDaftar').innerHTML = edit ? esc(t('edit_kenderaan_tajuk')) : esc(t('kenderaan_baru')) + ' <span id="platBaru"></span>';
     $('notaDaftar').classList.toggle('tersembunyi', edit);
     $('blokDPlat').classList.toggle('tersembunyi', !edit);
     $('blokEditK').classList.toggle('tersembunyi', !edit);
-    $('btnDaftar').textContent = edit ? 'Simpan Perubahan' : 'Daftar Kenderaan';
+    $('btnDaftar').textContent = t(edit ? 'simpan_perubahan' : 'daftar_kenderaan');
   }
 
   function editKenderaan() {
@@ -952,13 +1018,13 @@
 
   async function simpanKenderaan(jenis) {
     const platBaru = $('dPlat').value.trim();
-    if (!platBaru) return mesej('Nombor plat diperlukan.', 'ralat');
+    if (!platBaru) return mesej(t('err_plat_perlu'), 'ralat');
     const data = await panggil('kemaskiniKenderaan', [{
       platAsal: platSemasa, plat: platBaru, jenis: jenis, ikon: ikonDipilih(),
       model: $('dModel').value, tahun: $('dTahun').value, pemilik: $('dPemilik').value,
       tamatCukai: $('dCukai').value, tamatInsurans: $('dInsurans').value
     }], $('btnDaftar'));
-    mesej('Maklumat kenderaan ' + data.plat + ' dikemaskini.');
+    mesej(t('kenderaan_dikemaskini', { p: data.plat }));
     $('plat').value = data.plat;
     papar(data);
     tunjukAmaran(data);
@@ -975,14 +1041,14 @@
     if (!k) return;
     const bil = Object.keys(rekodSemasa).length;
     const ok = await sahkan({
-      tajuk: `Padam kenderaan ${k.plat}?`,
-      mesej: `<p>Kenderaan ini <b>dan ${bil} rekod maintenance</b> akan dipadam terus, termasuk peringatan di Google Calendar.</p>
-              <p>Tindakan ini tidak boleh diundur.</p>`,
+      tajuk: t('padam_kenderaan_q', { p: k.plat }),
+      mesej: `<p>${t('padam_kenderaan_teks', { n: bil })}</p>
+              <p>${t('tak_boleh_undur')}</p>`,
       taip: k.plat
     });
     if (!ok) return;
     const hasil = await panggil('padamKenderaan', [k.plat]);
-    mesej(`Kenderaan ${hasil.plat} dan ${hasil.bilRekod} rekod telah dipadam.`);
+    mesej(t('kenderaan_dipadam', { p: hasil.plat, n: hasil.bilRekod }));
     setModKenderaan(false);
     sembunyiSemua();
     platSemasa = '';
@@ -993,7 +1059,7 @@
 
   /** Modal pengesahan. opsyen.taip = teks yang mesti ditaip sebelum butang Padam aktif. */
   let selesaiModal = null;
-  function sahkan({ tajuk, mesej: isi, taip, butang = 'Padam' }) {
+  function sahkan({ tajuk, mesej: isi, taip, butang = t('padam') }) {
     $('mTajuk').textContent = tajuk;
     $('mMesej').innerHTML = isi;
     $('mOk').textContent = butang;
@@ -1003,7 +1069,7 @@
     $('mTaip').oninput = () => {
       $('mOk').disabled = $('mTaip').value.toUpperCase().replace(/[^A-Z0-9]/g, '') !== taip;
     };
-    if (taip) $('mLabelTaip').innerHTML = `Taip <b>${esc(taip)}</b> untuk sahkan:`;
+    if (taip) $('mLabelTaip').innerHTML = t('taip_sahkan', { x: esc(taip) });
     $('modal').classList.remove('tersembunyi');
     if (taip) setTimeout(() => $('mTaip').focus(), 50);
     return new Promise(res => selesaiModal = res);
@@ -1018,7 +1084,7 @@
   function tunjukAmaran(data) {
     if (!data || !data.amaran || !data.amaran.length) return;
     const el = $('mesej');
-    el.textContent = 'Rekod disimpan, tetapi: ' + data.amaran.join(' ');
+    el.textContent = t('rekod_disimpan_tetapi') + ' ' + data.amaran.join(' ');
     el.className = 'mesej ralat';
     clearTimeout(mesej.t);
     mesej.t = setTimeout(() => el.className = 'mesej', 12000);
@@ -1033,11 +1099,11 @@
 
   function bukaDerma() {
     const bah = [];
-    if (DERMA.qr) bah.push(`<img src="${esc(DERMA.qr)}" alt="Kod QR derma"><div class="nota">Imbas dengan app bank atau e-wallet anda.</div>`);
+    if (DERMA.qr) bah.push(`<img src="${esc(DERMA.qr)}" alt="QR"><div class="nota">${t('imbas_bank')}</div>`);
     if (DERMA.bank) bah.push(`<p><b>${esc(DERMA.bank)}</b></p>`);
-    if (DERMA.url) bah.push(`<a class="btn" style="display:block;text-decoration:none" href="${esc(DERMA.url)}" target="_blank" rel="noopener">Derma secara dalam talian</a>`);
+    if (DERMA.url) bah.push(`<a class="btn" style="display:block;text-decoration:none" href="${esc(DERMA.url)}" target="_blank" rel="noopener">${t('derma_online')}</a>`);
     if (!bah.length) bah.push(`<a class="btn" style="display:block;text-decoration:none" target="_blank" rel="noopener"
-        href="${pautan('wa.me', PEMBANGUN.whatsapp)}?text=${encodeURIComponent('Salam, saya ingin menderma untuk app Rekod Maintenance Kenderaan.')}">Hubungi melalui WhatsApp</a>`);
+        href="${pautan('wa.me', PEMBANGUN.whatsapp)}?text=${encodeURIComponent(t('wa_derma_mesej'))}">${t('hubungi_wa')}</a>`);
     $('dIsi').innerHTML = bah.join('');
     $('modalDerma').classList.remove('tersembunyi');
   }
@@ -1073,20 +1139,20 @@
     if (!aktiviti) return null;
     const kunci = aktiviti.trim().toLowerCase();
     const sendiri = ((dataSemasa && dataSemasa.templat) || []).find(t => t.aktiviti.trim().toLowerCase() === kunci);
-    if (sendiri) return { km: sendiri.km || 0, bulan: sendiri.bulan || 0, sumber: 'templat anda' };
+    if (sendiri) return { km: sendiri.km || 0, bulan: sendiri.bulan || 0, sumber: t('templat_anda') };
     const asas = (TEMPLAT_ASAS[jenisSemasa] || {})[kunci];
-    return asas ? { km: asas.km || 0, bulan: asas.bulan || 0, sumber: 'cadangan umum' } : null;
+    return asas ? { km: asas.km || 0, bulan: asas.bulan || 0, sumber: t('cadangan_umum') } : null;
   }
 
-  function isiDariTemplat(t) {
-    $('cbIngatKm').checked = !!t.km;
-    $('cbIngatTarikh').checked = !!t.bulan;
+  function isiDariTemplat(tp) {
+    $('cbIngatKm').checked = !!tp.km;
+    $('cbIngatTarikh').checked = !!tp.bulan;
     $('rIngatMileage').value = '';
     $('rIngatTarikh').value = '';
-    if (t.km) setKm(t.km);
-    if (t.bulan) setBulan(t.bulan);
-    $('notaTemplat').textContent = t.sumber
-      ? `Selang ${[t.km ? km(t.km) + ' km' : '', t.bulan ? t.bulan + ' bulan' : ''].filter(Boolean).join(' / ')} (${t.sumber}).`
+    if (tp.km) setKm(tp.km);
+    if (tp.bulan) setBulan(tp.bulan);
+    $('notaTemplat').textContent = tp.sumber
+      ? t('selang', { s: [tp.km ? km(tp.km) + ' km' : '', tp.bulan ? t('bulan_n', { n: tp.bulan }) : ''].filter(Boolean).join(' / '), sumber: tp.sumber })
       : '';
     kemasPanel();
   }
@@ -1108,7 +1174,7 @@
     $('rResitPratonton').classList.add('tersembunyi');
     $('rResitSedia').classList.add('tersembunyi');
     $('rResitBuang').classList.add('tersembunyi');
-    $('rResitBtnTeks').textContent = 'Ambil / pilih gambar';
+    $('rResitBtnTeks').textContent = t('ambil_gambar');
   }
 
   /** Mampatkan gambar di pelayar (maks 1600px, JPEG) sebelum dihantar. */
@@ -1130,9 +1196,9 @@
       $('rResitPratonton').classList.remove('tersembunyi');
       $('rResitSedia').classList.add('tersembunyi');
       $('rResitBuang').classList.remove('tersembunyi');
-      $('rResitBtnTeks').textContent = 'Ganti gambar';
+      $('rResitBtnTeks').textContent = t('ganti_gambar');
     };
-    img.onerror = () => mesej('Fail ini bukan gambar yang boleh dibaca.', 'ralat');
+    img.onerror = () => mesej(t('err_gambar'), 'ralat');
     img.src = url;
   }
 
@@ -1156,9 +1222,9 @@
   }
 
   async function simpanMileage() {
-    if (!$('mKm').value) return mesej('Sila isi mileage semasa.', 'ralat');
+    if (!$('mKm').value) return mesej(t('err_mileage_isi'), 'ralat');
     const data = await panggil('kemaskiniMileage', [{ plat: platSemasa, mileage: $('mKm').value, tarikh: $('mTarikh').value }], $('btnSimpanKm'));
-    mesej('Mileage dikemas kini: ' + km(data.ringkasan.mileageTerkini) + ' km');
+    mesej(t('mileage_dikemaskini', { km: km(data.ringkasan.mileageTerkini) }));
     papar(data);
     muatSenaraiPlat();
   }
@@ -1169,45 +1235,45 @@
     const kekal = (id, opsyen) => { const v = $(id).value; $(id).innerHTML = opsyen; if ([...$(id).options].some(o => o.value === v)) $(id).value = v; };
     const akt = [...new Set(r.map(x => x.aktiviti))].sort((a, b) => a.localeCompare(b));
     const thn = [...new Set(r.map(x => x.tarikh.slice(0, 4)))].sort().reverse();
-    kekal('tAktiviti', '<option value="">Semua aktiviti</option>' + akt.map(a => `<option value="${esc(a)}">${esc(a)}</option>`).join(''));
-    kekal('tTahun', '<option value="">Semua tahun</option>' + thn.map(t => `<option>${t}</option>`).join(''));
+    kekal('tAktiviti', `<option value="">${t('semua_aktiviti')}</option>` + akt.map(a => `<option value="${esc(a)}">${esc(tAkt(a))}</option>`).join(''));
+    kekal('tTahun', `<option value="">${t('semua_tahun')}</option>` + thn.map(y => `<option>${y}</option>`).join(''));
     $('blokTapis').classList.toggle('tersembunyi', r.length < 4);
   }
 
   function lukisSejarah() {
     const semua = dataSemasa.rekod;
-    const q = $('tCari').value.trim().toLowerCase(), a = $('tAktiviti').value, t = $('tTahun').value;
+    const q = $('tCari').value.trim().toLowerCase(), a = $('tAktiviti').value, th = $('tTahun').value;
     const tapis = semua.filter(r =>
-      (!a || r.aktiviti === a) && (!t || r.tarikh.startsWith(t)) &&
-      (!q || [r.aktiviti, r.bengkel, r.catatan].join(' ').toLowerCase().includes(q)));
+      (!a || r.aktiviti === a) && (!th || r.tarikh.startsWith(th)) &&
+      (!q || [r.aktiviti, tAkt(r.aktiviti), r.bengkel, r.catatan].join(' ').toLowerCase().includes(q)));
     const jumlah = tapis.reduce((s, r) => s + (Number(r.kos) || 0), 0);
-    $('tRingkas').textContent = (q || a || t) ? `${tapis.length} daripada ${semua.length} rekod • ${rm(jumlah)}` : '';
+    $('tRingkas').textContent = (q || a || th) ? t('tapis_ringkas', { a: tapis.length, b: semua.length, rm: rm(jumlah) }) : '';
 
     $('senaraiRekod').innerHTML = tapis.length
       ? tapis.map(r => `
           <div class="rekod" id="rek-${esc(r.id)}">
             <div style="min-width:0">
-              <div class="tajuk-r">${esc(r.aktiviti)}</div>
+              <div class="tajuk-r">${esc(tAkt(r.aktiviti))}</div>
               <div class="meta">
                 <span>${ik('i-kalendar')}${fmtTarikh(r.tarikh)}</span>
                 <span>${ik('i-meter')}${km(r.mileage)} km</span>
                 ${r.bengkel ? `<span>${ik('i-bengkel')}${esc(r.bengkel)}</span>` : ''}
-                ${r.resitUrl ? `<a class="pautan-resit" href="${esc(r.resitUrl)}" target="_blank">${ik('i-klip')}Resit</a>` : ''}
+                ${r.resitUrl ? `<a class="pautan-resit" href="${esc(r.resitUrl)}" target="_blank">${ik('i-klip')}${t('resit_pautan')}</a>` : ''}
               </div>
               ${r.catatan ? `<div class="catatan">${esc(r.catatan)}</div>` : ''}
-              ${r.aktif ? `<span class="tag">${ik('i-loceng')}Seterusnya: ${esc([
+              ${r.aktif ? `<span class="tag">${ik('i-loceng')}${t('seterusnya')} ${esc([
                   r.ingatMileage !== '' ? km(r.ingatMileage) + ' km' : '',
                   r.ingatTarikh ? fmtTarikh(r.ingatTarikh) : ''].filter(Boolean).join(' / '))}</span>` : ''}
             </div>
             <div class="kanan">
               <span class="kos">${r.kos === '' ? '' : rm(r.kos)}</span>
               <div class="tindakan">
-                <button class="edit" onclick="editRekod('${esc(r.id)}')">${ik('i-pensel')}Edit</button>
-                <button class="padam" onclick="padam('${esc(r.id)}')">${ik('i-tong')}Padam</button>
+                <button class="edit" onclick="editRekod('${esc(r.id)}')">${ik('i-pensel')}${t('edit')}</button>
+                <button class="padam" onclick="padam('${esc(r.id)}')">${ik('i-tong')}${t('padam')}</button>
               </div>
             </div>
           </div>`).join('')
-      : `<div class="kosong">${semua.length ? 'Tiada rekod sepadan dengan tapisan.' : 'Tiada rekod lagi. Tekan "+ Tambah Rekod".'}</div>`;
+      : `<div class="kosong">${esc(t(semua.length ? 'tiada_padan' : 'tiada_rekod'))}</div>`;
     if (idEdit && $('rek-' + idEdit)) $('rek-' + idEdit).classList.add('diedit');
   }
 
@@ -1224,7 +1290,7 @@
   function isiTahunLaporan() {
     const thn = [...new Set(dataSemasa.rekod.map(r => r.tarikh.slice(0, 4)))].sort().reverse();
     const v = $('lTahun').value;
-    $('lTahun').innerHTML = '<option value="">Semua tahun</option>' + thn.map(t => `<option>${t}</option>`).join('');
+    $('lTahun').innerHTML = `<option value="">${t('semua_tahun')}</option>` + thn.map(y => `<option>${y}</option>`).join('');
     $('lTahun').value = thn.includes(v) || v === '' ? v : (thn[0] || '');
     if (v === '' && !$('lTahun').dataset.sudah) { $('lTahun').value = thn[0] || ''; $('lTahun').dataset.sudah = 1; }
   }
@@ -1247,19 +1313,19 @@
     // Kumpulan: bulan (jika tahun dipilih) atau tahun
     let label, nilai;
     if (tahun) {
-      label = NAMA_BULAN;
+      label = KAMUS_BULAN[BAHASA] || NAMA_BULAN;
       nilai = NAMA_BULAN.map((_, i) => rekod.filter(r => Number(r.tarikh.slice(5, 7)) === i + 1)
         .reduce((s, r) => s + (Number(r.kos) || 0), 0));
       const bulanAktif = tahun === String(new Date().getFullYear()) ? new Date().getMonth() + 1 : 12;
       $('lPurata').textContent = rm(jumlah / bulanAktif);
-      $('lPurataLbl').textContent = 'Purata sebulan';
-      $('lTajukCarta').textContent = 'Kos bulanan ' + tahun;
+      $('lPurataLbl').textContent = t('purata_sebulan');
+      $('lTajukCarta').textContent = t('kos_bulanan_thn', { t: tahun });
     } else {
       label = [...new Set(dataSemasa.rekod.map(r => r.tarikh.slice(0, 4)))].sort();
-      nilai = label.map(t => rekod.filter(r => r.tarikh.startsWith(t)).reduce((s, r) => s + (Number(r.kos) || 0), 0));
+      nilai = label.map(y => rekod.filter(r => r.tarikh.startsWith(y)).reduce((s, r) => s + (Number(r.kos) || 0), 0));
       $('lPurata').textContent = label.length ? rm(jumlah / label.length) : '-';
-      $('lPurataLbl').textContent = 'Purata setahun';
-      $('lTajukCarta').textContent = 'Kos tahunan';
+      $('lPurataLbl').textContent = t('purata_setahun');
+      $('lTajukCarta').textContent = t('kos_tahunan');
     }
     $('lJumlah').textContent = rm(jumlah);
     $('lPerKm').textContent = jarak > 0 && jumlah > 0 ? 'RM' + (jumlah / jarak).toFixed(3) : '-';
@@ -1270,20 +1336,20 @@
     const peta = {};
     rekod.forEach(r => peta[r.aktiviti] = (peta[r.aktiviti] || 0) + (Number(r.kos) || 0));
     let baris = Object.entries(peta).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
-    if (baris.length > 8) baris = baris.slice(0, 7).concat([['Lain-lain', baris.slice(7).reduce((s, [, v]) => s + v, 0)]]);
+    if (baris.length > 8) baris = baris.slice(0, 7).concat([[t('lain_lain'), baris.slice(7).reduce((s, [, v]) => s + v, 0)]]);
     const maks = Math.max(1, ...baris.map(([, v]) => v));
     $('lAktiviti').innerHTML = baris.length ? baris.map(([n, v]) => `
-      <div class="hbar"><span class="nama" title="${esc(n)}">${esc(n)}</span>
+      <div class="hbar"><span class="nama" title="${esc(tAkt(n))}">${esc(tAkt(n))}</span>
         <div class="trek"><div class="isi" style="width:${(v / maks * 100).toFixed(1)}%"></div></div>
         <span class="nilai">${rm(v)} <small style="color:var(--kelabu)">${Math.round(v / jumlah * 100)}%</small></span></div>`).join('')
-      : '<div class="kosong">Tiada kos direkodkan.</div>';
+      : `<div class="kosong">${t('tiada_kos')}</div>`;
   }
 
   /** Carta bar menegak (SVG) dengan tooltip bila hover/sentuh. */
   function lukisCartaBar(el, label, nilai) {
     const W = 600, H = 200, kiri = 44, bawah = 22, atas = 8;
     const maks = Math.max(...nilai, 0);
-    if (!maks) { el.innerHTML = '<div class="kosong">Tiada kos direkodkan untuk tempoh ini.</div>'; return; }
+    if (!maks) { el.innerHTML = `<div class="kosong">${t('tiada_kos_tempoh')}</div>`; return; }
     const langkah = skalaBagus(maks);
     const atasY = Math.ceil(maks / langkah) * langkah;
     const y = v => atas + (H - atas - bawah) * (1 - v / atasY);
@@ -1340,15 +1406,15 @@
     a.href = url; a.download = hasil.nama; a.target = '_blank';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 60000);
-    mesej('PDF dimuat turun: ' + hasil.nama);
+    mesej(t('pdf_dimuat', { n: hasil.nama }));
   }
 
   /* ---------- Garaj & perkongsian ---------- */
   function muatPengguna() {
     google.script.run.withSuccessHandler(u => {
-      $('kaki').innerHTML = `Log masuk sebagai <b>${esc(u.emel)}</b><br>
-        Data disimpan dalam <a href="${esc(u.urlSheet)}" target="_blank">${u.garajSendiri ? 'Google Sheet anda sendiri' : 'Google Sheet garaj dikongsi'}</a>`;
-      $('gAktif').innerHTML = `Sedang guna: <b>${esc(u.namaGaraj)}</b>${u.garajSendiri ? '' : '<span class="lencana-garaj">Dikongsi</span>'}`;
+      $('kaki').innerHTML = `${t('log_masuk')} <b>${esc(u.emel)}</b><br>
+        ${t('data_disimpan')} <a href="${esc(u.urlSheet)}" target="_blank">${t(u.garajSendiri ? 'sheet_sendiri' : 'sheet_dikongsi')}</a>`;
+      $('gAktif').innerHTML = `${t('sedang_guna')} <b>${esc(u.garajSendiri ? t('garaj_saya') : u.namaGaraj)}</b>${u.garajSendiri ? '' : `<span class="lencana-garaj">${t('dikongsi')}</span>`}`;
     }).maklumatPengguna();
   }
 
@@ -1359,54 +1425,55 @@
 
   function paparGaraj(g) {
     const aktif = g.garaj.find(x => x.aktif) || g.garaj[0];
-    $('gAktif').innerHTML = `Sedang guna: <b>${esc(aktif.nama)}</b>${aktif.sendiri ? '' : '<span class="lencana-garaj">Dikongsi</span>'}`;
+    const namaG = x => x.sendiri ? t('garaj_saya') : x.nama;
+    $('gAktif').innerHTML = `${t('sedang_guna')} <b>${esc(namaG(aktif))}</b>${aktif.sendiri ? '' : `<span class="lencana-garaj">${t('dikongsi')}</span>`}`;
     $('gIsi').innerHTML = `
       ${g.garaj.length > 1 ? `
-        <label class="tajuk">Tukar garaj</label>
+        <label class="tajuk">${t('tukar_garaj')}</label>
         <div class="medan"><select id="gPilih" onchange="tukarGarajUI(this.value)" style="padding-left:12px">
-          ${g.garaj.map(x => `<option value="${esc(x.id)}" ${x.aktif ? 'selected' : ''}>${esc(x.nama)}</option>`).join('')}
+          ${g.garaj.map(x => `<option value="${esc(x.id)}" ${x.aktif ? 'selected' : ''}>${esc(namaG(x))}</option>`).join('')}
         </select><svg class="ik chevron"><use href="#i-chevron"/></svg></div>
-        ${!aktif.sendiri ? `<button class="btn bahaya" onclick="tinggalkanGarajUI('${esc(aktif.id)}')">Tinggalkan garaj ini</button>` : ''}` : ''}
+        ${!aktif.sendiri ? `<button class="btn bahaya" onclick="tinggalkanGarajUI('${esc(aktif.id)}')">${t('tinggalkan_btn')}</button>` : ''}` : ''}
 
-      <label class="tajuk" style="margin-top:16px">Kongsi garaj saya dengan ahli keluarga</label>
+      <label class="tajuk" style="margin-top:16px">${t('kongsi_label')}</label>
       <div class="baris-input">
-        <input id="gEmel" type="email" placeholder="e-mel Gmail ahli keluarga" autocomplete="off">
-        <button class="btn" id="gBtnKongsi" onclick="kongsiGarajUI()">Kongsi</button>
+        <input id="gEmel" type="email" placeholder="${esc(t('ph_emel_ahli'))}" autocomplete="off">
+        <button class="btn" id="gBtnKongsi" onclick="kongsiGarajUI()">${t('kongsi')}</button>
       </div>
       ${g.ahli.length ? g.ahli.map(e => `<div class="ahli"><span>${esc(e)}</span>
-          <button onclick="buangAhliUI('${esc(e)}')">Buang</button></div>`).join('')
-        : '<div class="nota">Belum dikongsi dengan sesiapa.</div>'}
-      <div class="nota" style="margin-top:10px">Selepas dikongsi, beri <b>kod garaj</b> ini kepada ahli tersebut:</div>
+          <button onclick="buangAhliUI('${esc(e)}')">${t('buang')}</button></div>`).join('')
+        : `<div class="nota">${t('belum_kongsi')}</div>`}
+      <div class="nota" style="margin-top:10px">${t('beri_kod')}</div>
       <div class="kod-garaj" id="gKod">${esc(g.kod)}</div>
-      <button class="btn sekunder" onclick="salinKod()">Salin kod garaj</button>
+      <button class="btn sekunder" onclick="salinKod()">${t('salin_kod')}</button>
 
-      <label class="tajuk" style="margin-top:16px">Sertai garaj orang lain</label>
+      <label class="tajuk" style="margin-top:16px">${t('sertai_label')}</label>
       <div class="baris-input">
-        <input id="gKodSertai" placeholder="Tampal kod garaj" autocomplete="off">
-        <button class="btn" id="gBtnSertai" onclick="sertaiGarajUI()">Sertai</button>
+        <input id="gKodSertai" placeholder="${esc(t('ph_kod'))}" autocomplete="off">
+        <button class="btn" id="gBtnSertai" onclick="sertaiGarajUI()">${t('sertai')}</button>
       </div>
-      <div class="nota">Pemilik garaj perlu kongsi dengan e-mel anda (${esc(g.emel)}) dahulu.</div>`;
+      <div class="nota">${t('pemilik_perlu', { e: esc(g.emel) })}</div>`;
   }
 
   async function kongsiGarajUI() {
     const emel = $('gEmel').value.trim();
-    if (!emel) return mesej('Sila isi e-mel ahli keluarga.', 'ralat');
+    if (!emel) return mesej(t('err_emel_ahli'), 'ralat');
     paparGaraj(await panggil('kongsiGaraj', [emel], $('gBtnKongsi')));
-    mesej('Garaj dikongsi dengan ' + emel + '. Hantar kod garaj kepadanya.');
+    mesej(t('garaj_dikongsi_dgn', { e: emel }));
   }
 
   async function buangAhliUI(emel) {
-    const ok = await sahkan({ tajuk: 'Buang ahli?', mesej: `<p><b>${esc(emel)}</b> tidak lagi boleh melihat atau mengubah kenderaan dalam garaj anda.</p>`, butang: 'Buang' });
+    const ok = await sahkan({ tajuk: t('buang_ahli_q'), mesej: `<p>${t('buang_ahli_teks', { e: esc(emel) })}</p>`, butang: t('buang') });
     if (!ok) return;
     paparGaraj(await panggil('buangAhli', [emel]));
-    mesej(emel + ' telah dibuang dari garaj.');
+    mesej(t('ahli_dibuang', { e: emel }));
   }
 
   async function sertaiGarajUI() {
     const kod = $('gKodSertai').value.trim();
-    if (!kod) return mesej('Sila tampal kod garaj.', 'ralat');
+    if (!kod) return mesej(t('err_kod'), 'ralat');
     paparGaraj(await panggil('sertaiGaraj', [kod], $('gBtnSertai')));
-    mesej('Berjaya sertai garaj.');
+    mesej(t('berjaya_sertai'));
     selepasTukarGaraj();
   }
 
@@ -1416,7 +1483,7 @@
   }
 
   async function tinggalkanGarajUI(id) {
-    const ok = await sahkan({ tajuk: 'Tinggalkan garaj ini?', mesej: '<p>Anda tidak akan nampak kenderaan garaj ini lagi sehingga sertai semula.</p>', butang: 'Tinggalkan' });
+    const ok = await sahkan({ tajuk: t('tinggalkan_q'), mesej: `<p>${t('tinggalkan_teks')}</p>`, butang: t('tinggalkan') });
     if (!ok) return;
     paparGaraj(await panggil('tinggalkanGaraj', [id]));
     selepasTukarGaraj();
@@ -1433,8 +1500,8 @@
   function salinKod() {
     const kod = $('gKod').textContent;
     (navigator.clipboard ? navigator.clipboard.writeText(kod) : Promise.reject())
-      .then(() => mesej('Kod garaj disalin.'))
-      .catch(() => { const r = document.createRange(); r.selectNodeContents($('gKod')); getSelection().removeAllRanges(); getSelection().addRange(r); mesej('Tekan lama untuk salin kod.'); });
+      .then(() => mesej(t('kod_disalin')))
+      .catch(() => { const r = document.createRange(); r.selectNodeContents($('gKod')); getSelection().removeAllRanges(); getSelection().addRange(r); mesej(t('tekan_lama')); });
   }
 
   /* ---------- Peringatan ---------- */
@@ -1442,19 +1509,19 @@
 
   function teksPeringatan(p) {
     if (p.jenisP === 'dokumen') {
-      return p.bakiHari < 0 ? `Tamat ${fmtTarikh(p.ingatTarikh)} (lewat ${-p.bakiHari} hari)`
-           : p.bakiHari === 0 ? `Tamat hari ini (${fmtTarikh(p.ingatTarikh)})`
-           : `Tamat ${fmtTarikh(p.ingatTarikh)} (${p.bakiHari} hari lagi)`;
+      const tt = fmtTarikh(p.ingatTarikh);
+      return p.bakiHari < 0 ? t('tamat_lewat', { t: tt, n: -p.bakiHari })
+           : p.bakiHari === 0 ? t('tamat_hari_ini', { t: tt }) : t('tamat_lagi', { t: tt, n: p.bakiHari });
     }
     const bah = [];
     if (p.bakiKm !== null) bah.push(p.bakiKm <= 0
-      ? `Pada ${km(p.ingatMileage)} km (lewat ${km(-p.bakiKm)} km)`
-      : `Pada ${km(p.ingatMileage)} km (baki ${km(p.bakiKm)} km)`);
+      ? t('pada_km_lewat', { a: km(p.ingatMileage), b: km(-p.bakiKm) })
+      : t('pada_km_baki', { a: km(p.ingatMileage), b: km(p.bakiKm) }));
     if (p.bakiHari !== null) bah.push(p.bakiHari < 0
-      ? `${fmtTarikh(p.ingatTarikh)} (lewat ${-p.bakiHari} hari)`
-      : p.bakiHari === 0 ? `${fmtTarikh(p.ingatTarikh)} (hari ini)`
-      : `${fmtTarikh(p.ingatTarikh)} (${p.bakiHari} hari lagi)`);
-    return bah.join(' atau ');
+      ? t('tarikh_lewat', { t: fmtTarikh(p.ingatTarikh), n: -p.bakiHari })
+      : p.bakiHari === 0 ? t('tarikh_hari_ini', { t: fmtTarikh(p.ingatTarikh) })
+      : t('tarikh_lagi', { t: fmtTarikh(p.ingatTarikh), n: p.bakiHari }));
+    return bah.join(' ' + t('atau') + ' ');
   }
 
   /** Buka/tutup panel. Buka kali pertama = isi nilai lalai ikut jenis kenderaan. */
@@ -1487,8 +1554,8 @@
     $('cbKalendar').disabled = !adaTarikh;
     const asas = Number($('rMileage').value) || 0, sasar = Number($('rIngatMileage').value) || 0;
     $('notaKm').textContent = sasar
-      ? (sasar > asas ? `Mileage semasa ${km(asas)} km → ingatkan pada ${km(sasar)} km (+${km(sasar - asas)})`
-                      : 'Mileage peringatan mesti lebih tinggi daripada mileage semasa.')
+      ? (sasar > asas ? t('nota_km', { a: km(asas), b: km(sasar), c: km(sasar - asas) })
+                      : t('err_km_tinggi'))
       : '';
     tandaPantas();
   }
@@ -1546,6 +1613,8 @@
   document.querySelectorAll('#pantasTarikh button').forEach(b => b.onclick = () => setBulan(Number(b.dataset.bulan)));
   ['rIngatMileage','rIngatTarikh','rMileage','rTarikh'].forEach(id => $(id).addEventListener('input', kemasPanel));
 
+  terapBahasa();
+  google.script.run.simpanBahasa(BAHASA);   // supaya mesej pelayan, PDF & e-mel ikut bahasa ini
   binaSenaraiAktiviti();
   isiPembangun();
   muatSenaraiPlat();

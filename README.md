@@ -1,4 +1,4 @@
-# 🚗 Rekod Maintenance Kenderaan `v2.0.6`
+# 🚗 Rekod Maintenance Kenderaan `v2.1.0`
 
 Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke **Google Sheets**, dibina dengan **Google Apps Script**. Mesra telefon, berbilang pengguna, dengan peringatan servis melalui **Google Calendar** dan **e-mel**.
 
@@ -29,6 +29,9 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 **Laporan**
 - **Laporan kos** — jumlah, purata sebulan/setahun, kos setiap km, carta kos bulanan/tahunan dan pecahan ikut aktiviti.
 - **Eksport PDF** sejarah servis satu kenderaan (berguna semasa menjual kenderaan).
+
+**Bahasa**
+- **4 bahasa** — Bahasa Melayu, English, 中文, தமிழ். Pilih di penjuru kanan atas; mesej ralat, PDF, e-mel dan acara Calendar turut mengikut bahasa pilihan.
 
 **Pengguna & perkongsian**
 - **Berbilang pengguna** — setiap akaun Google mendapat "garaj" (Google Sheet) sendiri dalam Drive mereka.
