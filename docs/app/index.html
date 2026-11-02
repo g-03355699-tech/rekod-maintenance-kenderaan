@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rekod Servis</title>
+<link rel="apple-touch-icon" href="ikon-180.png">
+<link rel="icon" type="image/png" href="ikon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Rekod Servis">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#12386b">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#12386b;color:#fff;
+       display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+  .kotak{max-width:380px;width:100%}
+  img.ikon{width:96px;height:96px;border-radius:22px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  h1{font-size:1.4rem;margin:16px 0 4px}
+  p{opacity:.85;margin:0 0 20px;line-height:1.5}
+  .butang{display:block;background:#fff;color:#12386b;font-weight:700;font-size:1.05rem;padding:14px;border-radius:12px;text-decoration:none}
+  .langkah{background:rgba(255,255,255,.08);border-radius:14px;padding:16px;margin-top:20px;text-align:left;font-size:.92rem;line-height:1.6}
+  .langkah b{color:#ffd166}
+  .langkah ol{margin:6px 0 0;padding-left:20px}
+  .muat{display:none}
+  .pelancar .muat{display:block} .pelancar .biasa{display:none}
+  .putar{width:28px;height:28px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;
+         margin:18px auto 0;animation:p 0.8s linear infinite}
+  @keyframes p{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="kotak">
+  <img class="ikon" src="ikon-180.png" alt="">
+  <h1>Rekod Maintenance Kenderaan</h1>
+
+  <div class="muat"><p>Membuka app…</p><div class="putar"></div></div>
+
+  <div class="biasa">
+    <p>Pasang di skrin utama telefon supaya boleh dibuka macam app biasa.</p>
+    <a class="butang" id="buka" href="#">Buka App</a>
+    <div class="langkah" id="ios">
+      <b>iPhone (Safari)</b>
+      <ol>
+        <li>Tekan butang <b>Kongsi</b> (petak dengan anak panah ke atas).</li>
+        <li>Pilih <b>Add to Home Screen</b> / Tambah ke Skrin Utama.</li>
+        <li>Pastikan <b>Open as Web App</b> dihidupkan, kemudian tekan <b>Add</b>.</li>
+      </ol>
+    </div>
+    <div class="langkah" id="android">
+      <b>Android (Chrome)</b>
+      <ol>
+        <li>Tekan menu <b>⋮</b> di penjuru kanan atas.</li>
+        <li>Pilih <b>Add to Home screen</b> / <b>Install app</b>.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+<script>
+  // URL web app Apps Script (tukar di sini jika deployment berubah)
+  var APP = 'https:' + '/' + '/script.google.com/macros/s/AKfycby5Uj53vsQQPFM49sKKFBUo3C1HlAe3jv4X9uj5J6XJwEMsJKKx7ZkhuuCXTDqSNphg/exec';
+  document.getElementById('buka').href = APP;
+
+  var standalone = window.navigator.standalone === true ||
+                   (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  var mula = /[?&]mula=1/.test(location.search);
+
+  // Dibuka dari ikon skrin utama -> terus ke app
+  if (standalone || mula) {
+    document.body.classList.add('pelancar');
+    location.replace(APP);
+  }
+
+  // Tunjuk panduan ikut peranti
+  var ua = navigator.userAgent;
+  var ios = /iPhone|iPad|iPod/.test(ua), android = /Android/.test(ua);
+  if (ios) document.getElementById('android').style.display = 'none';
+  if (android) document.getElementById('ios').style.display = 'none';
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "Rekod Maintenance Kenderaan",
+  "short_name": "Rekod Servis",
+  "start_url": "./?mula=1",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#12386b",
+  "theme_color": "#12386b",
+  "icons": [
+    { "src": "ikon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "ikon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

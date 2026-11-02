@@ -51,6 +51,7 @@ const DOKUMEN = [
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('Index')
     .setTitle('Rekod Maintenance Kenderaan')
+    .setFaviconUrl('https://raw.githubusercontent.com/g-03355699-tech/rekod-maintenance-kenderaan/main/docs/app/ikon-192.png')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
