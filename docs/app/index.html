@@ -34,26 +34,26 @@
 <body>
 <div class="kotak">
   <img class="ikon" src="ikon-180.png" alt="">
-  <h1>Rekod Maintenance Kenderaan</h1>
+  <h1 data-t="tajuk">Rekod Maintenance Kenderaan</h1>
 
-  <div class="muat"><p>Membuka app…</p><div class="putar"></div></div>
+  <div class="muat"><p data-t="muat">Membuka app…</p><div class="putar"></div></div>
 
   <div class="biasa">
-    <p>Pasang di skrin utama telefon supaya boleh dibuka macam app biasa.</p>
-    <a class="butang" id="buka" href="#">Buka App</a>
+    <p data-t="intro">Pasang di skrin utama telefon supaya boleh dibuka macam app biasa.</p>
+    <a class="butang" id="buka" href="#" data-t="buka">Buka App</a>
     <div class="langkah" id="ios">
-      <b>iPhone (Safari atau Chrome)</b>
+      <b data-t="ios_h">iPhone (Safari atau Chrome)</b>
       <ol>
-        <li>Tekan butang <b>Kongsi</b> (petak dengan anak panah ke atas). Di Chrome, butang ini ada di hujung kanan bar alamat.</li>
-        <li>Pilih <b>Add to Home Screen</b> / Tambah ke Skrin Utama.</li>
-        <li>Pastikan <b>Open as Web App</b> dihidupkan, kemudian tekan <b>Add</b>.</li>
+        <li data-t="ios1">Tekan butang <b>Kongsi</b> (petak dengan anak panah ke atas). Di Chrome, butang ini ada di hujung kanan bar alamat.</li>
+        <li data-t="ios2">Pilih <b>Add to Home Screen</b> / Tambah ke Skrin Utama.</li>
+        <li data-t="ios3">Pastikan <b>Open as Web App</b> dihidupkan, kemudian tekan <b>Add</b>.</li>
       </ol>
     </div>
     <div class="langkah" id="android">
-      <b>Android (Chrome)</b>
+      <b data-t="and_h">Android (Chrome)</b>
       <ol>
-        <li>Tekan menu <b>⋮</b> di penjuru kanan atas.</li>
-        <li>Pilih <b>Add to Home screen</b> / <b>Install app</b>.</li>
+        <li data-t="and1">Tekan menu <b>⋮</b> di penjuru kanan atas.</li>
+        <li data-t="and2">Pilih <b>Add to Home screen</b> / <b>Install app</b>.</li>
       </ol>
     </div>
   </div>
@@ -78,6 +78,14 @@
   var ios = /iPhone|iPad|iPod/.test(ua), android = /Android/.test(ua);
   if (ios) document.getElementById('android').style.display = 'none';
   if (android) document.getElementById('ios').style.display = 'none';
+
+  // Bahasa: ikut pilihan di halaman utama (localStorage) atau bahasa telefon
+  var KAMUS = {"ms": {"tajuk": "Rekod Maintenance Kenderaan", "muat": "Membuka app…", "intro": "Pasang di skrin utama telefon supaya boleh dibuka macam app biasa.", "buka": "Buka App", "ios_h": "iPhone (Safari atau Chrome)", "ios1": "Tekan butang <b>Kongsi</b> (petak dengan anak panah ke atas). Di Chrome, butang ini ada di hujung kanan bar alamat.", "ios2": "Pilih <b>Add to Home Screen</b> / Tambah ke Skrin Utama.", "ios3": "Pastikan <b>Open as Web App</b> dihidupkan, kemudian tekan <b>Add</b>.", "and_h": "Android (Chrome)", "and1": "Tekan menu <b>⋮</b> di penjuru kanan atas.", "and2": "Pilih <b>Add to Home screen</b> / <b>Install app</b>."}, "en": {"tajuk": "Vehicle Maintenance Log", "muat": "Opening app…", "intro": "Install it on your Home Screen so it opens like a regular app.", "buka": "Open App", "ios_h": "iPhone (Safari or Chrome)", "ios1": "Tap the <b>Share</b> button (square with an up arrow). In Chrome it is at the right end of the address bar.", "ios2": "Choose <b>Add to Home Screen</b>.", "ios3": "Make sure <b>Open as Web App</b> is on, then tap <b>Add</b>.", "and_h": "Android (Chrome)", "and1": "Tap the <b>⋮</b> menu at the top right.", "and2": "Choose <b>Add to Home screen</b> / <b>Install app</b>."}, "zh": {"tajuk": "车辆保养记录", "muat": "正在打开应用…", "intro": "安装到手机主屏幕，像普通应用一样打开。", "buka": "打开应用", "ios_h": "iPhone（Safari 或 Chrome）", "ios1": "点击<b>分享</b>按钮（带向上箭头的方框）。在 Chrome 中位于地址栏右端。", "ios2": "选择<b>添加到主屏幕</b>（Add to Home Screen）。", "ios3": "确保已开启 <b>Open as Web App</b>，然后点击<b>添加</b>。", "and_h": "Android（Chrome）", "and1": "点击右上角的 <b>⋮</b> 菜单。", "and2": "选择<b>添加到主屏幕</b> / <b>安装应用</b>。"}, "ta": {"tajuk": "வாகன பராமரிப்புப் பதிவு", "muat": "செயலியைத் திறக்கிறது…", "intro": "வழக்கமான செயலி போல திறக்க முகப்புத் திரையில் நிறுவுங்கள்.", "buka": "செயலியைத் திற", "ios_h": "iPhone (Safari அல்லது Chrome)", "ios1": "<b>பகிர்</b> பொத்தானைத் தட்டவும் (மேல் அம்புக்குறியுடன் சதுரம்). Chrome-இல் இது முகவரிப் பட்டியின் வலது முனையில் உள்ளது.", "ios2": "<b>Add to Home Screen</b> என்பதைத் தேர்ந்தெடுக்கவும்.", "ios3": "<b>Open as Web App</b> இயக்கத்தில் இருப்பதை உறுதிசெய்து <b>Add</b> தட்டவும்.", "and_h": "Android (Chrome)", "and1": "மேல் வலது மூலையில் உள்ள <b>⋮</b> மெனுவைத் தட்டவும்.", "and2": "<b>Add to Home screen</b> / <b>Install app</b> தேர்ந்தெடுக்கவும்."}};
+  var b = null; try { b = localStorage.getItem('bahasa'); } catch (e) {}
+  if (!KAMUS[b]) { var n = (navigator.language || 'ms').toLowerCase();
+    b = n.indexOf('zh') === 0 ? 'zh' : n.indexOf('ta') === 0 ? 'ta' : n.indexOf('en') === 0 ? 'en' : 'ms'; }
+  document.documentElement.lang = b;
+  document.querySelectorAll('[data-t]').forEach(function (el) { el.innerHTML = KAMUS[b][el.getAttribute('data-t')]; });
 </script>
 </body>
 </html>
