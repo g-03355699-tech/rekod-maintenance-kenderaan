@@ -743,7 +743,7 @@
   </div>
 
 <script>
-  const VERSI = '2.4.0';   // naikkan setiap kali deploy versi baru
+  const VERSI = '2.4.1';   // naikkan setiap kali deploy versi baru
   document.getElementById('versi').textContent = 'v' + VERSI;
 
   /* ---------- Bahasa (BM / EN / 中文 / தமிழ்) ---------- */
@@ -2072,11 +2072,15 @@
       return p.bakiHari < 0 ? t('tamat_lewat', { t: tt, n: -p.bakiHari })
            : p.bakiHari === 0 ? t('tamat_hari_ini', { t: tt }) : t('tamat_lagi', { t: tt, n: p.bakiHari });
     }
+    // google.script.run tidak menghantar nilai null — semak kewujudan dengan teliti
+    const ada = v => v !== null && v !== undefined && v !== '';
+    const adaKm = ada(p.ingatMileage) && ada(p.bakiKm) && !isNaN(p.bakiKm);
+    const adaHari = ada(p.ingatTarikh) && ada(p.bakiHari) && !isNaN(p.bakiHari);
     const bah = [];
-    if (p.bakiKm !== null) bah.push(p.bakiKm <= 0
+    if (adaKm) bah.push(p.bakiKm <= 0
       ? t('pada_km_lewat', { a: km(p.ingatMileage), b: km(-p.bakiKm) })
       : t('pada_km_baki', { a: km(p.ingatMileage), b: km(p.bakiKm) }));
-    if (p.bakiHari !== null) bah.push(p.bakiHari < 0
+    if (adaHari) bah.push(p.bakiHari < 0
       ? t('tarikh_lewat', { t: fmtTarikh(p.ingatTarikh), n: -p.bakiHari })
       : p.bakiHari === 0 ? t('tarikh_hari_ini', { t: fmtTarikh(p.ingatTarikh) })
       : t('tarikh_lagi', { t: fmtTarikh(p.ingatTarikh), n: p.bakiHari }));
