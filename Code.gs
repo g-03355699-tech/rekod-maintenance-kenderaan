@@ -25,6 +25,7 @@ const SHEET_KENDERAAN = 'Kenderaan';
 const SHEET_REKOD = 'Rekod';
 const SHEET_MILEAGE = 'Mileage';
 const SHEET_TEMPLAT = 'Templat';
+const SHEET_MINYAK = 'Minyak';
 
 const HDR_KENDERAAN = ['No_Plat', 'Jenama_Model', 'Tahun', 'Pemilik', 'Tarikh_Daftar', 'Jenis', 'Ikon',
                        'Tamat_Cukai', 'Tamat_Insurans', 'Notis_Cukai', 'Notis_Insurans', 'Cal_Cukai', 'Cal_Insurans'];
@@ -32,6 +33,8 @@ const HDR_REKOD = ['ID', 'No_Plat', 'Tarikh', 'Jenis_Aktiviti', 'Mileage', 'Kos'
                    'Ingat_Mileage', 'Ingat_Tarikh', 'Ingat_Emel', 'Calendar_ID', 'Emel_Dihantar', 'Resit_ID', 'Resit_URL'];
 const HDR_MILEAGE = ['ID', 'No_Plat', 'Tarikh', 'Mileage', 'Masa_Rekod'];
 const HDR_TEMPLAT = ['No_Plat', 'Aktiviti', 'Selang_KM', 'Selang_Bulan'];
+const HDR_MINYAK = ['ID', 'No_Plat', 'Tarikh', 'Odometer', 'Kuantiti', 'Harga_Seunit', 'Jumlah_RM', 'Penuh', 'Jenis_Tenaga', 'Stesen', 'Masa_Rekod'];
+const JENIS_TENAGA = ['RON95', 'RON97', 'Diesel', 'EV'];   // EV dalam kWh, lain-lain dalam liter
 
 const JENIS_KENDERAAN = ['Motorsikal', 'Kereta'];
 
@@ -114,7 +117,16 @@ const KAMUS_S = {
 "c_servis_ket": "Peringatan maintenance kenderaan {p}: {a}",
 "c_atau_km": "Atau pada {k} km (mana dulu).",
 "c_dok_tajuk": "📄 {d} tamat — {p}",
-"c_dok_ket": "{d} kenderaan {p} tamat pada tarikh ini. Sila perbaharui."
+"c_dok_ket": "{d} kenderaan {p} tamat pada tarikh ini. Sila perbaharui.",
+"e_kuantiti": "Kuantiti (liter / kWh) tidak sah.",
+"e_jenis_tenaga": "Jenis minyak / tenaga tidak sah.",
+"pdf_minyak": "Minyak / Cas",
+"pdf_purata_eff": "Purata kecekapan",
+"pdf_jum_minyak": "Jumlah belanja minyak / cas",
+"pdf_c_odo": "Odometer",
+"pdf_c_jenis": "Jenis",
+"pdf_c_kuantiti": "Kuantiti",
+"pdf_c_eff": "Kecekapan"
 },
 "en": {
 "e_emel_tak_sah": "Invalid email address.",
@@ -180,7 +192,16 @@ const KAMUS_S = {
 "c_servis_ket": "Maintenance reminder for vehicle {p}: {a}",
 "c_atau_km": "Or at {k} km (whichever comes first).",
 "c_dok_tajuk": "📄 {d} expires — {p}",
-"c_dok_ket": "{d} for vehicle {p} expires on this date. Please renew."
+"c_dok_ket": "{d} for vehicle {p} expires on this date. Please renew.",
+"e_kuantiti": "Invalid quantity (litres / kWh).",
+"e_jenis_tenaga": "Invalid fuel / energy type.",
+"pdf_minyak": "Fuel / Charging",
+"pdf_purata_eff": "Average efficiency",
+"pdf_jum_minyak": "Total fuel / charging spend",
+"pdf_c_odo": "Odometer",
+"pdf_c_jenis": "Type",
+"pdf_c_kuantiti": "Quantity",
+"pdf_c_eff": "Efficiency"
 },
 "zh": {
 "e_emel_tak_sah": "电邮地址无效。",
@@ -246,7 +267,16 @@ const KAMUS_S = {
 "c_servis_ket": "车辆 {p} 保养提醒：{a}",
 "c_atau_km": "或于 {k} 公里时（以先到者为准）。",
 "c_dok_tajuk": "📄 {d} 到期 — {p}",
-"c_dok_ket": "车辆 {p} 的{d}于此日期到期，请续期。"
+"c_dok_ket": "车辆 {p} 的{d}于此日期到期，请续期。",
+"e_kuantiti": "数量（升 / kWh）无效。",
+"e_jenis_tenaga": "燃料 / 能源类型无效。",
+"pdf_minyak": "燃油 / 充电",
+"pdf_purata_eff": "平均能耗",
+"pdf_jum_minyak": "燃油 / 充电总开销",
+"pdf_c_odo": "里程表",
+"pdf_c_jenis": "类型",
+"pdf_c_kuantiti": "数量",
+"pdf_c_eff": "能耗"
 },
 "ta": {
 "e_emel_tak_sah": "தவறான மின்னஞ்சல் முகவரி.",
@@ -312,7 +342,16 @@ const KAMUS_S = {
 "c_servis_ket": "வாகனம் {p} பராமரிப்பு நினைவூட்டல்: {a}",
 "c_atau_km": "அல்லது {k} கி.மீ-இல் (எது முதலில்).",
 "c_dok_tajuk": "📄 {d} காலாவதி — {p}",
-"c_dok_ket": "வாகனம் {p}-இன் {d} இந்தத் தேதியில் காலாவதியாகிறது. புதுப்பிக்கவும்."
+"c_dok_ket": "வாகனம் {p}-இன் {d} இந்தத் தேதியில் காலாவதியாகிறது. புதுப்பிக்கவும்.",
+"e_kuantiti": "தவறான அளவு (லிட்டர் / kWh).",
+"e_jenis_tenaga": "தவறான எரிபொருள் / ஆற்றல் வகை.",
+"pdf_minyak": "எரிபொருள் / சார்ஜ்",
+"pdf_purata_eff": "சராசரி செயல்திறன்",
+"pdf_jum_minyak": "மொத்த எரிபொருள் / சார்ஜ் செலவு",
+"pdf_c_odo": "ஓடோமீட்டர்",
+"pdf_c_jenis": "வகை",
+"pdf_c_kuantiti": "அளவு",
+"pdf_c_eff": "செயல்திறன்"
 }
 };
 const AKTIVITI_S = {
@@ -471,7 +510,7 @@ function ssSendiri_(cipta) {
   props.setProperty('SS_ID', ss.getId());
   sediaTab_(ss);
   ss.getSheets()
-    .filter(s => [SHEET_KENDERAAN, SHEET_REKOD, SHEET_MILEAGE, SHEET_TEMPLAT].indexOf(s.getName()) < 0)
+    .filter(s => [SHEET_KENDERAAN, SHEET_REKOD, SHEET_MILEAGE, SHEET_TEMPLAT, SHEET_MINYAK].indexOf(s.getName()) < 0)
     .forEach(s => ss.deleteSheet(s));   // buang "Sheet1" lalai
   try { pasangTrigger_(); } catch (e) { console.error('Gagal pasang trigger: ' + e); }
   return ss;
@@ -482,6 +521,7 @@ function sediaTab_(ss) {
   getSheet_(SHEET_REKOD, HDR_REKOD, ss).getRange('A:B').setNumberFormat('@');
   getSheet_(SHEET_MILEAGE, HDR_MILEAGE, ss).getRange('A:B').setNumberFormat('@');
   getSheet_(SHEET_TEMPLAT, HDR_TEMPLAT, ss).getRange('A:A').setNumberFormat('@');
+  getSheet_(SHEET_MINYAK, HDR_MINYAK, ss).getRange('A:B').setNumberFormat('@');
 }
 
 /** Garaj yang sedang aktif (sendiri atau garaj yang dikongsi orang lain). */
@@ -638,6 +678,7 @@ function cariKenderaan(plat) {
     rekod: rekod,
     peringatan: peringatan,
     logMileage: logPlat,
+    minyak: bacaMinyak_().filter(m => m.plat === plat).map(m => { const o = Object.assign({}, m); delete o.baris; delete o.plat; return o; }),
     templat: bacaTemplat_().filter(t => t.plat === plat),
     senaraiAktiviti: unik_(semua.map(r => r.aktiviti)),
     senaraiBengkel: unik_(semua.map(r => r.bengkel)),
@@ -722,7 +763,7 @@ function tukarPlatSemuaTab_(asal, baru) {
       } catch (e) { console.error('Gagal kemaskini acara: ' + e); }
     }
   });
-  [[SHEET_MILEAGE, HDR_MILEAGE, 1], [SHEET_TEMPLAT, HDR_TEMPLAT, 0]].forEach(([nama, hdr, kol]) => {
+  [[SHEET_MILEAGE, HDR_MILEAGE, 1], [SHEET_TEMPLAT, HDR_TEMPLAT, 0], [SHEET_MINYAK, HDR_MINYAK, 1]].forEach(([nama, hdr, kol]) => {
     const sh = getSheet_(nama, hdr);
     const last = sh.getLastRow();
     if (last < 2) return;
@@ -745,7 +786,7 @@ function padamKenderaan(plat) {
     rekod.forEach(r => { padamAcara_(r.calendarId); padamResit_(r.resitId); });
     padamBaris_(getSheet_(SHEET_REKOD, HDR_REKOD), rekod.map(r => r.baris));
 
-    [[SHEET_MILEAGE, HDR_MILEAGE, 1], [SHEET_TEMPLAT, HDR_TEMPLAT, 0]].forEach(([nama, hdr, kol]) => {
+    [[SHEET_MILEAGE, HDR_MILEAGE, 1], [SHEET_TEMPLAT, HDR_TEMPLAT, 0], [SHEET_MINYAK, HDR_MINYAK, 1]].forEach(([nama, hdr, kol]) => {
       const sh = getSheet_(nama, hdr);
       const last = sh.getLastRow();
       if (last < 2) return;
@@ -853,6 +894,74 @@ function padamRekod(id, plat) {
       padamResit_(row[R.RESIT_ID]);
       sh.deleteRow(baris);
     }
+    return cariKenderaan(plat);
+  });
+}
+
+/* ===================== Minyak / cas EV ===================== */
+
+/** Tambah atau kemaskini isian minyak / cas EV. data.id kosong = baru. */
+function simpanMinyak(data) {
+  const plat = normPlat_(data.plat);
+  const odo = Number(data.odometer), kuantiti = Number(data.kuantiti), jumlah = Number(data.jumlah);
+  const harga = Number(data.harga) || (kuantiti > 0 ? jumlah / kuantiti : 0);
+  if (!tarikhSah_(data.tarikh)) throw new Error(T_('e_tarikh'));
+  if (!(odo > 0)) throw new Error(T_('e_mileage'));
+  if (!(kuantiti > 0)) throw new Error(T_('e_kuantiti'));
+  if (!(jumlah >= 0) || isNaN(jumlah)) throw new Error(T_('e_kos'));
+  if (JENIS_TENAGA.indexOf(data.jenis) < 0) throw new Error(T_('e_jenis_tenaga'));
+
+  return withLock_(() => {
+    if (!findKenderaan_(plat)) throw new Error(T_('e_kenderaan_tiada', { p: plat }));
+    const sh = getSheet_(SHEET_MINYAK, HDR_MINYAK);
+    const nilai = [keTarikh_(data.tarikh), odo, Math.round(kuantiti * 1000) / 1000, Math.round(harga * 1000) / 1000,
+                   Math.round(jumlah * 100) / 100, !!data.penuh, data.jenis, clean_(data.stesen)];
+    if (data.id) {
+      const baris = cariBaris_(sh, 0, data.id, String);
+      if (!baris) throw new Error(T_('e_rekod_tiada'));
+      if (normPlat_(sh.getRange(baris, 2).getValue()) !== plat) throw new Error(T_('e_rekod_bukan'));
+      sh.getRange(baris, 3, 1, nilai.length).setValues([nilai]);
+    } else {
+      sh.appendRow([Utilities.getUuid().slice(0, 8), plat].concat(nilai, [new Date()]));
+    }
+    return cariKenderaan(plat);
+  });
+}
+
+/**
+ * Kira kecekapan dengan kaedah penuh-ke-penuh.
+ * Setiap isian penuh menutup satu segmen: jarak sejak isian penuh sebelumnya ÷ jumlah kuantiti sejak itu.
+ * Kenderaan liter & kWh dikira berasingan. Pulangkan { L: {...}, kWh: {...} }.
+ */
+function kiraMinyak_(senarai) {
+  const hasil = {};
+  ['L', 'kWh'].forEach(unit => {
+    const isian = senarai.filter(m => (m.jenis === 'EV' ? 'kWh' : 'L') === unit)
+      .sort((a, b) => (a.odometer - b.odometer) || a.tarikh.localeCompare(b.tarikh));
+    if (!isian.length) return;
+    const eff = {};
+    let odoPenuh = null, kumpul = 0, rmKumpul = 0, jarak = 0, kuantiti = 0, rm = 0;
+    isian.forEach(m => {
+      if (odoPenuh !== null) { kumpul += m.kuantiti; rmKumpul += m.jumlah; }
+      if (m.penuh) {
+        if (odoPenuh !== null && m.odometer > odoPenuh && kumpul > 0) {
+          eff[m.id] = (m.odometer - odoPenuh) / kumpul;
+          jarak += m.odometer - odoPenuh; kuantiti += kumpul; rm += rmKumpul;
+        }
+        odoPenuh = m.odometer; kumpul = 0; rmKumpul = 0;
+      }
+    });
+    hasil[unit] = { eff: eff, purata: kuantiti ? jarak / kuantiti : 0, rmSeKm: jarak ? rm / jarak : 0,
+                    jumlahRM: isian.reduce((s, m) => s + m.jumlah, 0), bil: isian.length };
+  });
+  return hasil;
+}
+
+function padamMinyak(id, plat) {
+  return withLock_(() => {
+    const sh = getSheet_(SHEET_MINYAK, HDR_MINYAK);
+    const baris = cariBaris_(sh, 0, id, String);
+    if (baris) sh.deleteRow(baris);
     return cariKenderaan(plat);
   });
 }
@@ -980,11 +1089,32 @@ function eksportPdf(plat) {
     ${k.tamatInsurans ? `<div class="kotak">${T_('pdf_insurans')}<b>${fmt(k.tamatInsurans)}</b></div>` : ''}
     <table><tr><th>${T_('pdf_c_tarikh')}</th><th>${T_('pdf_c_aktiviti')}</th><th class="n">${T_('pdf_c_mileage')}</th><th>${T_('pdf_c_bengkel')}</th><th class="n">${T_('pdf_c_kos')}</th></tr>
     ${baris || `<tr><td colspan="5">${T_('pdf_tiada')}</td></tr>`}</table>
+    ${blokMinyakPdf_(d.minyak || [], fmt, rm, km)}
     <div class="kaki">${T_('pdf_dijana', { t: Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'dd/MM/yyyy HH:mm') })}</div>
   </body></html>`;
 
   const pdf = Utilities.newBlob(html, 'text/html', 'laporan.html').getAs('application/pdf');
   return { nama: `${T_('pdf_fail')}_${k.plat}.pdf`, b64: Utilities.base64Encode(pdf.getBytes()) };
+}
+
+/** Bahagian minyak / cas dalam PDF. */
+function blokMinyakPdf_(senarai, fmt, rm, km) {
+  if (!senarai.length) return '';
+  const k = kiraMinyak_(senarai);
+  const ringkas = Object.keys(k).map(u => `
+    <div class="kotak">${T_('pdf_purata_eff')} (${u === 'L' ? 'km/L' : 'km/kWh'})<b>${k[u].purata ? k[u].purata.toFixed(1) : '-'}</b></div>`).join('') +
+    `<div class="kotak">${T_('pdf_jum_minyak')}<b>${rm(senarai.reduce((s, m) => s + m.jumlah, 0))}</b></div>`;
+  const effSemua = Object.assign({}, ...Object.keys(k).map(u => k[u].eff));
+  const baris = senarai.slice().sort((a, b) => a.tarikh.localeCompare(b.tarikh)).map((m, i) => {
+    const unit = m.jenis === 'EV' ? 'kWh' : 'L';
+    const e = effSemua[m.id];
+    return `<tr${i % 2 ? ' style="background:#f5f7fa"' : ''}><td>${fmt(m.tarikh)}</td><td class="n">${km(m.odometer)}</td>
+      <td>${esc_(m.jenis)}</td><td class="n">${m.kuantiti.toFixed(2)} ${unit}</td>
+      <td class="n">${e ? e.toFixed(1) + ' km/' + unit : '-'}</td><td class="n">${rm(m.jumlah)}</td></tr>`;
+  }).join('');
+  return `<h2 style="color:#12386b;font-size:15px;margin:22px 0 8px">${T_('pdf_minyak')}</h2>${ringkas}
+    <table><tr><th>${T_('pdf_c_tarikh')}</th><th class="n">${T_('pdf_c_odo')}</th><th>${T_('pdf_c_jenis')}</th>
+    <th class="n">${T_('pdf_c_kuantiti')}</th><th class="n">${T_('pdf_c_eff')}</th><th class="n">${T_('pdf_c_kos')}</th></tr>${baris}</table>`;
 }
 
 /* ===================== Peringatan ===================== */
@@ -1288,13 +1418,28 @@ function bacaRekod_() {
   }));
 }
 
+/** Log mileage = kemas kini mileage pantas + bacaan odometer semasa isi minyak/cas. */
 function bacaMileage_() {
   const sh = getSheet_(SHEET_MILEAGE, HDR_MILEAGE);
   const last = sh.getLastRow();
-  if (last < 2) return [];
-  return sh.getRange(2, 1, last - 1, HDR_MILEAGE.length).getValues()
+  const log = last < 2 ? [] : sh.getRange(2, 1, last - 1, HDR_MILEAGE.length).getValues()
     .filter(r => r[1] !== '')
     .map(r => ({ plat: normPlat_(r[1]), tarikh: fmtDate_(r[2]), mileage: Number(r[3]) }));
+  return log.concat(bacaMinyak_().map(m => ({ plat: m.plat, tarikh: m.tarikh, mileage: m.odometer })));
+}
+
+function bacaMinyak_() {
+  const sh = getSheet_(SHEET_MINYAK, HDR_MINYAK);
+  const last = sh.getLastRow();
+  if (last < 2) return [];
+  return sh.getRange(2, 1, last - 1, HDR_MINYAK.length).getValues()
+    .map((r, i) => ({
+      baris: i + 2, id: String(r[0]), plat: normPlat_(r[1]), tarikh: fmtDate_(r[2]),
+      odometer: Number(r[3]) || 0, kuantiti: Number(r[4]) || 0, harga: Number(r[5]) || 0, jumlah: Number(r[6]) || 0,
+      penuh: r[7] === true || String(r[7]).toUpperCase() === 'TRUE', jenis: String(r[8] || 'RON95'),
+      stesen: String(r[9] || ''), masa: r[10] instanceof Date ? r[10].getTime() : 0
+    }))
+    .filter(m => m.plat);
 }
 
 /** Medan rekod yang dihantar ke frontend. */
