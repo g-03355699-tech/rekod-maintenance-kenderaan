@@ -33,7 +33,9 @@ const HDR_REKOD = ['ID', 'No_Plat', 'Tarikh', 'Jenis_Aktiviti', 'Mileage', 'Kos'
                    'Ingat_Mileage', 'Ingat_Tarikh', 'Ingat_Emel', 'Calendar_ID', 'Emel_Dihantar', 'Resit_ID', 'Resit_URL'];
 const HDR_MILEAGE = ['ID', 'No_Plat', 'Tarikh', 'Mileage', 'Masa_Rekod'];
 const HDR_TEMPLAT = ['No_Plat', 'Aktiviti', 'Selang_KM', 'Selang_Bulan'];
-const HDR_MINYAK = ['ID', 'No_Plat', 'Tarikh', 'Odometer', 'Kuantiti', 'Harga_Seunit', 'Jumlah_RM', 'Penuh', 'Jenis_Tenaga', 'Stesen', 'Masa_Rekod'];
+const HDR_MINYAK = ['ID', 'No_Plat', 'Tarikh', 'Odometer', 'Kuantiti', 'Harga_Seunit', 'Jumlah_RM', 'Penuh', 'Jenis_Tenaga', 'Stesen', 'Masa_Rekod', 'Budi', 'Oleh'];
+const JENIS_BUDI = ['RON95', 'Diesel'];   // layak kuota BUDI MADANI
+const BUDI_LALAI = { kuota: 300, harga95: 1.99, hargaDiesel: 2.10 };
 const JENIS_TENAGA = ['RON95', 'RON97', 'Diesel', 'EV'];   // EV dalam kWh, lain-lain dalam liter
 
 const JENIS_KENDERAAN = ['Motorsikal', 'Kereta'];
@@ -126,7 +128,8 @@ const KAMUS_S = {
 "pdf_c_odo": "Odometer",
 "pdf_c_jenis": "Jenis",
 "pdf_c_kuantiti": "Kuantiti",
-"pdf_c_eff": "Kecekapan"
+"pdf_c_eff": "Kecekapan",
+"e_kuota": "Had kuota tidak sah."
 },
 "en": {
 "e_emel_tak_sah": "Invalid email address.",
@@ -201,7 +204,8 @@ const KAMUS_S = {
 "pdf_c_odo": "Odometer",
 "pdf_c_jenis": "Type",
 "pdf_c_kuantiti": "Quantity",
-"pdf_c_eff": "Efficiency"
+"pdf_c_eff": "Efficiency",
+"e_kuota": "Invalid quota limit."
 },
 "zh": {
 "e_emel_tak_sah": "电邮地址无效。",
@@ -276,7 +280,8 @@ const KAMUS_S = {
 "pdf_c_odo": "里程表",
 "pdf_c_jenis": "类型",
 "pdf_c_kuantiti": "数量",
-"pdf_c_eff": "能耗"
+"pdf_c_eff": "能耗",
+"e_kuota": "配额上限无效。"
 },
 "ta": {
 "e_emel_tak_sah": "தவறான மின்னஞ்சல் முகவரி.",
@@ -351,7 +356,8 @@ const KAMUS_S = {
 "pdf_c_odo": "ஓடோமீட்டர்",
 "pdf_c_jenis": "வகை",
 "pdf_c_kuantiti": "அளவு",
-"pdf_c_eff": "செயல்திறன்"
+"pdf_c_eff": "செயல்திறன்",
+"e_kuota": "தவறான ஒதுக்கீட்டு வரம்பு."
 }
 };
 const AKTIVITI_S = {
@@ -678,7 +684,11 @@ function cariKenderaan(plat) {
     rekod: rekod,
     peringatan: peringatan,
     logMileage: logPlat,
-    minyak: bacaMinyak_().filter(m => m.plat === plat).map(m => { const o = Object.assign({}, m); delete o.baris; delete o.plat; return o; }),
+    minyak: bacaMinyak_().filter(m => m.plat === plat).map(m => {
+      const o = Object.assign({}, m, { saya: !m.oleh || m.oleh === emelSaya_().toLowerCase() });
+      delete o.baris; delete o.plat; delete o.oleh; return o;
+    }),
+    budi: statusBudi_(),
     templat: bacaTemplat_().filter(t => t.plat === plat),
     senaraiAktiviti: unik_(semua.map(r => r.aktiviti)),
     senaraiBengkel: unik_(semua.map(r => r.bengkel)),
@@ -916,13 +926,16 @@ function simpanMinyak(data) {
     const sh = getSheet_(SHEET_MINYAK, HDR_MINYAK);
     const nilai = [keTarikh_(data.tarikh), odo, Math.round(kuantiti * 1000) / 1000, Math.round(harga * 1000) / 1000,
                    Math.round(jumlah * 100) / 100, !!data.penuh, data.jenis, clean_(data.stesen)];
+    const budi = !!data.budi && JENIS_BUDI.indexOf(data.jenis) >= 0;
     if (data.id) {
       const baris = cariBaris_(sh, 0, data.id, String);
       if (!baris) throw new Error(T_('e_rekod_tiada'));
       if (normPlat_(sh.getRange(baris, 2).getValue()) !== plat) throw new Error(T_('e_rekod_bukan'));
       sh.getRange(baris, 3, 1, nilai.length).setValues([nilai]);
+      sh.getRange(baris, 12).setValue(budi);
+      if (!sh.getRange(baris, 13).getValue()) sh.getRange(baris, 13).setValue(emelSaya_().toLowerCase());
     } else {
-      sh.appendRow([Utilities.getUuid().slice(0, 8), plat].concat(nilai, [new Date()]));
+      sh.appendRow([Utilities.getUuid().slice(0, 8), plat].concat(nilai, [new Date(), budi, emelSaya_().toLowerCase()]));
     }
     return cariKenderaan(plat);
   });
@@ -955,6 +968,42 @@ function kiraMinyak_(senarai) {
                     jumlahRM: isian.reduce((s, m) => s + m.jumlah, 0), bil: isian.length };
   });
   return hasil;
+}
+
+/* ---------- Kuota BUDI MADANI ---------- */
+
+/** Tetapan kuota BUDI pengguna (kuota terikat pada MyKad, jadi disimpan setiap pengguna). */
+function tetapanBudi_() {
+  let t = {};
+  try { t = JSON.parse(PropertiesService.getUserProperties().getProperty('BUDI') || '{}'); } catch (e) {}
+  return {
+    kuota: Number(t.kuota) > 0 ? Number(t.kuota) : BUDI_LALAI.kuota,
+    harga95: Number(t.harga95) > 0 ? Number(t.harga95) : BUDI_LALAI.harga95,
+    hargaDiesel: Number(t.hargaDiesel) > 0 ? Number(t.hargaDiesel) : BUDI_LALAI.hargaDiesel
+  };
+}
+
+function simpanTetapanBudi(data) {
+  const t = {
+    kuota: Math.round(Number(data.kuota)), harga95: Number(data.harga95), hargaDiesel: Number(data.hargaDiesel)
+  };
+  if (!(t.kuota > 0 && t.kuota <= 5000)) throw new Error(T_('e_kuota'));
+  if (!(t.harga95 > 0) || !(t.hargaDiesel > 0)) throw new Error(T_('e_kos'));
+  PropertiesService.getUserProperties().setProperty('BUDI', JSON.stringify(t));
+  return statusBudi_();
+}
+
+/** Penggunaan kuota bulan ini: isian BUDI yang direkod oleh pengguna ini, semua kenderaan dalam garaj. */
+function statusBudi_() {
+  const bulan = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyy-MM');
+  const saya = emelSaya_().toLowerCase();
+  const guna = { RON95: 0, Diesel: 0 };
+  bacaMinyak_().forEach(m => {
+    if (m.budi && m.tarikh.slice(0, 7) === bulan && (!m.oleh || m.oleh === saya) && guna[m.jenis] !== undefined) {
+      guna[m.jenis] += m.kuantiti;
+    }
+  });
+  return { tetapan: tetapanBudi_(), bulan: bulan, guna: guna };
 }
 
 function padamMinyak(id, plat) {
@@ -1437,7 +1486,8 @@ function bacaMinyak_() {
       baris: i + 2, id: String(r[0]), plat: normPlat_(r[1]), tarikh: fmtDate_(r[2]),
       odometer: Number(r[3]) || 0, kuantiti: Number(r[4]) || 0, harga: Number(r[5]) || 0, jumlah: Number(r[6]) || 0,
       penuh: r[7] === true || String(r[7]).toUpperCase() === 'TRUE', jenis: String(r[8] || 'RON95'),
-      stesen: String(r[9] || ''), masa: r[10] instanceof Date ? r[10].getTime() : 0
+      stesen: String(r[9] || ''), masa: r[10] instanceof Date ? r[10].getTime() : 0,
+      budi: r[11] === true || String(r[11]).toUpperCase() === 'TRUE', oleh: String(r[12] || '').toLowerCase()
     }))
     .filter(m => m.plat);
 }

@@ -1,4 +1,4 @@
-# 🚗 Rekod Maintenance Kenderaan `v2.2.0`
+# 🚗 Rekod Maintenance Kenderaan `v2.3.0`
 
 Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke **Google Sheets**, dibina dengan **Google Apps Script**. Mesra telefon, berbilang pengguna, dengan peringatan servis melalui **Google Calendar** dan **e-mel**.
 
@@ -30,6 +30,7 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 - Rekod isian RON95 / RON97 / Diesel / **EV (kWh)**: odometer, jumlah bayar, harga seunit, liter/kWh dikira automatik, isi penuh / separa, stesen.
 - **km/L, L/100km** (atau km/kWh, kWh/100km) dengan kaedah *penuh-ke-penuh*, kos tenaga setiap km, terbaik/terendah, belanja bulan ini, carta trend.
 - Odometer isian dikira sebagai mileage terkini; kos minyak dimasukkan dalam Laporan Kos & PDF.
+- **Kuota BUDI MADANI** — suis *Guna kuota BUDI* untuk RON95 & Diesel (harga BUDI diisi automatik), kad baki kuota bulanan (dikongsi RON95 + Diesel), amaran bila isian melebihi baki, tetapan had 200/300/400 L. Kuota dikira bagi isian yang direkod oleh setiap pengguna (MyKad masing-masing).
 
 **Laporan**
 - **Laporan kos** — jumlah, purata sebulan/setahun, kos setiap km, carta kos bulanan/tahunan dan pecahan ikut aktiviti.
@@ -80,7 +81,7 @@ Kebenaran boleh ditarik balik bila-bila masa di <https://myaccount.google.com/pe
 
 **Tab `Templat`:** `No_Plat`, `Aktiviti`, `Selang_KM`, `Selang_Bulan`
 
-**Tab `Minyak`:** `ID`, `No_Plat`, `Tarikh`, `Odometer`, `Kuantiti`, `Harga_Seunit`, `Jumlah_RM`, `Penuh`, `Jenis_Tenaga`, `Stesen`, `Masa_Rekod`
+**Tab `Minyak`:** `ID`, `No_Plat`, `Tarikh`, `Odometer`, `Kuantiti`, `Harga_Seunit`, `Jumlah_RM`, `Penuh`, `Jenis_Tenaga`, `Stesen`, `Masa_Rekod`, `Budi`, `Oleh`
 
 Peringatan yang **aktif** ialah rekod terbaru bagi kenderaan + jenis aktiviti yang sama. Bila rekod baru dengan aktiviti sama ditambah, peringatan lama dianggap selesai (acara Calendar lama dipadam).
 
