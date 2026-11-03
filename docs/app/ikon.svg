@@ -1,9 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
 <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a4a8a"/><stop offset="1" stop-color="#0c2a52"/></linearGradient></defs>
 <rect width="512" height="512" fill="url(#g)"/>
-<g transform="translate(40 160) scale(3.6)" style="color:#ffffff;--latar-ikon:#123d74"><path d="M8 53V44C8 40 11 38 15 37L32 34L44 22C46 20 49 19 52 19H78C82 19 85 20 87 22L100 34L107 36C110 37 112 40 112 43V53Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M38 34L47 25H62V34Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M66 25H79C81 25 82 26 83 27L90 34H66Z" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M64 36V50M70 40H74M104 41H109M10 41H14" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="30" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3.2"/><circle cx="30" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="91" cy="56" r="10" style="fill:var(--latar-ikon,#fff)" stroke="currentColor" stroke-width="3.2"/><circle cx="91" cy="56" r="3.8" fill="none" stroke="currentColor" stroke-width="2.5"/></g>
-<g transform="translate(330 70)">
-  <circle cx="70" cy="70" r="70" fill="#f2a600"/>
-  <g transform="translate(26 26) scale(3.7)"><path fill="#0c2a52" d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></g>
+<g transform="translate(64 60) scale(6)" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="--latar-logo:#123d74">
+<clipPath id="kg"><rect x="0" y="0" width="64" height="40"/></clipPath><g clip-path="url(#kg)"><path d="M28.0 7.5 L28.9 2.7 L35.1 2.7 L36.0 7.5 L39.1 8.4 L42.6 5.1 L47.6 8.8 L45.6 13.2 L47.5 15.8 L52.2 15.2 L54.2 21.1 L49.9 23.4 L49.9 26.6 L54.2 28.9 L52.2 34.8 L47.5 34.2 L45.6 36.8 L47.6 41.2 L42.6 44.9 L39.1 41.6 L36.0 42.5 L35.1 47.3 L28.9 47.3 L28.0 42.5 L24.9 41.6 L21.4 44.9 L16.4 41.2 L18.4 36.8 L16.5 34.2 L11.8 34.8 L9.8 28.9 L14.1 26.6 L14.1 23.4 L9.8 21.1 L11.8 15.2 L16.5 15.8 L18.4 13.2 L16.4 8.8 L21.4 5.1 L24.9 8.4Z"/></g>
+<path d="M18.5 31L22 22.6C22.7 20.9 24.3 19.8 26.1 19.8H37.9C39.7 19.8 41.3 20.9 42 22.6L45.5 31Z" style="fill:var(--latar-logo,#12386b)"/>
+<path d="M23.6 28.6L25.4 24.2C25.7 23.5 26.4 23 27.2 23H36.8C37.6 23 38.3 23.5 38.6 24.2L40.4 28.6Z"/>
+<path d="M12 33.2C12 31.9 13.1 30.8 14.4 30.8H49.6C50.9 30.8 52 31.9 52 33.2V40.6C52 41.4 51.4 42 50.6 42H13.4C12.6 42 12 41.4 12 40.6Z" style="fill:var(--latar-logo,#12386b)"/>
+<circle cx="18.2" cy="36.2" r="2.2"/><circle cx="45.8" cy="36.2" r="2.2"/>
+<path d="M26.5 35.4H37.5M26.5 38.6H37.5"/>
+<path d="M15 42V45.5H19.5V42M44.5 42V45.5H49V42" style="fill:var(--latar-logo,#12386b)"/>
+<path d="M9 52a4.3 4.3 0 0 1 6.6-3.6l.9.6h31l.9-.6a4.3 4.3 0 1 1 0 7.2l-.9-.6h-31l-.9.6A4.3 4.3 0 0 1 9 52z" style="fill:var(--latar-logo,#12386b)"/>
+<path d="M10.8 52h2.4M50.8 52h2.4"/>
 </g>
 </svg>
