@@ -1085,6 +1085,24 @@ function simpanResit_(plat, resit) {
   return { id: fail.id, url: fail.webViewLink || ('https://drive.google.com/file/d/' + fail.id + '/view') };
 }
 
+/**
+ * Ambil gambar resit dari Drive untuk dipaparkan dalam app (popup), tanpa membuka Google Drive.
+ * Guna Drive API v3 dengan token pengguna (skop drive.file — hanya fail yang dicipta oleh app ini).
+ */
+function lihatResit(id) {
+  id = String(id || '').replace(/[^-\w]/g, '');
+  if (!id) return { ok: false };
+  const res = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media', {
+    headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+    muteHttpExceptions: true
+  });
+  if (res.getResponseCode() !== 200) return { ok: false, kod: res.getResponseCode() };
+  const blob = res.getBlob();
+  const bytes = blob.getBytes();
+  if (bytes.length > 8 * 1024 * 1024) return { ok: false, kod: 413 };
+  return { ok: true, mime: blob.getContentType() || 'image/jpeg', b64: Utilities.base64Encode(bytes) };
+}
+
 function padamResit_(id) {
   if (!id) return;
   try { Drive.Files.update({ trashed: true }, String(id)); }
@@ -1498,7 +1516,7 @@ function awam_(r) {
     id: r.id, tarikh: r.tarikh, aktiviti: r.aktiviti, mileage: r.mileage, kos: r.kos,
     bengkel: r.bengkel, catatan: r.catatan,
     ingatMileage: r.ingatMileage, ingatTarikh: r.ingatTarikh, ingatEmel: r.ingatEmel,
-    adaKalendar: !!r.calendarId, resitUrl: r.resitUrl,
+    adaKalendar: !!r.calendarId, resitUrl: r.resitUrl, resitId: r.resitId,
     aktif: r.aktif, status: r.status, bakiKm: r.bakiKm, bakiHari: r.bakiHari
   };
 }

@@ -2,7 +2,11 @@
   "timeZone": "Asia/Kuala_Lumpur",
   "dependencies": {
     "enabledAdvancedServices": [
-      { "userSymbol": "Drive", "serviceId": "drive", "version": "v3" }
+      {
+        "userSymbol": "Drive",
+        "serviceId": "drive",
+        "version": "v3"
+      }
     ]
   },
   "exceptionLogging": "STACKDRIVER",
@@ -10,6 +14,7 @@
   "oauthScopes": [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/script.external_request",
     "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/script.send_mail",
     "https://www.googleapis.com/auth/script.scriptapp",
