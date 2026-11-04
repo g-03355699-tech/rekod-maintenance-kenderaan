@@ -747,7 +747,7 @@
   </div>
 
 <script>
-  const VERSI = '2.4.2';   // naikkan setiap kali deploy versi baru
+  const VERSI = '2.4.3';   // naikkan setiap kali deploy versi baru
   document.getElementById('versi').textContent = 'v' + VERSI;
 
   /* ---------- Bahasa (BM / EN / 中文 / தமிழ்) ---------- */
@@ -1648,7 +1648,7 @@
     google.script.run
       .withSuccessHandler(r => {
         if (!r || !r.ok) { isi.innerHTML = `<div class="muat-r">${esc(t('resit_gagal'))}</div>`; return; }
-        cacheResit[id] = `data:${r.mime};base64,${r.b64}`;
+        cacheResit[id] = r.url || `data:${r.mime};base64,${r.b64}`;
         papar(cacheResit[id]);
       })
       .withFailureHandler(() => { isi.innerHTML = `<div class="muat-r">${esc(t('resit_gagal'))}</div>`; })

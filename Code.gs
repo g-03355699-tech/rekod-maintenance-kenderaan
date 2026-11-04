@@ -26,6 +26,7 @@ const SHEET_REKOD = 'Rekod';
 const SHEET_MILEAGE = 'Mileage';
 const SHEET_TEMPLAT = 'Templat';
 const SHEET_MINYAK = 'Minyak';
+const SHEET_RESIT = 'ResitData';   // salinan gambar resit (tersembunyi) supaya ahli garaj boleh lihat
 
 const HDR_KENDERAAN = ['No_Plat', 'Jenama_Model', 'Tahun', 'Pemilik', 'Tarikh_Daftar', 'Jenis', 'Ikon',
                        'Tamat_Cukai', 'Tamat_Insurans', 'Notis_Cukai', 'Notis_Insurans', 'Cal_Cukai', 'Cal_Insurans'];
@@ -33,6 +34,8 @@ const HDR_REKOD = ['ID', 'No_Plat', 'Tarikh', 'Jenis_Aktiviti', 'Mileage', 'Kos'
                    'Ingat_Mileage', 'Ingat_Tarikh', 'Ingat_Emel', 'Calendar_ID', 'Emel_Dihantar', 'Resit_ID', 'Resit_URL'];
 const HDR_MILEAGE = ['ID', 'No_Plat', 'Tarikh', 'Mileage', 'Masa_Rekod'];
 const HDR_TEMPLAT = ['No_Plat', 'Aktiviti', 'Selang_KM', 'Selang_Bulan'];
+const HDR_RESIT = ['Resit_ID', 'Bahagian', 'Data'];
+const SAIZ_CEBISAN = 45000;     // had sel Sheets ialah 50,000 aksara
 const HDR_MINYAK = ['ID', 'No_Plat', 'Tarikh', 'Odometer', 'Kuantiti', 'Harga_Seunit', 'Jumlah_RM', 'Penuh', 'Jenis_Tenaga', 'Stesen', 'Masa_Rekod', 'Budi', 'Oleh'];
 const JENIS_BUDI = ['RON95', 'Diesel'];   // layak kuota BUDI MADANI
 const BUDI_LALAI = { kuota: 300, harga95: 1.99, hargaDiesel: 2.10 };
@@ -516,7 +519,7 @@ function ssSendiri_(cipta) {
   props.setProperty('SS_ID', ss.getId());
   sediaTab_(ss);
   ss.getSheets()
-    .filter(s => [SHEET_KENDERAAN, SHEET_REKOD, SHEET_MILEAGE, SHEET_TEMPLAT, SHEET_MINYAK].indexOf(s.getName()) < 0)
+    .filter(s => [SHEET_KENDERAAN, SHEET_REKOD, SHEET_MILEAGE, SHEET_TEMPLAT, SHEET_MINYAK, SHEET_RESIT].indexOf(s.getName()) < 0)
     .forEach(s => ss.deleteSheet(s));   // buang "Sheet1" lalai
   try { pasangTrigger_(); } catch (e) { console.error('Gagal pasang trigger: ' + e); }
   return ss;
@@ -1082,7 +1085,72 @@ function simpanResit_(plat, resit) {
       Drive.Permissions.create({ role: 'reader', type: 'user', emailAddress: emel }, fail.id, { sendNotificationEmail: false });
     } catch (e) { console.warn('Gagal kongsi resit dengan ' + emel + ': ' + e); }
   });
+  simpanDataResit_(fail.id, resit.b64, resit.mime || 'image/jpeg');
   return { id: fail.id, url: fail.webViewLink || ('https://drive.google.com/file/d/' + fail.id + '/view') };
+}
+
+/* --- Salinan resit dalam Sheet garaj (tab ResitData) --- */
+
+function sheetResit_() {
+  const ss = ss_();
+  let sh = ss.getSheetByName(SHEET_RESIT);
+  if (!sh) {
+    sh = getSheet_(SHEET_RESIT, HDR_RESIT);
+    sh.getRange('A:A').setNumberFormat('@');
+    try { sh.hideSheet(); } catch (e) {}
+  }
+  return sh;
+}
+
+/** Simpan gambar (base64) sebagai beberapa cebisan. Awalan '#' elak teks dianggap formula. */
+function simpanDataResit_(id, b64, mime) {
+  if (!id || !b64) return;
+  const sh = sheetResit_();
+  const data = 'data:' + (mime || 'image/jpeg') + ';base64,' + b64;
+  const baris = [];
+  for (let i = 0, n = 0; i < data.length; i += SAIZ_CEBISAN, n++) baris.push([id, n, '#' + data.slice(i, i + SAIZ_CEBISAN)]);
+  sh.getRange(sh.getLastRow() + 1, 1, baris.length, 3).setValues(baris);
+}
+
+function barisDataResit_(sh, id) {
+  const last = sh.getLastRow();
+  if (last < 2) return [];
+  const ids = sh.getRange(2, 1, last - 1, 1).getValues();
+  const hasil = [];
+  ids.forEach((r, i) => { if (String(r[0]) === id) hasil.push(i + 2); });
+  return hasil;
+}
+
+/** Baca salinan resit dari Sheet. Pulangkan data URL atau ''. */
+function bacaDataResit_(id) {
+  const sh = ss_().getSheetByName(SHEET_RESIT);
+  if (!sh) return '';
+  const baris = barisDataResit_(sh, id);
+  if (!baris.length) return '';
+  const cebisan = baris.map(b => sh.getRange(b, 2, 1, 2).getValues()[0])
+    .sort((a, b) => Number(a[0]) - Number(b[0]))
+    .map(r => String(r[1]).replace(/^#/, ''));
+  return cebisan.join('');
+}
+
+function padamDataResit_(id) {
+  const sh = ss_().getSheetByName(SHEET_RESIT);
+  if (sh) padamBaris_(sh, barisDataResit_(sh, id));
+}
+
+/**
+ * (Pemilik / pemuat naik) Salin semua resit lama ke dalam Sheet supaya ahli garaj boleh melihatnya.
+ * Jalankan sekali dari editor: pilih salinSemuaResit > Run.
+ */
+function salinSemuaResit() {
+  SS_CACHE = ss_();
+  let bil = 0, gagal = 0;
+  bacaRekod_().filter(r => r.resitId).forEach(r => {
+    if (bacaDataResit_(r.resitId)) return;
+    const f = ambilResitDrive_(r.resitId);
+    if (f.ok) { simpanDataResit_(r.resitId, f.b64, f.mime); bil++; } else gagal++;
+  });
+  console.log(`${bil} resit disalin ke Sheet. ${gagal ? gagal + ' gagal (mungkin dimuat naik oleh ahli lain — minta mereka jalankan fungsi ini juga).' : ''}`);
 }
 
 /**
@@ -1092,6 +1160,21 @@ function simpanResit_(plat, resit) {
 function lihatResit(id) {
   id = String(id || '').replace(/[^-\w]/g, '');
   if (!id) return { ok: false };
+  // 1) Salinan dalam Sheet garaj — boleh dibaca oleh semua ahli garaj
+  const salinan = bacaDataResit_(id);
+  if (salinan) return { ok: true, url: salinan };
+  // 2) Terus dari Drive (hanya pemuat naik), kemudian simpan salinan untuk ahli lain
+  const f = ambilResitDrive_(id);
+  if (f.ok && f.b64.length < 3 * 1024 * 1024) {
+    const lock = LockService.getScriptLock();
+    if (lock.tryLock(5000)) {
+      try { if (!bacaDataResit_(id)) simpanDataResit_(id, f.b64, f.mime); } finally { lock.releaseLock(); }
+    }
+  }
+  return f.ok ? { ok: true, url: 'data:' + f.mime + ';base64,' + f.b64 } : f;
+}
+
+function ambilResitDrive_(id) {
   const res = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + id + '?alt=media', {
     headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
     muteHttpExceptions: true
@@ -1105,6 +1188,7 @@ function lihatResit(id) {
 
 function padamResit_(id) {
   if (!id) return;
+  try { padamDataResit_(String(id)); } catch (e) { console.warn('Gagal padam salinan resit: ' + e); }
   try { Drive.Files.update({ trashed: true }, String(id)); }
   catch (e) { console.warn('Gagal padam resit (mungkin milik ahli lain): ' + e); }
 }

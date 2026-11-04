@@ -1,4 +1,4 @@
-# 🚗 Rekod Maintenance Kenderaan `v2.4.2`
+# 🚗 Rekod Maintenance Kenderaan `v2.4.3`
 
 Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke **Google Sheets**, dibina dengan **Google Apps Script**. Mesra telefon, berbilang pengguna, dengan peringatan servis melalui **Google Calendar** dan **e-mel**.
 
@@ -80,6 +80,8 @@ Kebenaran boleh ditarik balik bila-bila masa di <https://myaccount.google.com/pe
 **Tab `Mileage`:** `ID`, `No_Plat`, `Tarikh`, `Mileage`, `Masa_Rekod`
 
 **Tab `Templat`:** `No_Plat`, `Aktiviti`, `Selang_KM`, `Selang_Bulan`
+
+**Tab `ResitData`** (tersembunyi): `Resit_ID`, `Bahagian`, `Data` — salinan gambar resit supaya semua ahli garaj boleh melihatnya.
 
 **Tab `Minyak`:** `ID`, `No_Plat`, `Tarikh`, `Odometer`, `Kuantiti`, `Harga_Seunit`, `Jumlah_RM`, `Penuh`, `Jenis_Tenaga`, `Stesen`, `Masa_Rekod`, `Budi`, `Oleh`
 
