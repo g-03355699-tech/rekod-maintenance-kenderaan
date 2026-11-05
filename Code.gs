@@ -132,7 +132,8 @@ const KAMUS_S = {
 "pdf_c_jenis": "Jenis",
 "pdf_c_kuantiti": "Kuantiti",
 "pdf_c_eff": "Kecekapan",
-"e_kuota": "Had kuota tidak sah."
+"e_kuota": "Had kuota tidak sah.",
+"e_baki_rasmi": "Baki rasmi mesti antara 0 dan {k} L."
 },
 "en": {
 "e_emel_tak_sah": "Invalid email address.",
@@ -208,7 +209,8 @@ const KAMUS_S = {
 "pdf_c_jenis": "Type",
 "pdf_c_kuantiti": "Quantity",
 "pdf_c_eff": "Efficiency",
-"e_kuota": "Invalid quota limit."
+"e_kuota": "Invalid quota limit.",
+"e_baki_rasmi": "Official balance must be between 0 and {k} L."
 },
 "zh": {
 "e_emel_tak_sah": "电邮地址无效。",
@@ -284,7 +286,8 @@ const KAMUS_S = {
 "pdf_c_jenis": "类型",
 "pdf_c_kuantiti": "数量",
 "pdf_c_eff": "能耗",
-"e_kuota": "配额上限无效。"
+"e_kuota": "配额上限无效。",
+"e_baki_rasmi": "官方余额必须介于 0 至 {k} 升之间。"
 },
 "ta": {
 "e_emel_tak_sah": "தவறான மின்னஞ்சல் முகவரி.",
@@ -360,7 +363,8 @@ const KAMUS_S = {
 "pdf_c_jenis": "வகை",
 "pdf_c_kuantiti": "அளவு",
 "pdf_c_eff": "செயல்திறன்",
-"e_kuota": "தவறான ஒதுக்கீட்டு வரம்பு."
+"e_kuota": "தவறான ஒதுக்கீட்டு வரம்பு.",
+"e_baki_rasmi": "அதிகாரப்பூர்வ மீதம் 0 முதல் {k} L வரை இருக்க வேண்டும்."
 }
 };
 const AKTIVITI_S = {
@@ -1006,7 +1010,31 @@ function statusBudi_() {
       guna[m.jenis] += m.kuantiti;
     }
   });
-  return { tetapan: tetapanBudi_(), bulan: bulan, guna: guna };
+  let laras = 0;
+  try {
+    const l = JSON.parse(PropertiesService.getUserProperties().getProperty('BUDI_LARAS') || '{}');
+    if (l.bulan === bulan) laras = Number(l.liter) || 0;
+  } catch (e) {}
+  return { tetapan: tetapanBudi_(), bulan: bulan, guna: guna, laras: laras };
+}
+
+/**
+ * Selaraskan kuota dengan baki rasmi (dari portal BUDI MADANI) — contohnya bila ada isian yang terlupa direkod.
+ * Pelarasan = (had − baki rasmi) − liter BUDI yang direkod bulan ini. Hanya untuk bulan semasa.
+ */
+function selarasBudi(bakiRasmi) {
+  const baki = Number(bakiRasmi);
+  const s = statusBudi_();
+  if (isNaN(baki) || baki < 0 || baki > s.tetapan.kuota) throw new Error(T_('e_baki_rasmi', { k: s.tetapan.kuota }));
+  const direkod = (s.guna.RON95 || 0) + (s.guna.Diesel || 0);
+  const liter = Math.round(((s.tetapan.kuota - baki) - direkod) * 100) / 100;
+  PropertiesService.getUserProperties().setProperty('BUDI_LARAS', JSON.stringify({ bulan: s.bulan, liter: liter }));
+  return statusBudi_();
+}
+
+function buangSelarasBudi() {
+  PropertiesService.getUserProperties().deleteProperty('BUDI_LARAS');
+  return statusBudi_();
 }
 
 function padamMinyak(id, plat) {

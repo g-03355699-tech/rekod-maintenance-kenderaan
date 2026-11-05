@@ -1,4 +1,4 @@
-# 🚗 Rekod Maintenance Kenderaan `v2.4.3`
+# 🚗 Rekod Maintenance Kenderaan `v2.5.0`
 
 Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke **Google Sheets**, dibina dengan **Google Apps Script**. Mesra telefon, berbilang pengguna, dengan peringatan servis melalui **Google Calendar** dan **e-mel**.
 
@@ -30,7 +30,7 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 - Rekod isian RON95 / RON97 / Diesel / **EV (kWh)**: odometer, jumlah bayar, harga seunit, liter/kWh dikira automatik, isi penuh / separa, stesen.
 - **km/L, L/100km** (atau km/kWh, kWh/100km) dengan kaedah *penuh-ke-penuh*, kos tenaga setiap km, terbaik/terendah, belanja bulan ini, carta trend.
 - Odometer isian dikira sebagai mileage terkini; kos minyak dimasukkan dalam Laporan Kos & PDF.
-- **Kuota BUDI MADANI** — suis *Guna kuota BUDI* untuk RON95 & Diesel (harga BUDI diisi automatik), kad baki kuota bulanan (dikongsi RON95 + Diesel), amaran bila isian melebihi baki, tetapan had 200/300/400 L. Kuota dikira bagi isian yang direkod oleh setiap pengguna (MyKad masing-masing).
+- **Kuota BUDI MADANI** — suis *Guna kuota BUDI* untuk RON95 & Diesel (harga BUDI diisi automatik), kad baki kuota bulanan (dikongsi RON95 + Diesel), amaran bila isian melebihi baki, tetapan had 200/300/400 L, dan **selaraskan dengan baki rasmi** dari portal (untuk isian yang terlupa direkod). Kuota dikira bagi isian yang direkod oleh setiap pengguna (MyKad masing-masing).
 
 **Laporan**
 - **Laporan kos** — jumlah, purata sebulan/setahun, kos setiap km, carta kos bulanan/tahunan dan pecahan ikut aktiviti.
