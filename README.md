@@ -1,4 +1,4 @@
-# 🚗 Rekod Maintenance Kenderaan `v2.5.1`
+# 🚗 Rekod Maintenance Kenderaan `v2.6.0`
 
 Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke **Google Sheets**, dibina dengan **Google Apps Script**. Mesra telefon, berbilang pengguna, dengan peringatan servis melalui **Google Calendar** dan **e-mel**.
 
@@ -16,7 +16,7 @@ Web app percuma untuk merekod penyelenggaraan kenderaan (motosikal & kereta) ke 
 
 **Rekod maintenance**
 - Tarikh, mileage (auto-isi), jenis aktiviti, kos (gaya ATM: `1453` → 14.53), bengkel (auto-cadang), catatan.
-- **Gambar resit** — ambil dari kamera atau galeri; dimampatkan di telefon dan disimpan dalam folder *Resit Maintenance Kenderaan* di Google Drive pengguna. Tekan **Resit** untuk lihat dalam popup (boleh zum) tanpa membuka Google Drive.
+- **Resit gambar atau PDF** — ambil dari kamera/galeri atau pilih fail PDF (≤ 5 MB). Gambar dimampatkan di telefon; PDF dipapar terus dalam popup (hingga 10 muka). Semua dan disimpan dalam folder *Resit Maintenance Kenderaan* di Google Drive pengguna. Tekan **Resit** untuk lihat dalam popup (boleh zum) tanpa membuka Google Drive.
 - Aktiviti "Lain-lain" yang ditaip disimpan ke senarai pilihan.
 - **Edit & padam** rekod, dengan pengesahan.
 - **Cari & tapis sejarah** ikut kata kunci, aktiviti dan tahun, beserta jumlah kos hasil tapisan.

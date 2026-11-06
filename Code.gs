@@ -36,6 +36,7 @@ const HDR_MILEAGE = ['ID', 'No_Plat', 'Tarikh', 'Mileage', 'Masa_Rekod'];
 const HDR_TEMPLAT = ['No_Plat', 'Aktiviti', 'Selang_KM', 'Selang_Bulan'];
 const HDR_RESIT = ['Resit_ID', 'Bahagian', 'Data'];
 const SAIZ_CEBISAN = 45000;     // had sel Sheets ialah 50,000 aksara
+const HAD_SALINAN = 4 * 1024 * 1024;   // salinan resit dalam Sheet hanya jika base64 ≤ 4 MB
 const HDR_MINYAK = ['ID', 'No_Plat', 'Tarikh', 'Odometer', 'Kuantiti', 'Harga_Seunit', 'Jumlah_RM', 'Penuh', 'Jenis_Tenaga', 'Stesen', 'Masa_Rekod', 'Budi', 'Oleh'];
 const JENIS_BUDI = ['RON95', 'Diesel'];   // layak kuota BUDI MADANI
 const BUDI_LALAI = { kuota: 300, harga95: 1.99, hargaDiesel: 2.10 };
@@ -1103,8 +1104,10 @@ function folderResit_() {
 function simpanResit_(plat, resit) {
   if (!resit || !resit.b64) return { id: '', url: '' };
   if (resit.b64.length > 8 * 1024 * 1024) throw new Error(T_('e_gambar_besar'));
-  const nama = `Resit_${plat}_${Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd_HHmmss')}.jpg`;
-  const blob = Utilities.newBlob(Utilities.base64Decode(resit.b64), resit.mime || 'image/jpeg', nama);
+  const mime = resit.mime === 'application/pdf' ? 'application/pdf' : /^image\//.test(resit.mime || '') ? resit.mime : 'image/jpeg';
+  const ext = mime === 'application/pdf' ? 'pdf' : 'jpg';
+  const nama = `Resit_${plat}_${Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd_HHmmss')}.${ext}`;
+  const blob = Utilities.newBlob(Utilities.base64Decode(resit.b64), mime, nama);
   const fail = Drive.Files.create({ name: nama, parents: [folderResit_()] }, blob, { fields: 'id,webViewLink' });
 
   // Kongsi (lihat sahaja) dengan ahli lain garaj ini
@@ -1113,7 +1116,8 @@ function simpanResit_(plat, resit) {
       Drive.Permissions.create({ role: 'reader', type: 'user', emailAddress: emel }, fail.id, { sendNotificationEmail: false });
     } catch (e) { console.warn('Gagal kongsi resit dengan ' + emel + ': ' + e); }
   });
-  simpanDataResit_(fail.id, resit.b64, resit.mime || 'image/jpeg');
+  // Salinan dalam Sheet (untuk ahli garaj) — hanya jika saiz munasabah
+  if (resit.b64.length <= HAD_SALINAN) simpanDataResit_(fail.id, resit.b64, mime);
   return { id: fail.id, url: fail.webViewLink || ('https://drive.google.com/file/d/' + fail.id + '/view') };
 }
 
@@ -1193,7 +1197,7 @@ function lihatResit(id) {
   if (salinan) return { ok: true, url: salinan };
   // 2) Terus dari Drive (hanya pemuat naik), kemudian simpan salinan untuk ahli lain
   const f = ambilResitDrive_(id);
-  if (f.ok && f.b64.length < 3 * 1024 * 1024) {
+  if (f.ok && f.b64.length <= HAD_SALINAN) {
     const lock = LockService.getScriptLock();
     if (lock.tryLock(5000)) {
       try { if (!bacaDataResit_(id)) simpanDataResit_(id, f.b64, f.mime); } finally { lock.releaseLock(); }
